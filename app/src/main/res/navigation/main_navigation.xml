@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/mapViewFragment">
+
+    <fragment
+        android:id="@+id/listViewFragment"
+        android:name="com.guilhempelissier.go4lunch.ListViewFragment"
+        android:label="fragment_list_view"
+        tools:layout="@layout/fragment_list_view" />
+    <fragment
+        android:id="@+id/mapViewFragment"
+        android:name="com.guilhempelissier.go4lunch.MapViewFragment"
+        android:label="fragment_map_view"
+        tools:layout="@layout/fragment_map_view" />
+    <fragment
+        android:id="@+id/workmatesFragment"
+        android:name="com.guilhempelissier.go4lunch.WorkmatesFragment"
+        android:label="fragment_workmates"
+        tools:layout="@layout/fragment_workmates" />
+    <action android:id="@+id/action_global_mapViewFragment" app:destination="@id/mapViewFragment" />
+    <action android:id="@+id/action_global_workmatesFragment" app:destination="@id/workmatesFragment" />
+    <action android:id="@+id/action_global_listViewFragment" app:destination="@id/listViewFragment" />
+</navigation>

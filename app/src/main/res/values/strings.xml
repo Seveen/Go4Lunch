@@ -2,4 +2,8 @@
     <string name="app_name">Go4Lunch</string>
     <string name="facebook_application_id" translatable="false">423688198552527</string>
     <string name="facebook_login_protocol_scheme" translatable="false" tools:ignore="UnusedResources">fb423688198552527</string>
+    <string name="menu_map_view_title">Map View</string>
+    <string name="menu_list_view_title">List View</string>
+    <string name="menu_workmates_title">Workmates</string>
+
 </resources>

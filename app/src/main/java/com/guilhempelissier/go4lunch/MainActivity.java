@@ -1,11 +1,18 @@
 package com.guilhempelissier.go4lunch;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -13,21 +20,42 @@ import android.widget.Toast;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
+import com.google.android.material.bottomnavigation.BottomNavigationMenu;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.Arrays;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MapViewFragment.OnFragmentInteractionListener, WorkmatesFragment.OnFragmentInteractionListener, ListViewFragment.OnFragmentInteractionListener {
 
 	private static final int RC_SIGN_IN = 123;
-	private Button loginButton;
+	private BottomNavigationView bottomNavigationView;
+	private NavController navController;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		loginButton = findViewById(R.id.login_button_main);
-		loginButton.setOnClickListener(view -> startSignInActivity());
+		navController = Navigation.findNavController(this, R.id.navigation_container);
+
+		bottomNavigationView = findViewById(R.id.navigation_menu);
+		bottomNavigationView.setOnNavigationItemSelectedListener(menuItem -> {
+			switch (menuItem.getItemId()) {
+				case R.id.menu_map_view:
+					navController.navigate(R.id.action_global_mapViewFragment);
+					break;
+				case R.id.menu_list_view:
+					navController.navigate(R.id.action_global_listViewFragment);
+					break;
+				case R.id.menu_workmates:
+					navController.navigate(R.id.action_global_workmatesFragment);
+					break;
+			}
+			return true;
+		});
+
+		startSignInActivity();
 	}
 
 	private void startSignInActivity() {
@@ -64,8 +92,24 @@ public class MainActivity extends AppCompatActivity {
 				switch (response.getError().getErrorCode()) {
 					case ErrorCodes.NO_NETWORK: Toast.makeText(this, "Pas internet", Toast.LENGTH_SHORT).show();
 					case ErrorCodes.UNKNOWN_ERROR: Toast.makeText(this, "Erreur inconnue", Toast.LENGTH_SHORT).show();
+					default:
 				}
 			}
 		}
+	}
+
+	@Override
+	public void onMapFragmentInteraction(Uri uri) {
+
+	}
+
+	@Override
+	public void onListFragmentInteraction(Uri uri) {
+
+	}
+
+	@Override
+	public void onWorkmatesFragmentInteraction(Uri uri) {
+
 	}
 }
