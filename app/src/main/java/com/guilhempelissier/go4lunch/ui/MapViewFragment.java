@@ -1,4 +1,4 @@
-package com.guilhempelissier.go4lunch;
+package com.guilhempelissier.go4lunch.ui;
 
 import android.content.Context;
 import android.net.Uri;
@@ -10,16 +10,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.guilhempelissier.go4lunch.R;
+
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ListViewFragment.OnFragmentInteractionListener} interface
+ * {@link MapViewFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link ListViewFragment#newInstance} factory method to
+ * Use the {@link MapViewFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ListViewFragment extends Fragment {
+public class MapViewFragment extends Fragment {
 	// TODO: Rename parameter arguments, choose names that match
 	// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 	private static final String ARG_PARAM1 = "param1";
@@ -31,7 +33,7 @@ public class ListViewFragment extends Fragment {
 
 	private OnFragmentInteractionListener mListener;
 
-	public ListViewFragment() {
+	public MapViewFragment() {
 		// Required empty public constructor
 	}
 
@@ -41,11 +43,11 @@ public class ListViewFragment extends Fragment {
 	 *
 	 * @param param1 Parameter 1.
 	 * @param param2 Parameter 2.
-	 * @return A new instance of fragment ListViewFragment.
+	 * @return A new instance of fragment MapViewFragment.
 	 */
 	// TODO: Rename and change types and number of parameters
-	public static ListViewFragment newInstance(String param1, String param2) {
-		ListViewFragment fragment = new ListViewFragment();
+	public static MapViewFragment newInstance(String param1, String param2) {
+		MapViewFragment fragment = new MapViewFragment();
 		Bundle args = new Bundle();
 		args.putString(ARG_PARAM1, param1);
 		args.putString(ARG_PARAM2, param2);
@@ -66,13 +68,13 @@ public class ListViewFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		return inflater.inflate(R.layout.fragment_list_view, container, false);
+		return inflater.inflate(R.layout.fragment_map_view, container, false);
 	}
 
 	// TODO: Rename method, update argument and hook method into UI event
 	public void onButtonPressed(Uri uri) {
 		if (mListener != null) {
-			mListener.onListFragmentInteraction(uri);
+			mListener.onMapFragmentInteraction(uri);
 		}
 	}
 
@@ -105,6 +107,6 @@ public class ListViewFragment extends Fragment {
 	 */
 	public interface OnFragmentInteractionListener {
 		// TODO: Update argument type and name
-		void onListFragmentInteraction(Uri uri);
+		void onMapFragmentInteraction(Uri uri);
 	}
 }
