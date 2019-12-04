@@ -1,4 +1,4 @@
-package com.guilhempelissier.go4lunch.ui;
+package com.guilhempelissier.go4lunch.view.ui;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;

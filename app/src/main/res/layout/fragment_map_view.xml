@@ -5,7 +5,7 @@
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.MapViewFragment">
+    tools:context=".view.ui.MapViewFragment">
 
     <fragment
         android:id="@+id/map"
@@ -16,6 +16,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:context=".ui.MainActivity" />
+        tools:context=".view.ui.MainActivity" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
