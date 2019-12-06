@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.guilhempelissier.go4lunch.R;
-import com.guilhempelissier.go4lunch.databinding.ListViewItemBinding;
 import com.guilhempelissier.go4lunch.databinding.WorkmatesViewItemBinding;
 import com.guilhempelissier.go4lunch.viewmodel.FormattedWorkmate;
 
@@ -19,9 +18,11 @@ import java.util.List;
 public class WorkmatesListAdapter extends RecyclerView.Adapter<WorkmatesListAdapter.WorkmateViewHolder> {
 
 	private List<FormattedWorkmate> workmates;
+	private boolean displayEatingPlace;
 
-	public WorkmatesListAdapter(List<FormattedWorkmate> initialList) {
+	public WorkmatesListAdapter(List<FormattedWorkmate> initialList, boolean displayEatingPlace) {
 		workmates = initialList;
+		this.displayEatingPlace = displayEatingPlace;
 	}
 
 	public void setData(List<FormattedWorkmate> newData) {
@@ -61,11 +62,17 @@ public class WorkmatesListAdapter extends RecyclerView.Adapter<WorkmatesListAdap
 		}
 
 		public void bind(FormattedWorkmate workmate) {
+			String text;
 			Glide.with(binding.getRoot())
 					.load(workmate.getImageUrl())
 					.apply(RequestOptions.circleCropTransform())
 					.into(picture);
-			binding.setText(workmate.getName());
+			if (displayEatingPlace) {
+				text = workmate.getName() + " " + workmate.getEatingPlace();
+			} else {
+				text = workmate.getName() + " is joining!";
+			}
+			binding.setText(text);
 		}
 	}
 }

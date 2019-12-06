@@ -18,6 +18,7 @@ import java.util.List;
 public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAdapter.RestaurantViewHolder> {
 
 	private List<FormattedRestaurant> restaurants;
+	private OnClickRestaurantListener listener;
 
 
 	public RestaurantListAdapter(List<FormattedRestaurant> initialList) {
@@ -57,7 +58,13 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
 			picture = binding.getRoot().findViewById(R.id.list_item_image);
 			this.binding = binding;
 
-			//onclicklistener (TODO example mareu)
+			binding.Layout.setOnClickListener(view -> {
+				int position = getAdapterPosition();
+
+				if (listener != null && position != RecyclerView.NO_POSITION) {
+					listener.onClick(restaurants.get(position).getId());
+				}
+			});
 		}
 
 		public void bind(FormattedRestaurant restaurant) {
@@ -71,5 +78,13 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
 			binding.setNbWorkmates(restaurant.getNbWorkmates());
 			binding.setStars(restaurant.getStars());
 		}
+	}
+
+	public interface OnClickRestaurantListener {
+		void onClick(String id);
+	}
+
+	public void setOnClickRestaurantListener(OnClickRestaurantListener listener) {
+		this.listener = listener;
 	}
 }

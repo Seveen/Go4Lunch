@@ -38,7 +38,7 @@ public class WorkmatesFragment extends Fragment {
 
 	private List<FormattedWorkmate> dummylist = Arrays.asList(
 			new FormattedWorkmate(
-					"Hugh", "rst", "https://m.media-amazon.com/images/M/MV5BNDExMzIzNjk3Nl5BMl5BanBnXkFtZTcwOTE4NDU5OA@@._V1_.jpg"
+					"Hugh", "le zinc", "https://m.media-amazon.com/images/M/MV5BNDExMzIzNjk3Nl5BMl5BanBnXkFtZTcwOTE4NDU5OA@@._V1_.jpg"
 			)
 	);
 
@@ -64,7 +64,7 @@ public class WorkmatesFragment extends Fragment {
 
 		recyclerView = root.findViewById(R.id.workmatesRecyclerView);
 		recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-		adapter = new WorkmatesListAdapter(dummylist);
+		adapter = new WorkmatesListAdapter(dummylist, true);
 		recyclerView.setAdapter(adapter);
 
 		return root;

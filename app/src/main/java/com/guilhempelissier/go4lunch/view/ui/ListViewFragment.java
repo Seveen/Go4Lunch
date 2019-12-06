@@ -1,6 +1,7 @@
 package com.guilhempelissier.go4lunch.view.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -39,10 +40,10 @@ public class ListViewFragment extends Fragment {
 
 	private List<FormattedRestaurant> dummylist = Arrays.asList(
 			new FormattedRestaurant(
-					"Name1", "123 rue 465", "open", "100m", "3", "*", "https://media-cdn.tripadvisor.com/media/photo-s/12/c1/c3/f5/restaurant-araz.jpg"
+					"Name1", "123 rue 465", "open", "100m", "3", "*", "https://media-cdn.tripadvisor.com/media/photo-s/12/c1/c3/f5/restaurant-araz.jpg", "2"
 			),
 			new FormattedRestaurant(
-					"Name2", "123 rue 465", "open", "100m", "3", "*", "https://media-cdn.tripadvisor.com/media/photo-s/12/c1/c3/f5/restaurant-araz.jpg"
+					"Name2", "123 rue 465", "open", "100m", "3", "*", "https://media-cdn.tripadvisor.com/media/photo-s/12/c1/c3/f5/restaurant-araz.jpg", "2"
 			)
 	);
 
@@ -70,6 +71,12 @@ public class ListViewFragment extends Fragment {
 		recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 		adapter = new RestaurantListAdapter(dummylist);
 		recyclerView.setAdapter(adapter);
+
+		adapter.setOnClickRestaurantListener(id -> {
+			//TODO switch selected restaurant in vm
+			Intent intent = new Intent(getActivity(), RestaurantActivity.class);
+			startActivity(intent);
+		});
 
 		return root;
 	}

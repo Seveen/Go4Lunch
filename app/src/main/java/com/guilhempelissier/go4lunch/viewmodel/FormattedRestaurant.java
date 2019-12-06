@@ -1,6 +1,7 @@
 package com.guilhempelissier.go4lunch.viewmodel;
 
 public class FormattedRestaurant {
+	private String id;
 	private String name;
 	private String address;
 	private String openingTime;
@@ -9,7 +10,8 @@ public class FormattedRestaurant {
 	private String stars;
 	private String imageUrl;
 
-	public FormattedRestaurant(String name, String address, String openingTime, String distance, String nbWorkmates, String stars, String imageUrl) {
+	public FormattedRestaurant(String name, String address, String openingTime, String distance, String nbWorkmates, String stars, String imageUrl, String id) {
+		this.id = id;
 		this.name = name;
 		this.address = address;
 		this.openingTime = openingTime;
@@ -25,6 +27,14 @@ public class FormattedRestaurant {
 
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	public String getName() {
