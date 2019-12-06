@@ -1,13 +1,21 @@
 package com.guilhempelissier.go4lunch.view.ui;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.AttributeSet;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
@@ -21,13 +29,26 @@ import java.util.Arrays;
 public class MainActivity extends AppCompatActivity implements MapViewFragment.OnFragmentInteractionListener, WorkmatesFragment.OnFragmentInteractionListener, ListViewFragment.OnFragmentInteractionListener {
 
 	private static final int RC_SIGN_IN = 123;
+	private ActionBarDrawerToggle actionBarDrawerToggle;
 	private BottomNavigationView bottomNavigationView;
 	private NavController navController;
+
+	private DrawerLayout drawerLayout;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		Toolbar toolbar = findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
+
+		drawerLayout = findViewById(R.id.drawer_layout);
+		actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open_drawer, R.string.close_drawer);
+		drawerLayout.addDrawerListener(actionBarDrawerToggle);
+		actionBarDrawerToggle.syncState();
+
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		navController = Navigation.findNavController(this, R.id.navigation_container);
 
@@ -48,6 +69,12 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.O
 		});
 
 		startSignInActivity();
+	}
+
+	@Nullable
+	@Override
+	public View onCreateView(@NonNull String name, @NonNull Context context, @NonNull AttributeSet attrs) {
+		return super.onCreateView(name, context, attrs);
 	}
 
 	private void startSignInActivity() {
@@ -103,5 +130,14 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.O
 	@Override
 	public void onWorkmatesFragmentInteraction(Uri uri) {
 
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+
+		if(actionBarDrawerToggle.onOptionsItemSelected(item))
+			return true;
+
+		return super.onOptionsItemSelected(item);
 	}
 }

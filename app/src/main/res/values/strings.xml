@@ -6,5 +6,10 @@
     <string name="menu_list_view_title">List View</string>
     <string name="menu_workmates_title">Workmates</string>
     <string name="title_activity_maps">Map</string>
+    <string name="open_drawer">Open</string>
+    <string name="close_drawer">Close</string>
+    <string name="menu_your_lunch">Your Lunch</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_logout">Logout</string>
 
 </resources>
