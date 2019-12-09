@@ -5,15 +5,19 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -21,10 +25,23 @@ import android.widget.Toast;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.model.PlaceLikelihood;
+import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
+import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
+import com.google.android.libraries.places.api.net.PlacesClient;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.guilhempelissier.go4lunch.BuildConfig;
 import com.guilhempelissier.go4lunch.R;
 
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 public class MainActivity extends AppCompatActivity implements MapViewFragment.OnFragmentInteractionListener, WorkmatesFragment.OnFragmentInteractionListener, ListViewFragment.OnFragmentInteractionListener {
 
@@ -34,6 +51,9 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.O
 	private NavController navController;
 
 	private DrawerLayout drawerLayout;
+
+	//TODO
+	int PERMISSIONS_READ_CONTACT = 126;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +88,8 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.O
 			return true;
 		});
 
+		//TODO changer le comportement de la signin activity
+		initAndTestPlaces();
 		startSignInActivity();
 	}
 
@@ -139,5 +161,42 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.O
 			return true;
 
 		return super.onOptionsItemSelected(item);
+	}
+
+	public void getLocationPermission() {
+		ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_READ_CONTACT);
+	}
+
+	public void initAndTestPlaces() {
+
+		String TAG = "TEST PLACES";
+		Log.d("API", BuildConfig.PLACES_KEY);
+		Places.initialize(getApplicationContext(), BuildConfig.PLACES_KEY);
+		PlacesClient placesClient = Places.createClient(this);
+
+		List<Place.Field> placeFields = Collections.singletonList(Place.Field.NAME);
+		FindCurrentPlaceRequest request = FindCurrentPlaceRequest.newInstance(placeFields);
+
+		if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PERMISSION_GRANTED) {
+			Task<FindCurrentPlaceResponse> placeResponse = placesClient.findCurrentPlace(request);
+			placeResponse.addOnCompleteListener(task -> {
+				if (task.isSuccessful()){
+					FindCurrentPlaceResponse response = task.getResult();
+					for (PlaceLikelihood placeLikelihood : response.getPlaceLikelihoods()) {
+						Log.i(TAG, String.format("Place '%s' has likelihood: %f",
+								placeLikelihood.getPlace().getName(),
+								placeLikelihood.getLikelihood()));
+					}
+				} else {
+					Exception exception = task.getException();
+					if (exception instanceof ApiException) {
+						ApiException apiException = (ApiException) exception;
+						Log.e(TAG, "Place not found: " + apiException.getStatusCode());
+					}
+				}
+			});
+		} else {
+			getLocationPermission();
+		}
 	}
 }

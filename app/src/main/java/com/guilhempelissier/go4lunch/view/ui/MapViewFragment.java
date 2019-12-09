@@ -1,20 +1,41 @@
 package com.guilhempelissier.go4lunch.view.ui;
 
+import android.Manifest;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.model.PlaceLikelihood;
+import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
+import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
+import com.google.android.libraries.places.api.net.PlacesClient;
+import com.guilhempelissier.go4lunch.BuildConfig;
 import com.guilhempelissier.go4lunch.R;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 
 /**
@@ -29,6 +50,8 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
 	private OnFragmentInteractionListener mListener;
 	private GoogleMap map;
+
+	LatLng currentLatLng;
 
 	public MapViewFragment() {
 		// Required empty public constructor
@@ -90,6 +113,9 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 	@Override
 	public void onMapReady(GoogleMap googleMap) {
 		map = googleMap;
+		if (currentLatLng != null) {
+			map.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
+		}
 	}
 
 	/**
