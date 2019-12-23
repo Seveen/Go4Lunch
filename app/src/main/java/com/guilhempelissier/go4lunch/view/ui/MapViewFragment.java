@@ -1,41 +1,26 @@
 package com.guilhempelissier.go4lunch.view.ui;
 
-import android.Manifest;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.common.api.ApiException;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.Task;
-import com.google.android.libraries.places.api.Places;
+import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.model.PlaceLikelihood;
-import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
-import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
-import com.google.android.libraries.places.api.net.PlacesClient;
-import com.guilhempelissier.go4lunch.BuildConfig;
 import com.guilhempelissier.go4lunch.R;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
-import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+import com.guilhempelissier.go4lunch.viewmodel.MapViewModel;
 
 
 /**
@@ -51,13 +36,12 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 	private OnFragmentInteractionListener mListener;
 	private GoogleMap map;
 
-	LatLng currentLatLng;
+	private MapViewModel mapViewModel;
 
 	public MapViewFragment() {
 		// Required empty public constructor
 	}
 
-	// TODO: Rename and change types and number of parameters
 	public static MapViewFragment newInstance() {
 		MapViewFragment fragment = new MapViewFragment();
 		return fragment;
@@ -66,6 +50,8 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		mapViewModel = ViewModelProviders.of(this).get(MapViewModel.class);
 	}
 
 	@Override
@@ -73,7 +59,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 		super.onActivityCreated(savedInstanceState);
 
 		if(getActivity() != null) {
-			SupportMapFragment mapFragment = (SupportMapFragment) getActivity().getSupportFragmentManager().findFragmentById(R.id.map);
+			SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
 			if (mapFragment != null) {
 				mapFragment.getMapAsync(this);
 			}
@@ -113,9 +99,18 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 	@Override
 	public void onMapReady(GoogleMap googleMap) {
 		map = googleMap;
-		if (currentLatLng != null) {
-			map.moveCamera(CameraUpdateFactory.newLatLng(currentLatLng));
-		}
+		map.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.style_json));
+
+		mapViewModel.getRestaurantsList().observe(this, list -> {
+			for (Place restaurant : list) {
+				map.addMarker(new MarkerOptions().position(restaurant.getLatLng()).title(restaurant.getName()));
+			}
+		});
+
+		mapViewModel.getCurrentLocation().observe(this, location -> {
+			LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+			map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 16));
+		});
 	}
 
 	/**
