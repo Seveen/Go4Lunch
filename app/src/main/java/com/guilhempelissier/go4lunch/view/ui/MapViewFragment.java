@@ -18,8 +18,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.libraries.places.api.model.Place;
 import com.guilhempelissier.go4lunch.R;
+import com.guilhempelissier.go4lunch.model.Location;
+import com.guilhempelissier.go4lunch.model.Result;
 import com.guilhempelissier.go4lunch.viewmodel.MapViewModel;
 
 
@@ -102,8 +103,10 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 		map.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.style_json));
 
 		mapViewModel.getRestaurantsList().observe(this, list -> {
-			for (Place restaurant : list) {
-				map.addMarker(new MarkerOptions().position(restaurant.getLatLng()).title(restaurant.getName()));
+			for (Result restaurant : list) {
+				Location location = restaurant.getGeometry().getLocation();
+				LatLng latLng = new LatLng(location.getLat(), location.getLng());
+				map.addMarker(new MarkerOptions().position(latLng).title(restaurant.getName()));
 			}
 		});
 

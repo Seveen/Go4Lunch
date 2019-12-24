@@ -4,12 +4,11 @@ import android.content.Context;
 
 import com.guilhempelissier.go4lunch.repository.Repository;
 import com.guilhempelissier.go4lunch.service.LocationService;
-import com.guilhempelissier.go4lunch.service.PlacesAPIService;
-import com.guilhempelissier.go4lunch.service.PlacesAPIServiceImpl;
+import com.guilhempelissier.go4lunch.service.PlacesAPIStreams;
 
 public class DI {
 	private static Repository repository;
-	private static PlacesAPIService placesService;
+	private static PlacesAPIStreams placesService;
 	private static LocationService locationService;
 
 	public static Repository getRepository(Context applicationContext) {
@@ -19,9 +18,9 @@ public class DI {
 		return repository;
 	}
 
-	public static PlacesAPIService getPlacesService(Context applicationContext) {
+	public static PlacesAPIStreams getPlacesService() {
 		if (placesService == null) {
-			placesService = new PlacesAPIServiceImpl(applicationContext);
+			placesService = new PlacesAPIStreams();
 		}
 		return placesService;
 	}

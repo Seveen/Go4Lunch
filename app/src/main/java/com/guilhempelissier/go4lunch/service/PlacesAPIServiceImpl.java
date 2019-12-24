@@ -22,7 +22,7 @@ import io.reactivex.Single;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
-public class PlacesAPIServiceImpl implements PlacesAPIService {
+public class PlacesAPIServiceImpl {
 	private String TAG = "PlacesAPIService";
 
 	private Context applicationContext;
@@ -37,7 +37,6 @@ public class PlacesAPIServiceImpl implements PlacesAPIService {
 	}
 
 	//TODO changer du sdk vers des call api via http
-	@Override
 	public Single<List<Place>> getRestaurantsAround() {
 		FindCurrentPlaceRequest request = FindCurrentPlaceRequest.newInstance(placeFields);
 		Log.d(TAG, "Starting observable");
@@ -66,7 +65,6 @@ public class PlacesAPIServiceImpl implements PlacesAPIService {
 		}
 	}
 
-	@Override
 	public Single<Place> getDetailsAboutRestaurant(String id) {
 		return null;
 	}
