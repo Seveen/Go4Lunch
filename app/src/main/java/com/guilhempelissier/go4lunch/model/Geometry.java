@@ -6,13 +6,13 @@ import com.google.gson.annotations.Expose;
 public class Geometry {
 
     @Expose
-    private Location location;
+    private Location_ location;
 
-    public Location getLocation() {
+    public Location_ getLocation() {
         return location;
     }
 
-    public void setLocation(Location location) {
+    public void setLocation(Location_ location) {
         this.location = location;
     }
 

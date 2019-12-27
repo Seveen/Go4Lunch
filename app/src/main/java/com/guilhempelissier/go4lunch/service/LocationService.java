@@ -23,13 +23,13 @@ public class LocationService {
 			LocationCallback locationCallback = new LocationCallback() {
 				@Override
 				public void onLocationResult(LocationResult locationResult) {
-					Log.d("Location Service", "onLocationResult: new location result");
+					Log.d("Location_ Service", "onLocationResult: new location result");
 					emitter.onNext(locationResult.getLastLocation());
 				}
 			};
 			LocationRequest locationRequest = LocationRequest.create();
-			locationRequest.setInterval(1000);
-			locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+			locationRequest.setInterval(10000);
+			locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
 			locationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
 		});
 	}

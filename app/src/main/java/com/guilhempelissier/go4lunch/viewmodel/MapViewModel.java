@@ -33,7 +33,7 @@ public class MapViewModel extends AndroidViewModel {
 				.observeOn(AndroidSchedulers.mainThread())
 				.subscribe(location -> {
 					currentLocation.postValue(location);
-					repository.getRestaurantsAround(location, "15000")
+					repository.getRestaurantsAround(location, "1500")
 							.subscribeOn(Schedulers.newThread())
 							.observeOn(AndroidSchedulers.mainThread())
 							.subscribe(response -> {

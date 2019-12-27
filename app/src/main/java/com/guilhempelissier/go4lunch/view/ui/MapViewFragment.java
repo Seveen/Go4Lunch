@@ -1,6 +1,7 @@
 package com.guilhempelissier.go4lunch.view.ui;
 
 import android.content.Context;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -18,8 +19,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.guilhempelissier.go4lunch.R;
-import com.guilhempelissier.go4lunch.model.Location;
+import com.guilhempelissier.go4lunch.model.Location_;
 import com.guilhempelissier.go4lunch.model.Result;
 import com.guilhempelissier.go4lunch.viewmodel.MapViewModel;
 
@@ -36,8 +38,10 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
 	private OnFragmentInteractionListener mListener;
 	private GoogleMap map;
+	private FloatingActionButton centerButton;
 
 	private MapViewModel mapViewModel;
+	private Location currentLocation;
 
 	public MapViewFragment() {
 		// Required empty public constructor
@@ -64,6 +68,8 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 			if (mapFragment != null) {
 				mapFragment.getMapAsync(this);
 			}
+			centerButton = getView().findViewById(R.id.map_center_fab);
+			centerButton.setOnClickListener(view -> centerMapOnCurrentLocation());
 		}
 	}
 
@@ -104,16 +110,22 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
 		mapViewModel.getRestaurantsList().observe(this, list -> {
 			for (Result restaurant : list) {
-				Location location = restaurant.getGeometry().getLocation();
+				Location_ location = restaurant.getGeometry().getLocation();
 				LatLng latLng = new LatLng(location.getLat(), location.getLng());
 				map.addMarker(new MarkerOptions().position(latLng).title(restaurant.getName()));
 			}
 		});
 
-		mapViewModel.getCurrentLocation().observe(this, location -> {
-			LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-			map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 16));
-		});
+		mapViewModel.getCurrentLocation().observe(this, location -> currentLocation = location);
+	}
+
+	private void centerMapOnLocation(Location location) {
+		LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
+		map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLatLng, 16));
+	}
+
+	private void centerMapOnCurrentLocation() {
+		centerMapOnLocation(currentLocation);
 	}
 
 	/**

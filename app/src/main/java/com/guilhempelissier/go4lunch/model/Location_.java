@@ -3,7 +3,7 @@ package com.guilhempelissier.go4lunch.model;
 
 import com.google.gson.annotations.Expose;
 
-public class Location {
+public class Location_ {
 
     @Expose
     private Double lat;
