@@ -1,5 +1,5 @@
 
-package com.guilhempelissier.go4lunch.model;
+package com.guilhempelissier.go4lunch.model.serialization;
 
 import com.google.gson.annotations.SerializedName;
 

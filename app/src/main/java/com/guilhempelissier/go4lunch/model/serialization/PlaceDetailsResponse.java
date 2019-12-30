@@ -1,17 +1,17 @@
 
-package com.guilhempelissier.go4lunch.model;
+package com.guilhempelissier.go4lunch.model.serialization;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class PlacesResponse {
+public class PlaceDetailsResponse {
 
     @SerializedName("html_attributions")
     private List<Object> htmlAttributions;
     @Expose
-    private List<Result> results;
+    private DetailsResult result;
     @Expose
     private String status;
 
@@ -23,12 +23,12 @@ public class PlacesResponse {
         this.htmlAttributions = htmlAttributions;
     }
 
-    public List<Result> getResults() {
-        return results;
+    public DetailsResult getResult() {
+        return result;
     }
 
-    public void setResults(List<Result> results) {
-        this.results = results;
+    public void setResult(DetailsResult result) {
+        this.result = result;
     }
 
     public String getStatus() {

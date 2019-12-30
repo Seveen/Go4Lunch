@@ -3,6 +3,7 @@ package com.guilhempelissier.go4lunch.view.ui;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.AttributeSet;
@@ -17,8 +18,8 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
@@ -26,35 +27,38 @@ import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.guilhempelissier.go4lunch.R;
-import com.guilhempelissier.go4lunch.di.DI;
-import com.guilhempelissier.go4lunch.repository.Repository;
+import com.guilhempelissier.go4lunch.viewmodel.MapViewModel;
 
 import java.util.Arrays;
 
-import static android.content.pm.PackageManager.PERMISSION_GRANTED;
-
 public class MainActivity extends AppCompatActivity implements MapViewFragment.OnFragmentInteractionListener, WorkmatesFragment.OnFragmentInteractionListener, ListViewFragment.OnFragmentInteractionListener {
 
-	private static final int PERMISSIONS_READ_CONTACT = 126;
+	private static final int PERMISSIONS_ACCESS_CODE = 126;
 	private static final int RC_SIGN_IN = 123;
 	private ActionBarDrawerToggle actionBarDrawerToggle;
 	private BottomNavigationView bottomNavigationView;
 	private NavController navController;
 	private DrawerLayout drawerLayout;
 
-	private FusedLocationProviderClient fusedLocationClient;
-
+	private MapViewModel mapViewModel;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
+		mapViewModel = ViewModelProviders.of(this).get(MapViewModel.class);
+
+		mapViewModel.getNeedsPermission().observe(this, isPermissionNeeded -> {
+			if(isPermissionNeeded) {
+				getLocationPermission();
+			}
+		});
 
 		Toolbar toolbar = findViewById(R.id.toolbar);
 		setSupportActionBar(toolbar);
@@ -101,16 +105,8 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.O
 			}
 		});
 
-		//TODO gestion permissions ?
-		if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PERMISSION_GRANTED) {
-			getLocationPermission();
-		}
-
 		//TODO changer le comportement de la signin activity
 		//startSignInActivity();
-
-		//TODO debug test repository
-		Repository repository = DI.getRepository(getApplicationContext());
 	}
 
 	@Nullable
@@ -184,6 +180,24 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.O
 	}
 
 	public void getLocationPermission() {
-		ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_READ_CONTACT);
+		ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_ACCESS_CODE);
+	}
+
+	@Override
+	public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+		if (requestCode == PERMISSIONS_ACCESS_CODE) {
+			for (int i = 0; i < permissions.length; i++) {
+				String permission = permissions[i];
+				int grantResult = grantResults[i];
+
+				if (permission.equals(Manifest.permission.ACCESS_FINE_LOCATION)) {
+					if (grantResult == PackageManager.PERMISSION_GRANTED) {
+						mapViewModel.setNeedsPermission(false);
+					} else {
+						getLocationPermission();
+					}
+				}
+			}
+		}
 	}
 }

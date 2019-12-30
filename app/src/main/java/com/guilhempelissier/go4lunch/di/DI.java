@@ -2,20 +2,20 @@ package com.guilhempelissier.go4lunch.di;
 
 import android.content.Context;
 
-import com.guilhempelissier.go4lunch.repository.Repository;
+import com.guilhempelissier.go4lunch.repository.PlacesRepository;
 import com.guilhempelissier.go4lunch.service.LocationService;
 import com.guilhempelissier.go4lunch.service.PlacesAPIStreams;
 
 public class DI {
-	private static Repository repository;
+	private static PlacesRepository placesRepository;
 	private static PlacesAPIStreams placesService;
 	private static LocationService locationService;
 
-	public static Repository getRepository(Context applicationContext) {
-		if (repository == null) {
-			repository = new Repository(applicationContext);
+	public static PlacesRepository getRepository(Context applicationContext) {
+		if (placesRepository == null) {
+			placesRepository = new PlacesRepository(applicationContext);
 		}
-		return repository;
+		return placesRepository;
 	}
 
 	public static PlacesAPIStreams getPlacesService() {

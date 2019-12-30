@@ -1,9 +1,12 @@
 package com.guilhempelissier.go4lunch.service;
 
+import android.Manifest;
 import android.content.Context;
 import android.location.Location;
 import android.os.Looper;
 import android.util.Log;
+
+import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -13,6 +16,8 @@ import com.google.android.gms.location.LocationServices;
 
 import io.reactivex.Observable;
 
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
+
 public class LocationService {
 	Observable<Location> lastLocation;
 
@@ -20,17 +25,21 @@ public class LocationService {
 		FusedLocationProviderClient locationClient = LocationServices.getFusedLocationProviderClient(applicationContext);
 
 		lastLocation = Observable.create(emitter -> {
-			LocationCallback locationCallback = new LocationCallback() {
-				@Override
-				public void onLocationResult(LocationResult locationResult) {
-					Log.d("Location_ Service", "onLocationResult: new location result");
-					emitter.onNext(locationResult.getLastLocation());
-				}
-			};
-			LocationRequest locationRequest = LocationRequest.create();
-			locationRequest.setInterval(10000);
-			locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-			locationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
+			if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.ACCESS_FINE_LOCATION) != PERMISSION_GRANTED) {
+				emitter.onError(new SecurityException("Permission to access location needed"));
+			} else {
+				LocationCallback locationCallback = new LocationCallback() {
+					@Override
+					public void onLocationResult(LocationResult locationResult) {
+						Log.d("Location Service", "onLocationResult: new location result");
+						emitter.onNext(locationResult.getLastLocation());
+					}
+				};
+				LocationRequest locationRequest = LocationRequest.create();
+				locationRequest.setInterval(10000);
+				locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+				locationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
+			}
 		});
 	}
 

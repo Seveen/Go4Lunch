@@ -4,18 +4,22 @@ import android.content.Context;
 import android.location.Location;
 
 import com.guilhempelissier.go4lunch.di.DI;
-import com.guilhempelissier.go4lunch.model.PlacesResponse;
+import com.guilhempelissier.go4lunch.model.serialization.PlaceDetailsResponse;
+import com.guilhempelissier.go4lunch.model.serialization.PlacesNearbyResponse;
 import com.guilhempelissier.go4lunch.service.LocationService;
 import com.guilhempelissier.go4lunch.service.PlacesAPIStreams;
 
-import io.reactivex.Observable;
+import java.util.List;
 
-public class Repository {
-	private String TAG = "Repository";
+import io.reactivex.Observable;
+import io.reactivex.Single;
+
+public class PlacesRepository {
+	private String TAG = "PlacesRepository";
 	private PlacesAPIStreams placesAPI;
 	private LocationService locationService;
 
-	public Repository(Context applicationContext) {
+	public PlacesRepository(Context applicationContext) {
 		placesAPI = DI.getPlacesService();
 		locationService = DI.getLocationService(applicationContext);
 	}
@@ -24,7 +28,11 @@ public class Repository {
 		return locationService.getObservableLocation();
 	}
 
-	public Observable<PlacesResponse> getRestaurantsAround(Location location, String radius) {
+	public Observable<PlacesNearbyResponse> getRestaurantsAround(Location location, String radius) {
 		return placesAPI.getRestaurantsAround(location, radius);
+	}
+
+	public Single<List<PlaceDetailsResponse>> getDetailedRestaurantsAround(Location location, String radius) {
+		return placesAPI.getDetailedRestaurantsAround(location, radius);
 	}
 }
