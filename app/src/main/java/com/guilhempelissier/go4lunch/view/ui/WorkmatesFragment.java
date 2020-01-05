@@ -3,32 +3,19 @@ package com.guilhempelissier.go4lunch.view.ui;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.guilhempelissier.go4lunch.R;
 import com.guilhempelissier.go4lunch.view.adapter.WorkmatesListAdapter;
-import com.guilhempelissier.go4lunch.viewmodel.FormattedRestaurant;
-import com.guilhempelissier.go4lunch.viewmodel.FormattedWorkmate;
+import com.guilhempelissier.go4lunch.viewmodel.WorkmatesViewModel;
 
-import java.util.Arrays;
-import java.util.List;
-
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link WorkmatesFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link WorkmatesFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class WorkmatesFragment extends Fragment {
 
 	private OnFragmentInteractionListener mListener;
@@ -36,11 +23,13 @@ public class WorkmatesFragment extends Fragment {
 	private RecyclerView recyclerView;
 	private WorkmatesListAdapter adapter;
 
-	private List<FormattedWorkmate> dummylist = Arrays.asList(
-			new FormattedWorkmate(
-					"Hugh", "le zinc", "https://m.media-amazon.com/images/M/MV5BNDExMzIzNjk3Nl5BMl5BanBnXkFtZTcwOTE4NDU5OA@@._V1_.jpg"
-			)
-	);
+	private WorkmatesViewModel workmatesViewModel;
+
+//	private List<FormattedWorkmate> dummylist = Arrays.asList(
+//			new FormattedWorkmate(
+//					"Hugh", "le zinc", "https://m.media-amazon.com/images/M/MV5BNDExMzIzNjk3Nl5BMl5BanBnXkFtZTcwOTE4NDU5OA@@._V1_.jpg"
+//			)
+//	);
 
 	public WorkmatesFragment() {
 		// Required empty public constructor
@@ -54,6 +43,8 @@ public class WorkmatesFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		workmatesViewModel = ViewModelProviders.of(this).get(WorkmatesViewModel.class);
 	}
 
 	@Override
@@ -64,8 +55,12 @@ public class WorkmatesFragment extends Fragment {
 
 		recyclerView = root.findViewById(R.id.workmatesRecyclerView);
 		recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-		adapter = new WorkmatesListAdapter(dummylist, true);
+		adapter = new WorkmatesListAdapter(workmatesViewModel.getWorkmates().getValue(), true);
 		recyclerView.setAdapter(adapter);
+
+		workmatesViewModel.getWorkmates().observe(this, workmates -> {
+			adapter.setData(workmates);
+		});
 
 		return root;
 	}

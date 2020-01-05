@@ -11,7 +11,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.guilhempelissier.go4lunch.R;
 import com.guilhempelissier.go4lunch.databinding.WorkmatesViewItemBinding;
-import com.guilhempelissier.go4lunch.viewmodel.FormattedWorkmate;
+import com.guilhempelissier.go4lunch.model.FormattedWorkmate;
 
 import java.util.List;
 

@@ -11,5 +11,7 @@
     <string name="menu_your_lunch">Your Lunch</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_logout">Logout</string>
+    <string name="main_title">Go4Lunch</string>
+    <string name="menu_login">Log in</string>
 
 </resources>

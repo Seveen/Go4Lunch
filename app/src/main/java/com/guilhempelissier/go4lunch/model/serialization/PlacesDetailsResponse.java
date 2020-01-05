@@ -6,7 +6,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class PlaceDetailsResponse {
+public class PlacesDetailsResponse {
 
     @SerializedName("html_attributions")
     private List<Object> htmlAttributions;

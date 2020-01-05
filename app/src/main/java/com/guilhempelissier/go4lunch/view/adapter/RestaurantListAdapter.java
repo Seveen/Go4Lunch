@@ -1,7 +1,6 @@
 package com.guilhempelissier.go4lunch.view.adapter;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
@@ -11,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.guilhempelissier.go4lunch.R;
 import com.guilhempelissier.go4lunch.databinding.ListViewItemBinding;
-import com.guilhempelissier.go4lunch.viewmodel.FormattedRestaurant;
+import com.guilhempelissier.go4lunch.model.FormattedRestaurant;
 
 import java.util.List;
 
@@ -67,15 +66,16 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
 			});
 		}
 
+		//TODO redo en passant le binding dans le xml
 		public void bind(FormattedRestaurant restaurant) {
 			Glide.with(binding.getRoot())
 					.load(restaurant.getImageUrl())
 					.into(picture);
 			binding.setName(restaurant.getName());
 			binding.setAddress(restaurant.getAddress());
-			binding.setOpeningTime(restaurant.getOpeningTime());
+			binding.setOpeningTime(restaurant.getOpenNow());
 			binding.setDistance(restaurant.getDistance());
-			binding.setNbWorkmates(restaurant.getNbWorkmates());
+			binding.setNbWorkmates("0");
 			binding.setStars(restaurant.getStars());
 		}
 	}

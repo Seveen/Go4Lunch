@@ -18,6 +18,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
@@ -27,16 +28,26 @@ import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.common.api.Status;
+import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
+import com.guilhempelissier.go4lunch.BuildConfig;
 import com.guilhempelissier.go4lunch.R;
+import com.guilhempelissier.go4lunch.databinding.ActivityMainBinding;
+import com.guilhempelissier.go4lunch.databinding.MenuHeaderBinding;
+import com.guilhempelissier.go4lunch.viewmodel.AuthViewModel;
 import com.guilhempelissier.go4lunch.viewmodel.MapViewModel;
 
 import java.util.Arrays;
 
-public class MainActivity extends AppCompatActivity implements MapViewFragment.OnFragmentInteractionListener, WorkmatesFragment.OnFragmentInteractionListener, ListViewFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity
+		implements
+		MapViewFragment.OnFragmentInteractionListener,
+		WorkmatesFragment.OnFragmentInteractionListener,
+		ListViewFragment.OnFragmentInteractionListener {
 
 	private static final int PERMISSIONS_ACCESS_CODE = 126;
 	private static final int RC_SIGN_IN = 123;
@@ -46,24 +57,26 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.O
 	private DrawerLayout drawerLayout;
 
 	private MapViewModel mapViewModel;
+	private AuthViewModel authViewModel;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		ActivityMainBinding mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
 		mapViewModel = ViewModelProviders.of(this).get(MapViewModel.class);
-
 		mapViewModel.getNeedsPermission().observe(this, isPermissionNeeded -> {
 			if(isPermissionNeeded) {
 				getLocationPermission();
 			}
 		});
 
-		Toolbar toolbar = findViewById(R.id.toolbar);
+		authViewModel = ViewModelProviders.of(this).get(AuthViewModel.class);
+
+		Toolbar toolbar = mainBinding.toolbar;
 		setSupportActionBar(toolbar);
 
-		drawerLayout = findViewById(R.id.drawer_layout);
+		drawerLayout = mainBinding.drawerLayout;
 		actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open_drawer, R.string.close_drawer);
 		drawerLayout.addDrawerListener(actionBarDrawerToggle);
 		actionBarDrawerToggle.syncState();
@@ -72,7 +85,7 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.O
 
 		navController = Navigation.findNavController(this, R.id.navigation_container);
 
-		bottomNavigationView = findViewById(R.id.navigation_menu);
+		bottomNavigationView = mainBinding.navigationMenu;
 		bottomNavigationView.setOnNavigationItemSelectedListener(menuItem -> {
 			switch (menuItem.getItemId()) {
 				case R.id.menu_map_view:
@@ -88,6 +101,40 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.O
 			return true;
 		});
 
+		NavigationView navView = mainBinding.navView;
+		MenuHeaderBinding menuHeaderBinding = MenuHeaderBinding.bind(navView.getHeaderView(0));
+		authViewModel.getCurrentUser().observe(this, user -> {
+			menuHeaderBinding.setUser(user);
+		});
+		authViewModel.isUserConnected().observe(this, isConnected -> {
+			if (isConnected) {
+				navView.getMenu().setGroupVisible(R.id.menu_group_1, true);
+				navView.getMenu().setGroupVisible(R.id.menu_group_2, false);
+			} else {
+				navView.getMenu().setGroupVisible(R.id.menu_group_1, false);
+				navView.getMenu().setGroupVisible(R.id.menu_group_2, true);
+				startSignInActivity();
+			}
+		});
+		authViewModel.updateCurrentUser();
+
+		navView.setNavigationItemSelectedListener(menuItem -> {
+			switch (menuItem.getItemId()) {
+				case R.id.menu_logout:
+					authViewModel.disconnectCurrentUser();
+					break;
+				case R.id.menu_settings:
+					break;
+				case R.id.menu_lunch:
+					break;
+				case R.id.menu_login:
+					startSignInActivity();
+					break;
+			}
+			return true;
+		});
+
+		Places.initialize(this, BuildConfig.PLACES_KEY);
 		AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
 				getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
 		autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
@@ -104,9 +151,6 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.O
 				Log.i(TAG, "An error occurred: " + status);
 			}
 		});
-
-		//TODO changer le comportement de la signin activity
-		//startSignInActivity();
 	}
 
 	@Nullable
@@ -141,13 +185,14 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.O
 		IdpResponse response = IdpResponse.fromResultIntent(data);
 
 		if (resultCode == RESULT_OK) {
-			Toast.makeText(this, "La connexion est un succes", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "Connecté", Toast.LENGTH_SHORT).show();
+			authViewModel.updateCurrentUser();
 		} else {
 			if (response == null) {
-				Toast.makeText(this, "La connexion a ete annulee", Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, "La connexion a été annulée", Toast.LENGTH_SHORT).show();
 			} else {
 				switch (response.getError().getErrorCode()) {
-					case ErrorCodes.NO_NETWORK: Toast.makeText(this, "Pas internet", Toast.LENGTH_SHORT).show();
+					case ErrorCodes.NO_NETWORK: Toast.makeText(this, "Pas de connexion internet", Toast.LENGTH_SHORT).show();
 					case ErrorCodes.UNKNOWN_ERROR: Toast.makeText(this, "Erreur inconnue", Toast.LENGTH_SHORT).show();
 					default:
 				}
@@ -172,7 +217,6 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.O
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-
 		if(actionBarDrawerToggle.onOptionsItemSelected(item))
 			return true;
 
@@ -180,6 +224,7 @@ public class MainActivity extends AppCompatActivity implements MapViewFragment.O
 	}
 
 	public void getLocationPermission() {
+		mapViewModel.setNeedsPermission(false);
 		ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_ACCESS_CODE);
 	}
 

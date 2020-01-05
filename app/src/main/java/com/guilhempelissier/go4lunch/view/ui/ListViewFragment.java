@@ -9,15 +9,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.guilhempelissier.go4lunch.R;
 import com.guilhempelissier.go4lunch.view.adapter.RestaurantListAdapter;
-import com.guilhempelissier.go4lunch.viewmodel.FormattedRestaurant;
+import com.guilhempelissier.go4lunch.viewmodel.MapViewModel;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.Collections;
 
 
 
@@ -36,14 +36,16 @@ public class ListViewFragment extends Fragment {
 	private RecyclerView recyclerView;
 	private RestaurantListAdapter adapter;
 
-	private List<FormattedRestaurant> dummylist = Arrays.asList(
-			new FormattedRestaurant(
-					"Name1", "123 rue 465", "open", "100m", "3", "*", "https://media-cdn.tripadvisor.com/media/photo-s/12/c1/c3/f5/restaurant-araz.jpg", "2"
-			),
-			new FormattedRestaurant(
-					"Name2", "123 rue 465", "open", "100m", "3", "*", "https://media-cdn.tripadvisor.com/media/photo-s/12/c1/c3/f5/restaurant-araz.jpg", "2"
-			)
-	);
+	private MapViewModel mapViewModel;
+
+//	private List<FormattedRestaurant> dummylist = Arrays.asList(
+//			new FormattedRestaurant(
+//					"Name1", "123 rue 465", "open", "100m", "3", "*", "https://media-cdn.tripadvisor.com/media/photo-s/12/c1/c3/f5/restaurant-araz.jpg", "2"
+//			),
+//			new FormattedRestaurant(
+//					"Name2", "123 rue 465", "open", "100m", "3", "*", "https://media-cdn.tripadvisor.com/media/photo-s/12/c1/c3/f5/restaurant-araz.jpg", "2"
+//			)
+//	);
 
 	public ListViewFragment() {
 		// Required empty public constructor
@@ -57,6 +59,7 @@ public class ListViewFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		mapViewModel = ViewModelProviders.of(this).get(MapViewModel.class);
 	}
 
 	@Override
@@ -65,10 +68,16 @@ public class ListViewFragment extends Fragment {
 		// Inflate the layout for this fragment
 		ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_list_view, null);
 
+
+
 		recyclerView = root.findViewById(R.id.restaurantsRecyclerView);
 		recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-		adapter = new RestaurantListAdapter(dummylist);
+		adapter = new RestaurantListAdapter(Collections.emptyList());
 		recyclerView.setAdapter(adapter);
+
+		mapViewModel.getRestaurantsList().observe(this, restaurants -> {
+			adapter.setData(restaurants);
+		});
 
 		adapter.setOnClickRestaurantListener(id -> {
 			//TODO switch selected restaurant in vm

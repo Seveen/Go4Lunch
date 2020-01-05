@@ -1,4 +1,4 @@
-package com.guilhempelissier.go4lunch.viewmodel;
+package com.guilhempelissier.go4lunch.model;
 
 public class FormattedWorkmate {
 	private String name;

@@ -1,32 +1,26 @@
-package com.guilhempelissier.go4lunch.viewmodel;
+package com.guilhempelissier.go4lunch.model;
+
+import com.google.android.gms.maps.model.LatLng;
 
 public class FormattedRestaurant {
 	private String id;
 	private String name;
 	private String address;
-	private String openingTime;
+	private String openNow;
 	private String distance;
-	private String nbWorkmates;
 	private String stars;
 	private String imageUrl;
+	private LatLng latLng;
 
-	public FormattedRestaurant(String name, String address, String openingTime, String distance, String nbWorkmates, String stars, String imageUrl, String id) {
+	public FormattedRestaurant(String id, String name, String address, String openNow, String distance, String stars, String imageUrl, LatLng latLng) {
 		this.id = id;
 		this.name = name;
 		this.address = address;
-		this.openingTime = openingTime;
+		this.openNow = openNow;
 		this.distance = distance;
-		this.nbWorkmates = nbWorkmates;
 		this.stars = stars;
 		this.imageUrl = imageUrl;
-	}
-
-	public String getImageUrl() {
-		return imageUrl;
-	}
-
-	public void setImageUrl(String imageUrl) {
-		this.imageUrl = imageUrl;
+		this.latLng = latLng;
 	}
 
 	public String getId() {
@@ -53,12 +47,12 @@ public class FormattedRestaurant {
 		this.address = address;
 	}
 
-	public String getOpeningTime() {
-		return openingTime;
+	public String getOpenNow() {
+		return openNow;
 	}
 
-	public void setOpeningTime(String openingTime) {
-		this.openingTime = openingTime;
+	public void setOpenNow(String openNow) {
+		this.openNow = openNow;
 	}
 
 	public String getDistance() {
@@ -69,19 +63,27 @@ public class FormattedRestaurant {
 		this.distance = distance;
 	}
 
-	public String getNbWorkmates() {
-		return nbWorkmates;
-	}
-
-	public void setNbWorkmates(String nbWorkmates) {
-		this.nbWorkmates = nbWorkmates;
-	}
-
 	public String getStars() {
 		return stars;
 	}
 
 	public void setStars(String stars) {
 		this.stars = stars;
+	}
+
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
+
+	public LatLng getLatLng() {
+		return latLng;
+	}
+
+	public void setLatLng(LatLng latLng) {
+		this.latLng = latLng;
 	}
 }

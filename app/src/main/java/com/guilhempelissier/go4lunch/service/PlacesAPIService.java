@@ -2,7 +2,7 @@ package com.guilhempelissier.go4lunch.service;
 
 
 
-import com.guilhempelissier.go4lunch.model.serialization.PlaceDetailsResponse;
+import com.guilhempelissier.go4lunch.model.serialization.PlacesDetailsResponse;
 import com.guilhempelissier.go4lunch.model.serialization.PlacesNearbyResponse;
 
 import io.reactivex.Observable;
@@ -21,8 +21,8 @@ public interface PlacesAPIService {
 														  @Query("type") String type);
 
 	@GET("maps/api/place/details/json")
-	Observable<PlaceDetailsResponse> getDetailsAboutRestaurant(@Query("place_id") String id,
-														   @Query("key") String key);
+	Observable<PlacesDetailsResponse> getDetailsAboutRestaurant(@Query("place_id") String id,
+																@Query("key") String key);
 
 	public static final Retrofit retrofit = new Retrofit.Builder()
 			.baseUrl("https://maps.googleapis.com/")

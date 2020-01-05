@@ -1,20 +1,20 @@
 package com.guilhempelissier.go4lunch.view.ui;
 
+import android.os.Bundle;
+import android.widget.ImageView;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Bundle;
-import android.widget.ImageView;
-
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.maps.model.LatLng;
 import com.guilhempelissier.go4lunch.R;
 import com.guilhempelissier.go4lunch.databinding.RestaurantViewBinding;
+import com.guilhempelissier.go4lunch.model.FormattedRestaurant;
+import com.guilhempelissier.go4lunch.model.FormattedWorkmate;
 import com.guilhempelissier.go4lunch.view.adapter.WorkmatesListAdapter;
-import com.guilhempelissier.go4lunch.viewmodel.FormattedRestaurant;
-import com.guilhempelissier.go4lunch.viewmodel.FormattedWorkmate;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,7 +22,9 @@ import java.util.List;
 public class RestaurantActivity extends AppCompatActivity {
 	//TODO debug data
 	private FormattedRestaurant dummyRestaurant = new FormattedRestaurant(
-			"Name1", "123 rue 465", "open", "100m", "3", "*", "https://media-cdn.tripadvisor.com/media/photo-s/12/c1/c3/f5/restaurant-araz.jpg", "2"
+			"1",
+			"Name1",
+			"123 rue 465", "open", "100m", "3", "https://media-cdn.tripadvisor.com/media/photo-s/12/c1/c3/f5/restaurant-araz.jpg", new LatLng(49.4,16.9)
 	);
 
 	private List<FormattedWorkmate> dummylist = Arrays.asList(
