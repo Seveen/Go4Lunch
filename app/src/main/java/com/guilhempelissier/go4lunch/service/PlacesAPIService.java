@@ -1,7 +1,5 @@
 package com.guilhempelissier.go4lunch.service;
 
-
-
 import com.guilhempelissier.go4lunch.model.serialization.PlacesDetailsResponse;
 import com.guilhempelissier.go4lunch.model.serialization.PlacesNearbyResponse;
 

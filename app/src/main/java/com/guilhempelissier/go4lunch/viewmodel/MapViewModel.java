@@ -19,11 +19,14 @@ import com.guilhempelissier.go4lunch.model.serialization.Location_;
 import com.guilhempelissier.go4lunch.model.serialization.NearbyResult;
 import com.guilhempelissier.go4lunch.repository.PlacesRepository;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
 
 public class MapViewModel extends AndroidViewModel {
 	private String TAG = "MapVM";
@@ -36,8 +39,7 @@ public class MapViewModel extends AndroidViewModel {
 		super(application);
 		placesRepository = DI.getPlacesRepository(application.getApplicationContext());
 
-		//TODO quand les api call fonctionnent correctement, transformer DetailedResults en FormattedRestaurant
-		placesRepository.getCurrentLocation()
+		Disposable disposable = placesRepository.getCurrentLocation()
 				.doOnError(error -> {
 					if (error instanceof SecurityException) {
 						needsPermission.postValue(true);
@@ -45,21 +47,29 @@ public class MapViewModel extends AndroidViewModel {
 				})
 				.retryWhen(attempts -> attempts.flatMap(i -> Observable.timer(1, TimeUnit.SECONDS)))
 				.subscribe(location -> {
-					currentLocation.postValue(location);
-//					placesRepository.getRestaurantsAround(location, "1500")
-//							.subscribe(response -> {
-//								List<NearbyResult> results = response.getResults();
-//								restaurantsList.postValue(results);
-//								Log.d(TAG, "MapViewModel: found restaurant: " + response);
-//							}, error -> Log.d(TAG, "Restaurants error: " + error.getMessage()));
-					placesRepository.getDetailedRestaurantsAround(location, "1500")
-							.subscribe(allResults -> {
-								List<FormattedRestaurant> results = new ArrayList<>();
-								for (AllResult result : allResults) {
-									results.add(formatAllResult(result));
-								}
-								restaurantsList.postValue(results);
-							}, error -> Log.d(TAG, "Detailed restaurants error: " + error.getMessage()));
+					Boolean updateLocation = false;
+
+					if (currentLocation.getValue() != null) {
+						Float distanceFromOldLocation = currentLocation.getValue().distanceTo(location);
+						if (distanceFromOldLocation < 1500.0) {
+							updateLocation = true;
+						}
+					} else {
+						updateLocation = true;
+					}
+
+					if (updateLocation) {
+						currentLocation.postValue(location);
+						placesRepository.getDetailedRestaurantsAround(location, "1500")
+								.subscribe(allResults -> {
+									List<FormattedRestaurant> results = new ArrayList<>();
+									for (AllResult result : allResults) {
+										Log.d(TAG, "All results: " + result.getId());
+										results.add(formatAllResult(result));
+									}
+									restaurantsList.postValue(results);
+								}, error -> Log.d(TAG, "Detailed restaurants error: " + error.getMessage()));
+					}
 				}, error -> Log.d(TAG, error.getMessage()));
 	}
 
@@ -90,12 +100,19 @@ public class MapViewModel extends AndroidViewModel {
 		Location.distanceBetween(currentLoc.getLatitude(), currentLoc.getLongitude(),
 				restaurantLoc.getLat(), restaurantLoc.getLng(), distanceResult);
 
-		String distance = distanceResult[0] + "m";
+		String distance = formatDistance(distanceResult[0]);
+
+		String openNow;
+		if (nearby.getOpeningHours() != null) {
+			openNow = formatOpenNow(nearby.getOpeningHours().getOpenNow());
+		} else {
+			openNow = "No opening information";
+		}
 
 		return new FormattedRestaurant(result.getId(),
 				details.getName(),
 				details.getFormattedAddress(),
-				formatOpenNow(nearby.getOpeningHours().getOpenNow()),
+				openNow,
 				distance,
 				formatRating(details.getRating()),
 				formatPhotoUrl(nearby.getPhotos().get(0).getPhotoReference()),
@@ -123,5 +140,14 @@ public class MapViewModel extends AndroidViewModel {
 
 	private String formatOpenNow(Boolean open) {
 		return open ? "Open now" : "Closed";
+	}
+
+	private String formatDistance(float distance) {
+		StringBuilder result = new StringBuilder();
+		DecimalFormat format = new DecimalFormat("####");
+		format.setRoundingMode(RoundingMode.DOWN);
+		result.append(format.format(distance));
+		result.append("m");
+		return result.toString();
 	}
 }

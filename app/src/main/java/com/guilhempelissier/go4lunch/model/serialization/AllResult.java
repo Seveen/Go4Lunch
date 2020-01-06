@@ -5,7 +5,7 @@ public class AllResult {
 	private DetailsResult detailsResult;
 	private NearbyResult nearbyResult;
 
-	public AllResult(String id, DetailsResult detailsResult, NearbyResult nearbyResult) {
+	public AllResult(String id, NearbyResult nearbyResult, DetailsResult detailsResult) {
 		this.id = id;
 		this.detailsResult = detailsResult;
 		this.nearbyResult = nearbyResult;
