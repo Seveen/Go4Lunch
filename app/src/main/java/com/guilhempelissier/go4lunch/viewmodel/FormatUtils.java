@@ -9,6 +9,7 @@ import com.guilhempelissier.go4lunch.model.serialization.AllResult;
 import com.guilhempelissier.go4lunch.model.serialization.DetailsResult;
 import com.guilhempelissier.go4lunch.model.serialization.Location_;
 import com.guilhempelissier.go4lunch.model.serialization.NearbyResult;
+import com.guilhempelissier.go4lunch.model.serialization.OpeningHours;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -59,7 +60,14 @@ public class FormatUtils {
 				restaurantLoc.getLat(), restaurantLoc.getLng(), distanceResult);
 		String distance = FormatUtils.formatDistance(distanceResult[0]);
 
-		String openNow = FormatUtils.formatOpenNow(nearby.getOpeningHours().getOpenNow());
+		OpeningHours openingHours = nearby.getOpeningHours();
+		String openNow;
+
+		if (openingHours != null) {
+			openNow = FormatUtils.formatOpenNow(openingHours.getOpenNow());
+		} else {
+			openNow = "No opening information";
+		}
 
 		return new FormattedRestaurant(result.getId(),
 				details.getName(),
