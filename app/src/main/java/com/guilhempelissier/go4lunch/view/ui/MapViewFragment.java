@@ -22,7 +22,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.guilhempelissier.go4lunch.R;
 import com.guilhempelissier.go4lunch.model.FormattedRestaurant;
-import com.guilhempelissier.go4lunch.viewmodel.MapViewModel;
+import com.guilhempelissier.go4lunch.viewmodel.PlaceViewModel;
 
 
 /**
@@ -39,7 +39,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 	private GoogleMap map;
 	private FloatingActionButton centerButton;
 
-	private MapViewModel mapViewModel;
+	private PlaceViewModel placeViewModel;
 	private Location currentLocation;
 
 	public MapViewFragment() {
@@ -55,7 +55,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		mapViewModel = ViewModelProviders.of(this).get(MapViewModel.class);
+		placeViewModel = ViewModelProviders.of(this).get(PlaceViewModel.class);
 	}
 
 	@Override
@@ -107,14 +107,17 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 		map = googleMap;
 		map.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.style_json));
 
-		mapViewModel.getRestaurantsList().observe(this, list -> {
+		placeViewModel.getRestaurantsList().observe(this, list -> {
 			for (FormattedRestaurant restaurant : list) {
 				LatLng latLng = restaurant.getLatLng();
 				map.addMarker(new MarkerOptions().position(latLng).title(restaurant.getName()));
 			}
 		});
 
-		mapViewModel.getCurrentLocation().observe(this, location -> currentLocation = location);
+		placeViewModel.getCurrentLocation().observe(this, location -> {
+			currentLocation = location;
+			centerMapOnCurrentLocation();
+		});
 	}
 
 	private void centerMapOnLocation(Location location) {
@@ -126,7 +129,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 		if(currentLocation != null) {
 			centerMapOnLocation(currentLocation);
 		} else {
-			mapViewModel.setNeedsPermission(true);
+			placeViewModel.setNeedsPermission(true);
 		}
 	}
 

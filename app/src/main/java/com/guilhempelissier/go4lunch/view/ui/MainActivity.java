@@ -39,7 +39,7 @@ import com.guilhempelissier.go4lunch.R;
 import com.guilhempelissier.go4lunch.databinding.ActivityMainBinding;
 import com.guilhempelissier.go4lunch.databinding.MenuHeaderBinding;
 import com.guilhempelissier.go4lunch.viewmodel.AuthViewModel;
-import com.guilhempelissier.go4lunch.viewmodel.MapViewModel;
+import com.guilhempelissier.go4lunch.viewmodel.PlaceViewModel;
 
 import java.util.Arrays;
 
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity
 	private NavController navController;
 	private DrawerLayout drawerLayout;
 
-	private MapViewModel mapViewModel;
+	private PlaceViewModel placeViewModel;
 	private AuthViewModel authViewModel;
 
 	@Override
@@ -64,8 +64,8 @@ public class MainActivity extends AppCompatActivity
 		super.onCreate(savedInstanceState);
 		ActivityMainBinding mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-		mapViewModel = ViewModelProviders.of(this).get(MapViewModel.class);
-		mapViewModel.getNeedsPermission().observe(this, isPermissionNeeded -> {
+		placeViewModel = ViewModelProviders.of(this).get(PlaceViewModel.class);
+		placeViewModel.getNeedsPermission().observe(this, isPermissionNeeded -> {
 			if(isPermissionNeeded) {
 				getLocationPermission();
 			}
@@ -224,7 +224,7 @@ public class MainActivity extends AppCompatActivity
 	}
 
 	public void getLocationPermission() {
-		mapViewModel.setNeedsPermission(false);
+		placeViewModel.setNeedsPermission(false);
 		ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSIONS_ACCESS_CODE);
 	}
 
@@ -237,7 +237,7 @@ public class MainActivity extends AppCompatActivity
 
 				if (permission.equals(Manifest.permission.ACCESS_FINE_LOCATION)) {
 					if (grantResult == PackageManager.PERMISSION_GRANTED) {
-						mapViewModel.setNeedsPermission(false);
+						placeViewModel.setNeedsPermission(false);
 					} else {
 						getLocationPermission();
 					}

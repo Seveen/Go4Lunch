@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.guilhempelissier.go4lunch.R;
 import com.guilhempelissier.go4lunch.view.adapter.RestaurantListAdapter;
-import com.guilhempelissier.go4lunch.viewmodel.MapViewModel;
+import com.guilhempelissier.go4lunch.viewmodel.PlaceViewModel;
 
 import java.util.Collections;
 
@@ -36,7 +36,7 @@ public class ListViewFragment extends Fragment {
 	private RecyclerView recyclerView;
 	private RestaurantListAdapter adapter;
 
-	private MapViewModel mapViewModel;
+	private PlaceViewModel placeViewModel;
 
 //	private List<FormattedRestaurant> dummylist = Arrays.asList(
 //			new FormattedRestaurant(
@@ -59,7 +59,7 @@ public class ListViewFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mapViewModel = ViewModelProviders.of(this).get(MapViewModel.class);
+		placeViewModel = ViewModelProviders.of(this).get(PlaceViewModel.class);
 	}
 
 	@Override
@@ -75,7 +75,7 @@ public class ListViewFragment extends Fragment {
 		adapter = new RestaurantListAdapter(Collections.emptyList());
 		recyclerView.setAdapter(adapter);
 
-		mapViewModel.getRestaurantsList().observe(this, restaurants -> {
+		placeViewModel.getRestaurantsList().observe(this, restaurants -> {
 			adapter.setData(restaurants);
 		});
 
