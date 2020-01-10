@@ -15,6 +15,8 @@ import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 
 import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.schedulers.Schedulers;
 
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
@@ -44,6 +46,8 @@ public class LocationService {
 	}
 
 	public Observable<Location> getObservableLocation() {
-		return lastLocation;
+		return lastLocation
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread());
 	}
 }

@@ -1,8 +1,6 @@
 package com.guilhempelissier.go4lunch.view.ui;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,38 +12,20 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.guilhempelissier.go4lunch.R;
+import com.guilhempelissier.go4lunch.model.FormattedRestaurant;
 import com.guilhempelissier.go4lunch.view.adapter.RestaurantListAdapter;
 import com.guilhempelissier.go4lunch.viewmodel.PlaceViewModel;
 
 import java.util.Collections;
+import java.util.List;
 
 
-
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ListViewFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ListViewFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ListViewFragment extends Fragment {
-
-	private OnFragmentInteractionListener mListener;
 
 	private RecyclerView recyclerView;
 	private RestaurantListAdapter adapter;
 
 	private PlaceViewModel placeViewModel;
-
-//	private List<FormattedRestaurant> dummylist = Arrays.asList(
-//			new FormattedRestaurant(
-//					"Name1", "123 rue 465", "open", "100m", "3", "*", "https://media-cdn.tripadvisor.com/media/photo-s/12/c1/c3/f5/restaurant-araz.jpg", "2"
-//			),
-//			new FormattedRestaurant(
-//					"Name2", "123 rue 465", "open", "100m", "3", "*", "https://media-cdn.tripadvisor.com/media/photo-s/12/c1/c3/f5/restaurant-araz.jpg", "2"
-//			)
-//	);
 
 	public ListViewFragment() {
 		// Required empty public constructor
@@ -75,6 +55,10 @@ public class ListViewFragment extends Fragment {
 		adapter = new RestaurantListAdapter(Collections.emptyList());
 		recyclerView.setAdapter(adapter);
 
+		List<FormattedRestaurant> initialData = placeViewModel.getRestaurantsList().getValue();
+		if (initialData != null) {
+			adapter.setData(initialData);
+		}
 		placeViewModel.getRestaurantsList().observe(this, restaurants -> {
 			adapter.setData(restaurants);
 		});
@@ -86,27 +70,5 @@ public class ListViewFragment extends Fragment {
 		});
 
 		return root;
-	}
-
-	@Override
-	public void onAttach(Context context) {
-		super.onAttach(context);
-		if (context instanceof OnFragmentInteractionListener) {
-			mListener = (OnFragmentInteractionListener) context;
-		} else {
-			throw new RuntimeException(context.toString()
-					+ " must implement OnFragmentInteractionListener");
-		}
-	}
-
-	@Override
-	public void onDetach() {
-		super.onDetach();
-		mListener = null;
-	}
-
-	public interface OnFragmentInteractionListener {
-		// TODO: Update argument type and name
-		void onListFragmentInteraction(Uri uri);
 	}
 }

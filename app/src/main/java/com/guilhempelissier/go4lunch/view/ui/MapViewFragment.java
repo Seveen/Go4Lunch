@@ -1,8 +1,6 @@
 package com.guilhempelissier.go4lunch.view.ui;
 
-import android.content.Context;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,18 +22,9 @@ import com.guilhempelissier.go4lunch.R;
 import com.guilhempelissier.go4lunch.model.FormattedRestaurant;
 import com.guilhempelissier.go4lunch.viewmodel.PlaceViewModel;
 
+import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link MapViewFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link MapViewFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class MapViewFragment extends Fragment implements OnMapReadyCallback {
-
-	private OnFragmentInteractionListener mListener;
 	private GoogleMap map;
 	private FloatingActionButton centerButton;
 
@@ -78,46 +67,35 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 		return inflater.inflate(R.layout.fragment_map_view, container, false);
 	}
 
-	// TODO: Rename method, update argument and hook method into UI event
-	public void onButtonPressed(Uri uri) {
-		if (mListener != null) {
-			mListener.onMapFragmentInteraction(uri);
-		}
-	}
-
-	@Override
-	public void onAttach(Context context) {
-		super.onAttach(context);
-		if (context instanceof OnFragmentInteractionListener) {
-			mListener = (OnFragmentInteractionListener) context;
-		} else {
-			throw new RuntimeException(context.toString()
-					+ " must implement OnFragmentInteractionListener");
-		}
-	}
-
-	@Override
-	public void onDetach() {
-		super.onDetach();
-		mListener = null;
-	}
-
 	@Override
 	public void onMapReady(GoogleMap googleMap) {
 		map = googleMap;
 		map.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.style_json));
 
+		List<FormattedRestaurant> initialData = placeViewModel.getRestaurantsList().getValue();
+		if (initialData != null) {
+			addMarkers(initialData);
+		}
 		placeViewModel.getRestaurantsList().observe(this, list -> {
-			for (FormattedRestaurant restaurant : list) {
-				LatLng latLng = restaurant.getLatLng();
-				map.addMarker(new MarkerOptions().position(latLng).title(restaurant.getName()));
-			}
+			addMarkers(list);
 		});
 
+		Location initialLocation = placeViewModel.getCurrentLocation().getValue();
+		if (initialLocation != null) {
+			currentLocation = initialLocation;
+			centerMapOnCurrentLocation();
+		}
 		placeViewModel.getCurrentLocation().observe(this, location -> {
 			currentLocation = location;
 			centerMapOnCurrentLocation();
 		});
+	}
+
+	private void addMarkers(List<FormattedRestaurant> list) {
+		for (FormattedRestaurant restaurant : list) {
+			LatLng latLng = restaurant.getLatLng();
+			map.addMarker(new MarkerOptions().position(latLng).title(restaurant.getName()));
+		}
 	}
 
 	private void centerMapOnLocation(Location location) {
@@ -131,20 +109,5 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 		} else {
 			placeViewModel.setNeedsPermission(true);
 		}
-	}
-
-	/**
-	 * This interface must be implemented by activities that contain this
-	 * fragment to allow an interaction in this fragment to be communicated
-	 * to the activity and potentially other fragments contained in that
-	 * activity.
-	 * <p>
-	 * See the Android Training lesson <a href=
-	 * "http://developer.android.com/training/basics/fragments/communicating.html"
-	 * >Communicating with Other Fragments</a> for more information.
-	 */
-	public interface OnFragmentInteractionListener {
-		// TODO: Update argument type and name
-		void onMapFragmentInteraction(Uri uri);
 	}
 }

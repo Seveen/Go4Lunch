@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -43,11 +42,7 @@ import com.guilhempelissier.go4lunch.viewmodel.PlaceViewModel;
 
 import java.util.Arrays;
 
-public class MainActivity extends AppCompatActivity
-		implements
-		MapViewFragment.OnFragmentInteractionListener,
-		WorkmatesFragment.OnFragmentInteractionListener,
-		ListViewFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity {
 
 	private static final int PERMISSIONS_ACCESS_CODE = 126;
 	private static final int RC_SIGN_IN = 123;
@@ -198,21 +193,6 @@ public class MainActivity extends AppCompatActivity
 				}
 			}
 		}
-	}
-
-	@Override
-	public void onMapFragmentInteraction(Uri uri) {
-
-	}
-
-	@Override
-	public void onListFragmentInteraction(Uri uri) {
-
-	}
-
-	@Override
-	public void onWorkmatesFragmentInteraction(Uri uri) {
-
 	}
 
 	@Override
