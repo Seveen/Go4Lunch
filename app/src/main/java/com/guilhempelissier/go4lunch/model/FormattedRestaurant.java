@@ -2,6 +2,8 @@ package com.guilhempelissier.go4lunch.model;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.List;
+
 public class FormattedRestaurant {
 	private String id;
 	private String name;
@@ -11,8 +13,9 @@ public class FormattedRestaurant {
 	private String stars;
 	private String imageUrl;
 	private LatLng latLng;
+	private List<String> workmates;
 
-	public FormattedRestaurant(String id, String name, String address, String openNow, String distance, String stars, String imageUrl, LatLng latLng) {
+	public FormattedRestaurant(String id, String name, String address, String openNow, String distance, String stars, String imageUrl, LatLng latLng, List<String> workmates) {
 		this.id = id;
 		this.name = name;
 		this.address = address;
@@ -21,6 +24,7 @@ public class FormattedRestaurant {
 		this.stars = stars;
 		this.imageUrl = imageUrl;
 		this.latLng = latLng;
+		this.workmates = workmates;
 	}
 
 	public String getId() {
@@ -85,5 +89,13 @@ public class FormattedRestaurant {
 
 	public void setLatLng(LatLng latLng) {
 		this.latLng = latLng;
+	}
+
+	public List<String> getWorkmates() {
+		return workmates;
+	}
+
+	public void setWorkmates(List<String> workmates) {
+		this.workmates = workmates;
 	}
 }

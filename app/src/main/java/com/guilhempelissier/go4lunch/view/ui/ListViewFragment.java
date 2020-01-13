@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.guilhempelissier.go4lunch.R;
 import com.guilhempelissier.go4lunch.model.FormattedRestaurant;
 import com.guilhempelissier.go4lunch.view.adapter.RestaurantListAdapter;
-import com.guilhempelissier.go4lunch.viewmodel.PlaceViewModel;
+import com.guilhempelissier.go4lunch.viewmodel.ListViewModel;
 
 import java.util.Collections;
 import java.util.List;
@@ -25,7 +25,7 @@ public class ListViewFragment extends Fragment {
 	private RecyclerView recyclerView;
 	private RestaurantListAdapter adapter;
 
-	private PlaceViewModel placeViewModel;
+	private ListViewModel listViewModel;
 
 	public ListViewFragment() {
 		// Required empty public constructor
@@ -39,7 +39,7 @@ public class ListViewFragment extends Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		placeViewModel = ViewModelProviders.of(this).get(PlaceViewModel.class);
+		listViewModel = ViewModelProviders.of(this).get(ListViewModel.class);
 	}
 
 	@Override
@@ -55,11 +55,11 @@ public class ListViewFragment extends Fragment {
 		adapter = new RestaurantListAdapter(Collections.emptyList());
 		recyclerView.setAdapter(adapter);
 
-		List<FormattedRestaurant> initialData = placeViewModel.getRestaurantsList().getValue();
+		List<FormattedRestaurant> initialData = listViewModel.getRestaurantsList().getValue();
 		if (initialData != null) {
 			adapter.setData(initialData);
 		}
-		placeViewModel.getRestaurantsList().observe(this, restaurants -> {
+		listViewModel.getRestaurantsList().observe(this, restaurants -> {
 			adapter.setData(restaurants);
 		});
 

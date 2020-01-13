@@ -1,6 +1,7 @@
 package com.guilhempelissier.go4lunch.viewmodel;
 
 import android.location.Location;
+import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.guilhempelissier.go4lunch.BuildConfig;
@@ -13,6 +14,7 @@ import com.guilhempelissier.go4lunch.model.serialization.OpeningHours;
 
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.util.List;
 
 public class FormatUtils {
 	public static String formatRating(Double rating) {
@@ -50,7 +52,7 @@ public class FormatUtils {
 		return result.toString();
 	}
 
-	public static FormattedRestaurant formatAllResult(Location currentLocation, AllResult result) {
+	public static FormattedRestaurant formatAllResult(Location currentLocation, AllResult result, List<String> workmates) {
 		DetailsResult details = result.getDetailsResult();
 		NearbyResult nearby = result.getNearbyResult();
 
@@ -69,6 +71,8 @@ public class FormatUtils {
 			openNow = "No opening information";
 		}
 
+		Log.d("PLACES ID", "resto id: "+ nearby.getPlaceId());
+
 		return new FormattedRestaurant(result.getId(),
 				details.getName(),
 				details.getFormattedAddress(),
@@ -76,7 +80,8 @@ public class FormatUtils {
 				distance,
 				FormatUtils.formatRating(details.getRating()),
 				FormatUtils.formatPhotoUrl(nearby.getPhotos().get(0).getPhotoReference()),
-				new LatLng(restaurantLoc.getLat(), restaurantLoc.getLng())
+				new LatLng(restaurantLoc.getLat(), restaurantLoc.getLng()),
+				workmates
 		);
 	}
 }

@@ -19,10 +19,12 @@ public class UsersRepository {
 	private MutableLiveData<Boolean> isUserConnected = new MutableLiveData<>();
 	private MutableLiveData<List<User>> workmates = new MutableLiveData<>();
 
+	//TODO rx plutot que livedata?
 	public UsersRepository() {
 		authService = DI.getAuthService();
 		updateConnectedUser();
 
+		//TODO FIX: aucune update apres le fetch original
 		FirebaseService.getAllUsers().addOnSuccessListener(queryDocumentSnapshots -> {
 			List<User> list = new ArrayList<>();
 			for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {

@@ -14,13 +14,15 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.guilhempelissier.go4lunch.R;
 import com.guilhempelissier.go4lunch.model.FormattedRestaurant;
-import com.guilhempelissier.go4lunch.viewmodel.PlaceViewModel;
+import com.guilhempelissier.go4lunch.viewmodel.MapViewModel;
+import com.guilhempelissier.go4lunch.viewmodel.WorkmatesViewModel;
 
 import java.util.List;
 
@@ -28,7 +30,8 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 	private GoogleMap map;
 	private FloatingActionButton centerButton;
 
-	private PlaceViewModel placeViewModel;
+	private MapViewModel mapViewModel;
+	private WorkmatesViewModel workmatesViewModel;
 	private Location currentLocation;
 
 	public MapViewFragment() {
@@ -44,7 +47,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		placeViewModel = ViewModelProviders.of(this).get(PlaceViewModel.class);
+		mapViewModel = ViewModelProviders.of(this).get(MapViewModel.class);
 	}
 
 	@Override
@@ -72,20 +75,20 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 		map = googleMap;
 		map.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.style_json));
 
-		List<FormattedRestaurant> initialData = placeViewModel.getRestaurantsList().getValue();
+		List<FormattedRestaurant> initialData = mapViewModel.getRestaurants().getValue();
 		if (initialData != null) {
 			addMarkers(initialData);
 		}
-		placeViewModel.getRestaurantsList().observe(this, list -> {
+		mapViewModel.getRestaurants().observe(this, list -> {
 			addMarkers(list);
 		});
 
-		Location initialLocation = placeViewModel.getCurrentLocation().getValue();
+		Location initialLocation = mapViewModel.getCurrentLocation().getValue();
 		if (initialLocation != null) {
 			currentLocation = initialLocation;
 			centerMapOnCurrentLocation();
 		}
-		placeViewModel.getCurrentLocation().observe(this, location -> {
+		mapViewModel.getCurrentLocation().observe(this, location -> {
 			currentLocation = location;
 			centerMapOnCurrentLocation();
 		});
@@ -94,7 +97,23 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 	private void addMarkers(List<FormattedRestaurant> list) {
 		for (FormattedRestaurant restaurant : list) {
 			LatLng latLng = restaurant.getLatLng();
-			map.addMarker(new MarkerOptions().position(latLng).title(restaurant.getName()));
+//			Bitmap icon;
+//			if (restaurant.getWorkmates().size() != 0) {
+//				icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_map_green_foreground);
+//			} else {
+//				icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_map_red_foreground);
+//			}
+			float markerHue;
+			if (restaurant.getWorkmates().size() != 0) {
+				markerHue = BitmapDescriptorFactory.HUE_GREEN;
+			} else {
+				markerHue = BitmapDescriptorFactory.HUE_RED;
+			}
+
+			map.addMarker(new MarkerOptions()
+					.position(latLng)
+					.icon(BitmapDescriptorFactory.defaultMarker(markerHue))
+					.title(restaurant.getName()));
 		}
 	}
 
@@ -106,8 +125,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 	private void centerMapOnCurrentLocation() {
 		if(currentLocation != null) {
 			centerMapOnLocation(currentLocation);
-		} else {
-			placeViewModel.setNeedsPermission(true);
 		}
 	}
 }

@@ -10,6 +10,7 @@ import com.guilhempelissier.go4lunch.model.User;
 public class FirebaseService {
 	private static final String COLLECTION_NAME = "users";
 
+	//TODO voir inSyncSnapshotListener
 	public static CollectionReference getUsersCollection(){
 		return FirebaseFirestore.getInstance().collection(COLLECTION_NAME);
 	}

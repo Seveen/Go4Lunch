@@ -16,6 +16,7 @@ import com.guilhempelissier.go4lunch.model.FormattedRestaurant;
 import com.guilhempelissier.go4lunch.model.FormattedWorkmate;
 import com.guilhempelissier.go4lunch.view.adapter.WorkmatesListAdapter;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class RestaurantActivity extends AppCompatActivity {
 	private FormattedRestaurant dummyRestaurant = new FormattedRestaurant(
 			"1",
 			"Name1",
-			"123 rue 465", "open", "100m", "3", "https://media-cdn.tripadvisor.com/media/photo-s/12/c1/c3/f5/restaurant-araz.jpg", new LatLng(49.4,16.9)
+			"123 rue 465", "open", "100m", "3", "https://media-cdn.tripadvisor.com/media/photo-s/12/c1/c3/f5/restaurant-araz.jpg", new LatLng(49.4,16.9), new ArrayList<>()
 	);
 
 	private List<FormattedWorkmate> dummylist = Arrays.asList(
