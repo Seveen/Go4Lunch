@@ -4,13 +4,11 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.guilhempelissier.go4lunch.di.DI;
 import com.guilhempelissier.go4lunch.model.User;
 import com.guilhempelissier.go4lunch.service.AuthService;
 import com.guilhempelissier.go4lunch.service.FirebaseService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class UsersRepository {
@@ -24,16 +22,10 @@ public class UsersRepository {
 		authService = DI.getAuthService();
 		updateConnectedUser();
 
-		//TODO FIX: aucune update apres le fetch original
-		FirebaseService.getAllUsers().addOnSuccessListener(queryDocumentSnapshots -> {
-			List<User> list = new ArrayList<>();
-			for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-				User user = document.toObject(User.class);
-				if (user!=null) {
-					list.add(user);
-				}
+		FirebaseService.getUsersCollection().addSnapshotListener((snapshot, e) -> {
+			if (snapshot != null && !snapshot.isEmpty()) {
+				workmates.postValue(snapshot.toObjects(User.class));
 			}
-			workmates.postValue(list);
 		});
 	}
 

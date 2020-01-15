@@ -1,5 +1,7 @@
 package com.guilhempelissier.go4lunch.view.ui;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,6 +19,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.guilhempelissier.go4lunch.R;
@@ -97,23 +100,17 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 	private void addMarkers(List<FormattedRestaurant> list) {
 		for (FormattedRestaurant restaurant : list) {
 			LatLng latLng = restaurant.getLatLng();
-//			Bitmap icon;
-//			if (restaurant.getWorkmates().size() != 0) {
-//				icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_map_green_foreground);
-//			} else {
-//				icon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_map_red_foreground);
-//			}
-			float markerHue;
+			Bitmap icon;
 			if (restaurant.getWorkmates().size() != 0) {
-				markerHue = BitmapDescriptorFactory.HUE_GREEN;
+				icon = BitmapFactory.decodeResource(getResources(), R.drawable.green_marker);
 			} else {
-				markerHue = BitmapDescriptorFactory.HUE_RED;
+				icon = BitmapFactory.decodeResource(getResources(), R.drawable.red_marker);
 			}
 
-			map.addMarker(new MarkerOptions()
+			Marker marker = map.addMarker(new MarkerOptions()
 					.position(latLng)
-					.icon(BitmapDescriptorFactory.defaultMarker(markerHue))
-					.title(restaurant.getName()));
+					.icon(BitmapDescriptorFactory.fromBitmap(icon)));
+			marker.setTag(restaurant.getId());
 		}
 	}
 
