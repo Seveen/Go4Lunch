@@ -1,5 +1,6 @@
 package com.guilhempelissier.go4lunch.repository;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Location;
 
@@ -21,14 +22,17 @@ public class PlacesRepository {
 	private Location cachedLocation;
 	private BehaviorSubject<Location> locationStream;
 	private BehaviorSubject<Boolean> permissionStatus;
+	private BehaviorSubject<String> currentRestaurantId;
 	private BehaviorSubject<List<AllResult>> restaurantsStream;
 
+	@SuppressLint("CheckResult")
 	public PlacesRepository(Context applicationContext) {
 		locationService = DI.getLocationService(applicationContext);
 
 		locationStream = BehaviorSubject.create();
 		permissionStatus = BehaviorSubject.create();
 		restaurantsStream = BehaviorSubject.create();
+		currentRestaurantId = BehaviorSubject.create();
 
 		locationService.getObservableLocation()
 				.doOnError( error -> {
@@ -49,6 +53,14 @@ public class PlacesRepository {
 					PlacesAPIStreams.getDetailedRestaurantsAround(location, "1500")
 							.subscribe(restaurantsStream::onNext);
 				});
+	}
+
+	public Observable<String> getCurrentRestaurantId() {
+		return currentRestaurantId;
+	}
+
+	public void setCurrentRestaurantId(String id) {
+		currentRestaurantId.onNext(id);
 	}
 
 	public Observable<Location> getCurrentLocation() {

@@ -1,5 +1,6 @@
 package com.guilhempelissier.go4lunch.view.ui;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
@@ -25,7 +26,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.guilhempelissier.go4lunch.R;
 import com.guilhempelissier.go4lunch.model.FormattedRestaurant;
 import com.guilhempelissier.go4lunch.viewmodel.MapViewModel;
-import com.guilhempelissier.go4lunch.viewmodel.WorkmatesViewModel;
 
 import java.util.List;
 
@@ -34,7 +34,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 	private FloatingActionButton centerButton;
 
 	private MapViewModel mapViewModel;
-	private WorkmatesViewModel workmatesViewModel;
 	private Location currentLocation;
 
 	public MapViewFragment() {
@@ -94,6 +93,18 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 		mapViewModel.getCurrentLocation().observe(this, location -> {
 			currentLocation = location;
 			centerMapOnCurrentLocation();
+		});
+
+		map.setOnMarkerClickListener(marker -> {
+			Object tag = marker.getTag();
+			if (tag != null) {
+				mapViewModel.setCurrentRestaurantId(tag.toString());
+				Intent intent = new Intent(getActivity(), RestaurantActivity.class);
+				startActivity(intent);
+				return true;
+			} else {
+				return false;
+			}
 		});
 	}
 

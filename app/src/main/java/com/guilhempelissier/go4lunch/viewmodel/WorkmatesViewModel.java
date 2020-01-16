@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MediatorLiveData;
-import androidx.lifecycle.MutableLiveData;
 
 import com.google.firebase.auth.FirebaseUser;
 import com.guilhempelissier.go4lunch.di.DI;
@@ -20,22 +19,21 @@ import java.util.List;
 public class WorkmatesViewModel extends AndroidViewModel {
 	private String TAG = "WorkmatesVM";
 	private UsersRepository usersRepository;
-	private MutableLiveData<List<FormattedWorkmate>> workmates = new MutableLiveData<>();
+	private MediatorLiveData<List<FormattedWorkmate>> formattedWorkmates = new MediatorLiveData<>();
 
 	public WorkmatesViewModel(@NonNull Application application) {
 		super(application);
 		usersRepository = DI.getUsersRepository();
+
+		formattedWorkmates.addSource(usersRepository.getCurrentUser(), o -> updateWorkmatesList());
+		formattedWorkmates.addSource(usersRepository.getWorkmates(), o -> updateWorkmatesList());
 	}
 
 	public LiveData<List<FormattedWorkmate>> getWorkmates() {
-		MediatorLiveData fusedData = new MediatorLiveData<List<FormattedWorkmate>>();
-		fusedData.addSource(usersRepository.getCurrentUser(), o -> updateWorkmatesList(fusedData));
-		fusedData.addSource(usersRepository.getWorkmates(), o -> updateWorkmatesList(fusedData));
-
-		return fusedData;
+		return formattedWorkmates;
 	}
 
-	private void updateWorkmatesList(MediatorLiveData<List<FormattedWorkmate>> fusedData) {
+	private void updateWorkmatesList() {
 		List<FormattedWorkmate> list = new ArrayList<>();
 		List<User> workmates = usersRepository.getWorkmates().getValue();
 
@@ -50,6 +48,6 @@ public class WorkmatesViewModel extends AndroidViewModel {
 			}
 		}
 
-		fusedData.setValue(list);
+		formattedWorkmates.setValue(list);
 	}
 }

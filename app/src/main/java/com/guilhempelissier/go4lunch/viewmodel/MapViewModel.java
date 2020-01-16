@@ -75,4 +75,8 @@ public class MapViewModel extends AndroidViewModel {
 	public LiveData<Location> getCurrentLocation() {
 		return currentLocation;
 	}
+
+	public void setCurrentRestaurantId(String id) {
+		placesRepository.setCurrentRestaurantId(id);
+	}
 }

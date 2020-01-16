@@ -45,10 +45,7 @@ public class ListViewFragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 							 Bundle savedInstanceState) {
-		// Inflate the layout for this fragment
 		ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_list_view, null);
-
-
 
 		recyclerView = root.findViewById(R.id.restaurantsRecyclerView);
 		recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -64,7 +61,7 @@ public class ListViewFragment extends Fragment {
 		});
 
 		adapter.setOnClickRestaurantListener(id -> {
-			//TODO switch selected restaurant in vm
+			listViewModel.setCurrentRestaurantId(id);
 			Intent intent = new Intent(getActivity(), RestaurantActivity.class);
 			startActivity(intent);
 		});

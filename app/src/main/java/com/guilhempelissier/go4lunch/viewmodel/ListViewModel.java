@@ -26,7 +26,7 @@ public class ListViewModel extends AndroidViewModel {
 	private PlacesRepository placesRepository;
 	private UsersRepository usersRepository;
 	private MutableLiveData<List<AllResult>> results = new MutableLiveData<>();
-	private MediatorLiveData<List<FormattedRestaurant>> restaurants;
+	private MediatorLiveData<List<FormattedRestaurant>> restaurants = new MediatorLiveData<>();
 	private MutableLiveData<Location> currentLocation = new MutableLiveData<>();
 
 	@SuppressLint("CheckResult")
@@ -39,36 +39,41 @@ public class ListViewModel extends AndroidViewModel {
 				.subscribe(location -> currentLocation.setValue(location), error -> Log.d(TAG, error.getMessage()));
 
 		placesRepository.getDetailedRestaurantsAround()
-				.subscribe(allResults -> {
-					results.setValue(allResults);
+				.subscribe(results::setValue, error -> Log.d(TAG, "Detailed restaurants error: " + error.getMessage()));
 
-				}, error -> Log.d(TAG, "Detailed restaurants error: " + error.getMessage()));
-
-
-		restaurants = new MediatorLiveData<>();
 		restaurants.addSource(results, o -> updateRestaurants());
 		restaurants.addSource(usersRepository.getWorkmates(), o -> updateRestaurants());
+		restaurants.addSource(currentLocation, o -> updateRestaurants());
 	}
 
 	private void updateRestaurants() {
 		List<FormattedRestaurant> formattedRestaurants = new ArrayList<>();
 		List<User> workmates = usersRepository.getWorkmates().getValue();
 
-		for (AllResult result : results.getValue()) {
-			List<String> workmatesEatingThere = new ArrayList<>();
-			if (workmates != null) {
-				for (User user : workmates) {
-					if (result.getId().equals(user.getLunch())) {
-						workmatesEatingThere.add(user.getUid());
+		if (results.getValue() != null) {
+			for (AllResult result : results.getValue()) {
+				List<String> workmatesEatingThere = new ArrayList<>();
+				if (workmates != null) {
+					for (User user : workmates) {
+						if (result.getId().equals(user.getLunch())) {
+							workmatesEatingThere.add(user.getUid());
+						}
 					}
 				}
+				Location location = currentLocation.getValue();
+				if (location != null) {
+					formattedRestaurants.add(FormatUtils.formatAllResult(location, result, workmatesEatingThere));
+				}
 			}
-			formattedRestaurants.add(FormatUtils.formatAllResult(currentLocation.getValue(), result, workmatesEatingThere));
+			restaurants.setValue(formattedRestaurants);
 		}
-		restaurants.setValue(formattedRestaurants);
 	}
 
 	public LiveData<List<FormattedRestaurant>> getRestaurantsList() {
 		return restaurants;
+	}
+
+	public void setCurrentRestaurantId(String id) {
+		placesRepository.setCurrentRestaurantId(id);
 	}
 }

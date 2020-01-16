@@ -19,7 +19,8 @@ import java.util.List;
 public class FormatUtils {
 	public static String formatRating(Double rating) {
 		StringBuilder result = new StringBuilder();
-		for (int i=0; i<=rating.intValue(); i++) {
+		Long trueRating = Math.round(rating/2.0);
+		for (int i=0; i<=trueRating; i++) {
 			result.append('*');
 		}
 		return result.toString();
@@ -27,7 +28,7 @@ public class FormatUtils {
 
 	public static String formatPhotoUrl(String ref) {
 		StringBuilder result = new StringBuilder();
-		result.append("https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=");
+		result.append("https://maps.googleapis.com/maps/api/place/photo?maxheight=400&photoreference=");
 		result.append(ref);
 		result.append("&key=");
 		result.append(BuildConfig.PLACES_KEY);
