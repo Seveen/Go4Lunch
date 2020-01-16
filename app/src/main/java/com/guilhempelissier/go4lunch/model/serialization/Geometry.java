@@ -7,6 +7,8 @@ public class Geometry {
 
     @Expose
     private Location_ location;
+    @Expose
+    private Viewport viewport;
 
     public Location_ getLocation() {
         return location;
@@ -16,4 +18,11 @@ public class Geometry {
         this.location = location;
     }
 
+    public Viewport getViewport() {
+        return viewport;
+    }
+
+    public void setViewport(Viewport viewport) {
+        this.viewport = viewport;
+    }
 }

@@ -5,7 +5,7 @@ import android.content.Context;
 import android.location.Location;
 
 import com.guilhempelissier.go4lunch.di.DI;
-import com.guilhempelissier.go4lunch.model.serialization.AllResult;
+import com.guilhempelissier.go4lunch.model.Restaurant;
 import com.guilhempelissier.go4lunch.service.LocationService;
 import com.guilhempelissier.go4lunch.service.PlacesAPIStreams;
 
@@ -23,7 +23,7 @@ public class PlacesRepository {
 	private BehaviorSubject<Location> locationStream;
 	private BehaviorSubject<Boolean> permissionStatus;
 	private BehaviorSubject<String> currentRestaurantId;
-	private BehaviorSubject<List<AllResult>> restaurantsStream;
+	private BehaviorSubject<List<Restaurant>> restaurantsStream;
 
 	@SuppressLint("CheckResult")
 	public PlacesRepository(Context applicationContext) {
@@ -71,7 +71,7 @@ public class PlacesRepository {
 		return permissionStatus;
 	}
 
-	public Observable<List<AllResult>> getDetailedRestaurantsAround() {
+	public Observable<List<Restaurant>> getDetailedRestaurantsAround() {
 		return restaurantsStream;
 	}
 }

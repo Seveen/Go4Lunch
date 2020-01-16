@@ -4,7 +4,6 @@ package com.guilhempelissier.go4lunch.model.serialization;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-
 import java.util.List;
 
 public class NearbyResult {
@@ -29,6 +28,8 @@ public class NearbyResult {
     private List<String> types;
     @Expose
     private String vicinity;
+    @Expose
+    private Double rating;
 
     public Geometry getGeometry() {
         return geometry;
@@ -110,4 +111,11 @@ public class NearbyResult {
         this.vicinity = vicinity;
     }
 
+    public Double getRating() {
+        return rating;
+    }
+
+    public void setRating(Double rating) {
+        this.rating = rating;
+    }
 }

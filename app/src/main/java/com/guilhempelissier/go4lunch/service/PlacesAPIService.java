@@ -20,7 +20,8 @@ public interface PlacesAPIService {
 
 	@GET("maps/api/place/details/json")
 	Observable<PlacesDetailsResponse> getDetailsAboutRestaurant(@Query("place_id") String id,
-																@Query("key") String key);
+																@Query("key") String key,
+																@Query("fields") String fields);
 
 	public static final Retrofit retrofit = new Retrofit.Builder()
 			.baseUrl("https://maps.googleapis.com/")

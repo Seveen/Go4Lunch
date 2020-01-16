@@ -13,8 +13,8 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.guilhempelissier.go4lunch.di.DI;
 import com.guilhempelissier.go4lunch.model.FormattedRestaurant;
+import com.guilhempelissier.go4lunch.model.Restaurant;
 import com.guilhempelissier.go4lunch.model.User;
-import com.guilhempelissier.go4lunch.model.serialization.AllResult;
 import com.guilhempelissier.go4lunch.repository.PlacesRepository;
 import com.guilhempelissier.go4lunch.repository.UsersRepository;
 
@@ -25,7 +25,7 @@ public class MapViewModel extends AndroidViewModel {
 	private String TAG = "MapVM";
 	private PlacesRepository placesRepository;
 	private UsersRepository usersRepository;
-	private MutableLiveData<List<AllResult>> results = new MutableLiveData<>();
+	private MutableLiveData<List<Restaurant>> results = new MutableLiveData<>();
 	private MediatorLiveData<List<FormattedRestaurant>> restaurants;
 	private MutableLiveData<Location> currentLocation = new MutableLiveData<>();
 
@@ -53,11 +53,11 @@ public class MapViewModel extends AndroidViewModel {
 		List<User> workmates = usersRepository.getWorkmates().getValue();
 
 		if (results.getValue() != null) {
-			for (AllResult result : results.getValue()) {
+			for (Restaurant result : results.getValue()) {
 				List<String> workmatesEatingThere = new ArrayList<>();
 				if (workmates != null) {
 					for (User user : workmates) {
-						if (result.getId().equals(user.getLunch())) {
+						if (result.getPlaceId().equals(user.getLunch())) {
 							workmatesEatingThere.add(user.getUid());
 						}
 					}

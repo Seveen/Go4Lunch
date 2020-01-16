@@ -1,15 +1,12 @@
 package com.guilhempelissier.go4lunch.viewmodel;
 
 import android.location.Location;
-import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.guilhempelissier.go4lunch.BuildConfig;
 import com.guilhempelissier.go4lunch.model.FormattedRestaurant;
-import com.guilhempelissier.go4lunch.model.serialization.AllResult;
-import com.guilhempelissier.go4lunch.model.serialization.DetailsResult;
+import com.guilhempelissier.go4lunch.model.Restaurant;
 import com.guilhempelissier.go4lunch.model.serialization.Location_;
-import com.guilhempelissier.go4lunch.model.serialization.NearbyResult;
 import com.guilhempelissier.go4lunch.model.serialization.OpeningHours;
 
 import java.math.RoundingMode;
@@ -53,34 +50,31 @@ public class FormatUtils {
 		return result.toString();
 	}
 
-	public static FormattedRestaurant formatAllResult(Location currentLocation, AllResult result, List<String> workmates) {
-		DetailsResult details = result.getDetailsResult();
-		NearbyResult nearby = result.getNearbyResult();
+	public static FormattedRestaurant formatAllResult(Location currentLocation, Restaurant result, List<String> workmates) {
 
-		Location_ restaurantLoc = nearby.getGeometry().getLocation();
+		Location_ restaurantLoc = result.getGeometry().getLocation();
 		float[] distanceResult = new float[1];
 		Location.distanceBetween(currentLocation.getLatitude(), currentLocation.getLongitude(),
 				restaurantLoc.getLat(), restaurantLoc.getLng(), distanceResult);
 		String distance = FormatUtils.formatDistance(distanceResult[0]);
 
-		OpeningHours openingHours = nearby.getOpeningHours();
-		String openNow;
+		OpeningHours openingHours = result.getOpeningHours();
 
+		//TODO changer logique d'affichage maintenant qu'on a une vraie opening hour
+		String openNow;
 		if (openingHours != null) {
 			openNow = FormatUtils.formatOpenNow(openingHours.getOpenNow());
 		} else {
 			openNow = "No opening information";
 		}
 
-		Log.d("PLACES ID", "resto id: "+ nearby.getPlaceId());
-
-		return new FormattedRestaurant(result.getId(),
-				details.getName(),
-				details.getFormattedAddress(),
+		return new FormattedRestaurant(result.getPlaceId(),
+				result.getName(),
+				result.getVicinity(),
 				openNow,
 				distance,
-				FormatUtils.formatRating(details.getRating()),
-				FormatUtils.formatPhotoUrl(nearby.getPhotos().get(0).getPhotoReference()),
+				FormatUtils.formatRating(result.getRating()),
+				FormatUtils.formatPhotoUrl(result.getPhotos().get(0).getPhotoReference()),
 				new LatLng(restaurantLoc.getLat(), restaurantLoc.getLng()),
 				workmates
 		);
