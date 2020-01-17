@@ -31,7 +31,6 @@ public class RestaurantActivity extends AppCompatActivity {
 
 	private String phoneNumber;
 	private String website;
-	private boolean liked;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +44,7 @@ public class RestaurantActivity extends AppCompatActivity {
 
 		recyclerView = findViewById(R.id.restaurant_view_recyclerview);
 		recyclerView.setLayoutManager(new LinearLayoutManager(this));
-		adapter = new WorkmatesListAdapter(Collections.emptyList(), false);
+		adapter = new WorkmatesListAdapter(Collections.emptyList(), false, getApplicationContext());
 		recyclerView.setAdapter(adapter);
 
 		restaurantViewModel.getCurrentRestaurant()

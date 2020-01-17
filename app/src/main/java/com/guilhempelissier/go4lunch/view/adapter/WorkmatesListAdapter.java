@@ -1,5 +1,6 @@
 package com.guilhempelissier.go4lunch.view.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -17,12 +18,16 @@ import java.util.List;
 
 public class WorkmatesListAdapter extends RecyclerView.Adapter<WorkmatesListAdapter.WorkmateViewHolder> {
 
+	private OnClickWorkmateListener listener;
 	private List<FormattedWorkmate> workmates;
 	private boolean displayEatingPlace;
 
-	public WorkmatesListAdapter(List<FormattedWorkmate> initialList, boolean displayEatingPlace) {
+	private Context context;
+
+	public WorkmatesListAdapter(List<FormattedWorkmate> initialList, boolean displayEatingPlace, Context context) {
 		workmates = initialList;
 		this.displayEatingPlace = displayEatingPlace;
+		this.context = context;
 	}
 
 	public void setData(List<FormattedWorkmate> newData) {
@@ -55,10 +60,16 @@ public class WorkmatesListAdapter extends RecyclerView.Adapter<WorkmatesListAdap
 
 		public WorkmateViewHolder(WorkmatesViewItemBinding binding) {
 			super(binding.getRoot());
-			picture = binding.getRoot().findViewById(R.id.workmates_item_image);
+			picture = binding.workmatesItemImage;
 			this.binding = binding;
 
-			//onclicklistener (TODO example mareu)
+			binding.constraintLayout.setOnClickListener(view -> {
+				int position = getAdapterPosition();
+
+				if (listener != null && position != RecyclerView.NO_POSITION) {
+					listener.onClick(workmates.get(position).getEatingPlaceId());
+				}
+			});
 		}
 
 		public void bind(FormattedWorkmate workmate) {
@@ -68,11 +79,23 @@ public class WorkmatesListAdapter extends RecyclerView.Adapter<WorkmatesListAdap
 					.apply(RequestOptions.circleCropTransform())
 					.into(picture);
 			if (displayEatingPlace) {
-				text = workmate.getName() + " " + workmate.getEatingPlace();
+				if (workmate.getEatingPlace() == "") {
+					text = workmate.getName() + " " + context.getString(R.string.doesnt_have_chosen);
+				} else {
+					text = workmate.getName() + " " + context.getString(R.string.eats_at) + " " + workmate.getEatingPlace();
+				}
 			} else {
-				text = workmate.getName() + " is joining!";
+				text = workmate.getName() + " " + context.getString(R.string.is_joining);
 			}
 			binding.setText(text);
 		}
+	}
+
+	public interface OnClickWorkmateListener {
+		void onClick(String id);
+	}
+
+	public void setListener(OnClickWorkmateListener listener) {
+		this.listener = listener;
 	}
 }

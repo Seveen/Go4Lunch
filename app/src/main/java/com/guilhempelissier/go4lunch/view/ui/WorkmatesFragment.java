@@ -1,5 +1,6 @@
 package com.guilhempelissier.go4lunch.view.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,12 +21,6 @@ public class WorkmatesFragment extends Fragment {
 	private WorkmatesListAdapter adapter;
 
 	private WorkmatesViewModel workmatesViewModel;
-
-//	private List<FormattedWorkmate> dummylist = Arrays.asList(
-//			new FormattedWorkmate(
-//					"Hugh", "le zinc", "https://m.media-amazon.com/images/M/MV5BNDExMzIzNjk3Nl5BMl5BanBnXkFtZTcwOTE4NDU5OA@@._V1_.jpg"
-//			)
-//	);
 
 	public WorkmatesFragment() {
 		// Required empty public constructor
@@ -51,11 +46,17 @@ public class WorkmatesFragment extends Fragment {
 
 		recyclerView = root.findViewById(R.id.workmatesRecyclerView);
 		recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-		adapter = new WorkmatesListAdapter(workmatesViewModel.getWorkmates().getValue(), true);
+		adapter = new WorkmatesListAdapter(workmatesViewModel.getWorkmates().getValue(), true, getContext());
 		recyclerView.setAdapter(adapter);
 
-		workmatesViewModel.getWorkmates().observe(this, workmates -> {
-			adapter.setData(workmates);
+		workmatesViewModel.getWorkmates().observe(this, workmates -> adapter.setData(workmates));
+
+		adapter.setListener(placeId -> {
+			if (placeId != null) {
+				workmatesViewModel.setCurrentRestaurantId(placeId);
+				Intent intent = new Intent(getActivity(), RestaurantActivity.class);
+				startActivity(intent);
+			}
 		});
 
 		return root;

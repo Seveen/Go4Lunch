@@ -17,5 +17,8 @@
     <string name="open_until">Open until</string>
     <string name="closed">Closed. Opens at</string>
     <string name="no_opening_infos">No opening information</string>
+    <string name="eats_at"> eats at: </string>
+    <string name="is_joining">is joining!</string>
+    <string name="doesnt_have_chosen">doesn\'t have chosen yet.</string>
 
 </resources>

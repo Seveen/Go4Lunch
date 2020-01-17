@@ -63,6 +63,7 @@ public class RestaurantViewModel extends AndroidViewModel {
 						if (result.getPlaceId().equals(user.getLunch())) {
 							FormattedWorkmate formattedWorkmate = new FormattedWorkmate(
 									user.getUsername(),
+									result.getPlaceId(),
 									result.getName(),
 									user.getImageUrl());
 							formattedWorkmates.add(formattedWorkmate);

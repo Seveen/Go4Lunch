@@ -2,14 +2,15 @@ package com.guilhempelissier.go4lunch.model;
 
 public class FormattedWorkmate {
 	private String name;
+	private String eatingPlaceId;
 	private String eatingPlace;
 	private String imageUrl;
 
-	//TODO juste le string qui va dans la textview? (compose des autres)
-	public FormattedWorkmate(String name, String eatingPlace, String imageUrl) {
+	public FormattedWorkmate(String name, String eatingPlaceId, String eatingPlace, String imageUrl) {
 		this.name = name;
-		this.imageUrl = imageUrl;
+		this.eatingPlaceId = eatingPlaceId;
 		this.eatingPlace = eatingPlace;
+		this.imageUrl = imageUrl;
 	}
 
 	public String getName() {
@@ -34,5 +35,13 @@ public class FormattedWorkmate {
 
 	public void setEatingPlace(String eatingPlace) {
 		this.eatingPlace = eatingPlace;
+	}
+
+	public String getEatingPlaceId() {
+		return eatingPlaceId;
+	}
+
+	public void setEatingPlaceId(String eatingPlaceId) {
+		this.eatingPlaceId = eatingPlaceId;
 	}
 }
