@@ -48,6 +48,7 @@ public class RestaurantViewModel extends AndroidViewModel {
 
 		currentRestaurant.addSource(results, o -> updateCurrentRestaurant());
 		currentRestaurant.addSource(currentRestaurantId, o -> updateCurrentRestaurant());
+		currentRestaurant.addSource(usersRepository.getCurrentUser(), o -> updateCurrentRestaurant());
 	}
 
 	private void updateCurrentRestaurant() {
@@ -69,10 +70,42 @@ public class RestaurantViewModel extends AndroidViewModel {
 						}
 					}
 				}
-				currentRestaurant.setValue(FormatUtils.formatRestaurant(currentLocation.getValue(), result, workmateNames, getApplication().getApplicationContext()));
+				currentRestaurant.setValue(FormatUtils.formatRestaurant(
+						currentLocation.getValue(),
+						result,
+						workmateNames,
+						getApplication().getApplicationContext(),
+						usersRepository.getCurrentUser().getValue()));
 				workmatesEatingThere.setValue(formattedWorkmates);
 			}
 		}
+	}
+
+	public void toggleEatingLunchHere() {
+		FormattedRestaurant restaurant = currentRestaurant.getValue();
+		if (restaurant != null) {
+			if (restaurant.isMyLunch()) {
+				usersRepository.updateCurrentUserLunch("");
+			} else {
+				usersRepository.updateCurrentUserLunch(restaurant.getId());
+			}
+		}
+	}
+
+	public void toggleLikeRestaurant() {
+		FormattedRestaurant restaurant = currentRestaurant.getValue();
+		User user = usersRepository.getCurrentUser().getValue();
+		List<String> likedRestaurants = user.getLikedRestaurants();
+
+		if (restaurant != null) {
+			if (likedRestaurants.contains(restaurant.getId())) {
+				likedRestaurants.remove(restaurant.getId());
+			} else {
+				likedRestaurants.add(restaurant.getId());
+			}
+		}
+
+		usersRepository.updateCurrentUserLikes(likedRestaurants);
 	}
 
 	public LiveData<FormattedRestaurant> getCurrentRestaurant() {

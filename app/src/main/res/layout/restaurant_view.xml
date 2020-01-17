@@ -11,6 +11,14 @@
         <variable
             name="restaurantAddress"
             type="String" />
+
+        <variable
+            name="isUserEatingHere"
+            type="boolean" />
+
+        <variable
+            name="isRestaurantLiked"
+            type="boolean" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -40,7 +48,7 @@
             app:layout_constraintBottom_toTopOf="@+id/restaurant_infos_cardview"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/restaurant_image_view"
-            app:srcCompat="@drawable/ic_check_circle_green_24dp" />
+            android:src="@{isUserEatingHere ? @drawable/ic_check_circle_green_24dp : @drawable/ic_add_black_24dp}" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/restaurant_infos_cardview"
@@ -91,21 +99,21 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    app:srcCompat="@drawable/ic_call_orange_24dp" />
+                    android:src="@drawable/ic_call_orange_24dp" />
 
                 <ImageButton
                     android:id="@+id/restaurant_like_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    app:srcCompat="@drawable/ic_star_orange_24dp" />
+                    android:src="@{isRestaurantLiked ? @drawable/ic_star_orange_24dp : @drawable/ic_star_border_black_24dp}" />
 
                 <ImageButton
                     android:id="@+id/restaurant_website_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    app:srcCompat="@drawable/ic_website_orange_24dp" />
+                    android:src="@drawable/ic_website_orange_24dp" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 

@@ -25,7 +25,7 @@ public class WorkmatesViewModel extends AndroidViewModel {
 		super(application);
 		usersRepository = DI.getUsersRepository();
 
-		formattedWorkmates.addSource(usersRepository.getCurrentUser(), o -> updateWorkmatesList());
+		formattedWorkmates.addSource(usersRepository.getCurrentAuthUser(), o -> updateWorkmatesList());
 		formattedWorkmates.addSource(usersRepository.getWorkmates(), o -> updateWorkmatesList());
 	}
 
@@ -39,7 +39,7 @@ public class WorkmatesViewModel extends AndroidViewModel {
 
 		if (workmates!=null) {
 			for (User workmate : workmates) {
-				FirebaseUser currentUser = usersRepository.getCurrentUser().getValue();
+				FirebaseUser currentUser = usersRepository.getCurrentAuthUser().getValue();
 				if (currentUser != null && !workmate.getUid().equals(currentUser.getUid())) {
 					list.add(new FormattedWorkmate(workmate.getUsername(),
 							workmate.getLunch(),

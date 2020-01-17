@@ -9,12 +9,14 @@ import com.guilhempelissier.go4lunch.model.User;
 import com.guilhempelissier.go4lunch.service.AuthService;
 import com.guilhempelissier.go4lunch.service.FirebaseService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class UsersRepository {
 	private AuthService authService;
-	private MutableLiveData<FirebaseUser> currentUser = new MutableLiveData<>();
+	private MutableLiveData<FirebaseUser> currentAuthUser = new MutableLiveData<>();
 	private MutableLiveData<Boolean> isUserConnected = new MutableLiveData<>();
+	private MutableLiveData<User> currentUser = new MutableLiveData<>();
 	private MutableLiveData<List<User>> workmates = new MutableLiveData<>();
 
 	public UsersRepository() {
@@ -23,12 +25,27 @@ public class UsersRepository {
 
 		FirebaseService.getUsersCollection().addSnapshotListener((snapshot, e) -> {
 			if (snapshot != null && !snapshot.isEmpty()) {
-				workmates.postValue(snapshot.toObjects(User.class));
+				List<User> users = snapshot.toObjects(User.class);
+				List<User> workmateUsers = new ArrayList<>();
+
+				for (User user : users) {
+					if (currentAuthUser.getValue() != null && user.getUid().equals(currentAuthUser.getValue().getUid())) {
+						currentUser.setValue(user);
+					} else {
+						workmateUsers.add(user);
+					}
+				}
+
+				workmates.setValue(workmateUsers);
 			}
 		});
 	}
 
-	public LiveData<FirebaseUser> getCurrentUser() {
+	public LiveData<FirebaseUser> getCurrentAuthUser() {
+		return currentAuthUser;
+	}
+
+	public LiveData<User> getCurrentUser() {
 		return currentUser;
 	}
 
@@ -48,12 +65,24 @@ public class UsersRepository {
 	public void updateConnectedUser() {
 		FirebaseUser user = authService.getCurrentUser();
 		Boolean connected = authService.isUserConnected();
-		currentUser.postValue(user);
-		isUserConnected.postValue(connected);
+		currentAuthUser.setValue(user);
+		isUserConnected.setValue(connected);
 
 		if (connected) {
 			FirebaseService.createUser(user.getUid(), user.getDisplayName(),
 					user.getPhotoUrl().toString());
+		}
+	}
+
+	public void updateCurrentUserLunch(String lunch) {
+		if (currentUser.getValue() != null) {
+			FirebaseService.updateLunch(currentUser.getValue().getUid(), lunch);
+		}
+	}
+
+	public void updateCurrentUserLikes(List<String> likes) {
+		if (currentUser.getValue() != null) {
+			FirebaseService.updateLikes(currentUser.getValue().getUid(), likes);
 		}
 	}
 }

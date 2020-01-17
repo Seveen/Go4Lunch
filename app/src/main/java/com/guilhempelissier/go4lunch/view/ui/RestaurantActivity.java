@@ -1,5 +1,7 @@
 package com.guilhempelissier.go4lunch.view.ui;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.ImageView;
 
@@ -27,6 +29,10 @@ public class RestaurantActivity extends AppCompatActivity {
 
 	private RestaurantViewModel restaurantViewModel;
 
+	private String phoneNumber;
+	private String website;
+	private boolean liked;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -50,8 +56,35 @@ public class RestaurantActivity extends AppCompatActivity {
 							.load(restaurant.getImageUrl())
 							.centerCrop()
 							.into(restaurantImageView);
+					binding.setIsUserEatingHere(restaurant.isMyLunch());
+					binding.setIsRestaurantLiked(restaurant.isLikedByCurrentUser());
+					phoneNumber = restaurant.getPhoneNumber();
+					website = restaurant.getWebsite();
 				});
 		restaurantViewModel.getWorkmatesEatingThere()
 				.observe(this, workmates -> adapter.setData(workmates));
+
+		binding.restaurantEatHereFab.setOnClickListener(view -> restaurantViewModel.toggleEatingLunchHere());
+		binding.restaurantLikeButton.setOnClickListener(view -> restaurantViewModel.toggleLikeRestaurant());
+		binding.restaurantCallButton.setOnClickListener(view -> callRestaurant());
+		binding.restaurantWebsiteButton.setOnClickListener(view -> visitWebsite());
+	}
+
+	public void callRestaurant() {
+		if (!phoneNumber.equals("")) {
+			Intent intent = new Intent(Intent.ACTION_DIAL);
+			intent.setData(Uri.parse("tel:" + phoneNumber));
+
+			startActivity(intent);
+		}
+	}
+
+	public void visitWebsite() {
+		if (!website.equals("")) {
+			Intent intent = new Intent(Intent.ACTION_VIEW);
+			intent.setData(Uri.parse(website));
+
+			startActivity(intent);
+		}
 	}
 }

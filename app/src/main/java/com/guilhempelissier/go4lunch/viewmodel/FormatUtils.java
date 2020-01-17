@@ -8,6 +8,7 @@ import com.guilhempelissier.go4lunch.BuildConfig;
 import com.guilhempelissier.go4lunch.R;
 import com.guilhempelissier.go4lunch.model.FormattedRestaurant;
 import com.guilhempelissier.go4lunch.model.Restaurant;
+import com.guilhempelissier.go4lunch.model.User;
 import com.guilhempelissier.go4lunch.model.serialization.Location_;
 import com.guilhempelissier.go4lunch.model.serialization.OpeningHours;
 import com.guilhempelissier.go4lunch.model.serialization.Period;
@@ -83,7 +84,21 @@ public class FormatUtils {
 		return result.toString();
 	}
 
-	public static FormattedRestaurant formatRestaurant(Location currentLocation, Restaurant result, List<String> workmates, Context ctx) {
+	public static boolean formatIsLunch(User user, Restaurant restaurant) {
+		if (user != null) {
+			return restaurant.getPlaceId().equals(user.getLunch());
+		}
+		return false;
+	}
+
+	public static boolean formatIsLiked(User user, Restaurant restaurant) {
+		if (user != null) {
+			return user.getLikedRestaurants().contains(restaurant.getPlaceId());
+		}
+		return false;
+	}
+
+	public static FormattedRestaurant formatRestaurant(Location currentLocation, Restaurant result, List<String> workmates, Context ctx, User currentUser) {
 
 		Location_ restaurantLoc = result.getGeometry().getLocation();
 		float[] distanceResult = new float[1];
@@ -108,7 +123,11 @@ public class FormatUtils {
 				FormatUtils.formatRating(result.getRating()),
 				FormatUtils.formatPhotoUrl(result.getPhotos().get(0).getPhotoReference()),
 				new LatLng(restaurantLoc.getLat(), restaurantLoc.getLng()),
-				workmates
+				workmates,
+				FormatUtils.formatIsLunch(currentUser, result),
+				FormatUtils.formatIsLiked(currentUser, result),
+				result.getFormattedPhoneNumber(),
+				result.getWebsite()
 		);
 	}
 }

@@ -14,8 +14,12 @@ public class FormattedRestaurant {
 	private String imageUrl;
 	private LatLng latLng;
 	private List<String> workmates;
+	private boolean isMyLunch;
+	private boolean isLikedByCurrentUser;
+	private String phoneNumber;
+	private String website;
 
-	public FormattedRestaurant(String id, String name, String address, String openNow, String distance, int stars, String imageUrl, LatLng latLng, List<String> workmates) {
+	public FormattedRestaurant(String id, String name, String address, String openNow, String distance, int stars, String imageUrl, LatLng latLng, List<String> workmates, boolean isMyLunch, boolean isLikedByCurrentUser, String phoneNumber, String website) {
 		this.id = id;
 		this.name = name;
 		this.address = address;
@@ -25,6 +29,10 @@ public class FormattedRestaurant {
 		this.imageUrl = imageUrl;
 		this.latLng = latLng;
 		this.workmates = workmates;
+		this.isMyLunch = isMyLunch;
+		this.isLikedByCurrentUser = isLikedByCurrentUser;
+		this.phoneNumber = phoneNumber;
+		this.website = website;
 	}
 
 	public String getId() {
@@ -97,5 +105,37 @@ public class FormattedRestaurant {
 
 	public void setWorkmates(List<String> workmates) {
 		this.workmates = workmates;
+	}
+
+	public boolean isMyLunch() {
+		return isMyLunch;
+	}
+
+	public void setMyLunch(boolean myLunch) {
+		isMyLunch = myLunch;
+	}
+
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+
+	public void setPhoneNumber(String phoneNumber) {
+		this.phoneNumber = phoneNumber;
+	}
+
+	public String getWebsite() {
+		return website;
+	}
+
+	public void setWebsite(String website) {
+		this.website = website;
+	}
+
+	public boolean isLikedByCurrentUser() {
+		return isLikedByCurrentUser;
+	}
+
+	public void setLikedByCurrentUser(boolean likedByCurrentUser) {
+		isLikedByCurrentUser = likedByCurrentUser;
 	}
 }

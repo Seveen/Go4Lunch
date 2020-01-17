@@ -62,7 +62,8 @@ public class MapViewModel extends AndroidViewModel {
 						}
 					}
 				}
-				formattedRestaurants.add(FormatUtils.formatRestaurant(currentLocation.getValue(), result, workmatesEatingThere, getApplication().getApplicationContext()));
+				formattedRestaurants.add(FormatUtils.formatRestaurant(currentLocation.getValue(), result, workmatesEatingThere, getApplication().getApplicationContext(),
+						usersRepository.getCurrentUser().getValue()));
 			}
 			restaurants.setValue(formattedRestaurants);
 		}

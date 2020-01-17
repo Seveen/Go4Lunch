@@ -20,7 +20,7 @@ public class AuthViewModel extends AndroidViewModel {
 	}
 
 	public LiveData<FormattedUser> getCurrentUser() {
-		return Transformations.map(usersRepository.getCurrentUser(),
+		return Transformations.map(usersRepository.getCurrentAuthUser(),
 			user -> {
 				if (user == null) {
 					return FormattedUser.defaultUser();

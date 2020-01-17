@@ -62,7 +62,7 @@ public class ListViewModel extends AndroidViewModel {
 				}
 				Location location = currentLocation.getValue();
 				if (location != null) {
-					formattedRestaurants.add(FormatUtils.formatRestaurant(location, result, workmatesEatingThere, getApplication().getApplicationContext()));
+					formattedRestaurants.add(FormatUtils.formatRestaurant(location, result, workmatesEatingThere, getApplication().getApplicationContext(), usersRepository.getCurrentUser().getValue()));
 				}
 			}
 			restaurants.setValue(formattedRestaurants);
