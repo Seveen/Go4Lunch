@@ -39,6 +39,7 @@ import com.guilhempelissier.go4lunch.databinding.ActivityMainBinding;
 import com.guilhempelissier.go4lunch.databinding.MenuHeaderBinding;
 import com.guilhempelissier.go4lunch.viewmodel.AuthViewModel;
 import com.guilhempelissier.go4lunch.viewmodel.MainViewModel;
+import com.jakewharton.threetenabp.AndroidThreeTen;
 
 import java.util.Arrays;
 
@@ -57,6 +58,8 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		AndroidThreeTen.init(getApplicationContext());
+
 		ActivityMainBinding mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
 		mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
@@ -181,7 +184,6 @@ public class MainActivity extends AppCompatActivity {
 
 		if (resultCode == RESULT_OK) {
 			Toast.makeText(this, "Connecté", Toast.LENGTH_SHORT).show();
-			authViewModel.updateCurrentUser();
 		} else {
 			if (response == null) {
 				Toast.makeText(this, "La connexion a été annulée", Toast.LENGTH_SHORT).show();
@@ -193,6 +195,7 @@ public class MainActivity extends AppCompatActivity {
 				}
 			}
 		}
+		authViewModel.updateCurrentUser();
 	}
 
 	@Override

@@ -10,12 +10,12 @@ public class FormattedRestaurant {
 	private String address;
 	private String openNow;
 	private String distance;
-	private String stars;
+	private int stars;
 	private String imageUrl;
 	private LatLng latLng;
 	private List<String> workmates;
 
-	public FormattedRestaurant(String id, String name, String address, String openNow, String distance, String stars, String imageUrl, LatLng latLng, List<String> workmates) {
+	public FormattedRestaurant(String id, String name, String address, String openNow, String distance, int stars, String imageUrl, LatLng latLng, List<String> workmates) {
 		this.id = id;
 		this.name = name;
 		this.address = address;
@@ -67,11 +67,11 @@ public class FormattedRestaurant {
 		this.distance = distance;
 	}
 
-	public String getStars() {
+	public int getStars() {
 		return stars;
 	}
 
-	public void setStars(String stars) {
+	public void setStars(int stars) {
 		this.stars = stars;
 	}
 

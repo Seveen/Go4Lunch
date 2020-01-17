@@ -76,7 +76,7 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
 			binding.setOpeningTime(restaurant.getOpenNow());
 			binding.setDistance(restaurant.getDistance());
 			binding.setNbWorkmates(Integer.toString(restaurant.getWorkmates().size()));
-			binding.setStars(restaurant.getStars());
+			binding.setStars(String.valueOf(restaurant.getStars()));
 		}
 	}
 

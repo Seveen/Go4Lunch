@@ -13,5 +13,9 @@
     <string name="menu_logout">Logout</string>
     <string name="main_title">Go4Lunch</string>
     <string name="menu_login">Log in</string>
+    <string name="openH24">Open 24/7</string>
+    <string name="open_until">Open until</string>
+    <string name="closed">Closed. Opens at</string>
+    <string name="no_opening_infos">No opening information</string>
 
 </resources>

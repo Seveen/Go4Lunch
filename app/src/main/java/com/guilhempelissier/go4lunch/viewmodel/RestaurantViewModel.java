@@ -69,7 +69,7 @@ public class RestaurantViewModel extends AndroidViewModel {
 						}
 					}
 				}
-				currentRestaurant.setValue(FormatUtils.formatAllResult(currentLocation.getValue(), result, workmateNames));
+				currentRestaurant.setValue(FormatUtils.formatRestaurant(currentLocation.getValue(), result, workmateNames, getApplication().getApplicationContext()));
 				workmatesEatingThere.setValue(formattedWorkmates);
 			}
 		}
