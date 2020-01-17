@@ -5,11 +5,13 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.google.firebase.auth.FirebaseUser;
 import com.guilhempelissier.go4lunch.di.DI;
+import com.guilhempelissier.go4lunch.model.LunchComparator;
 import com.guilhempelissier.go4lunch.model.User;
 import com.guilhempelissier.go4lunch.service.AuthService;
 import com.guilhempelissier.go4lunch.service.FirebaseService;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class UsersRepository {
@@ -35,7 +37,7 @@ public class UsersRepository {
 						workmateUsers.add(user);
 					}
 				}
-
+				Collections.sort(workmateUsers, new LunchComparator());
 				workmates.setValue(workmateUsers);
 			}
 		});
