@@ -37,6 +37,7 @@ import com.guilhempelissier.go4lunch.BuildConfig;
 import com.guilhempelissier.go4lunch.R;
 import com.guilhempelissier.go4lunch.databinding.ActivityMainBinding;
 import com.guilhempelissier.go4lunch.databinding.MenuHeaderBinding;
+import com.guilhempelissier.go4lunch.model.User;
 import com.guilhempelissier.go4lunch.viewmodel.AuthViewModel;
 import com.guilhempelissier.go4lunch.viewmodel.MainViewModel;
 import com.jakewharton.threetenabp.AndroidThreeTen;
@@ -124,6 +125,15 @@ public class MainActivity extends AppCompatActivity {
 				case R.id.menu_settings:
 					break;
 				case R.id.menu_lunch:
+					User user = mainViewModel.getCurrentUser().getValue();
+
+					if (user != null && !user.getLunch().equals("")) {
+						mainViewModel.setCurrentRestaurantId(user.getLunch());
+						Intent intent = new Intent(this, RestaurantActivity.class);
+						startActivity(intent);
+					} else {
+						Toast.makeText(this, getString(R.string.no_restaurant_selected), Toast.LENGTH_SHORT).show();
+					}
 					break;
 				case R.id.menu_login:
 					startSignInActivity();
