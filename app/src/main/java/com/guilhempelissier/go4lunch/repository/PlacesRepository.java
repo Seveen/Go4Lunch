@@ -3,9 +3,11 @@ package com.guilhempelissier.go4lunch.repository;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Location;
+import android.util.Log;
 
 import com.guilhempelissier.go4lunch.di.DI;
 import com.guilhempelissier.go4lunch.model.Restaurant;
+import com.guilhempelissier.go4lunch.model.serialization.AutocompleteResult;
 import com.guilhempelissier.go4lunch.service.LocationService;
 import com.guilhempelissier.go4lunch.service.PlacesAPIStreams;
 
@@ -52,6 +54,14 @@ public class PlacesRepository {
 					locationStream.onNext(location);
 					PlacesAPIStreams.getDetailedRestaurantsAround(location, "1500")
 							.subscribe(restaurantsStream::onNext);
+
+					//TODO debug
+					PlacesAPIStreams.getPlaceAutocomplete("répu", location, "1500")
+							.subscribe(placesAutocompleteResponse -> {
+								for (AutocompleteResult result : placesAutocompleteResponse.getPredictions()) {
+									Log.d(TAG, "autocomplete: " + result.getDescription());
+								}
+							});
 				});
 	}
 

@@ -2,6 +2,7 @@ package com.guilhempelissier.go4lunch.viewmodel;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
+import android.location.Location;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
@@ -19,6 +20,7 @@ public class MainViewModel extends AndroidViewModel {
 	private UsersRepository usersRepository;
 	private MutableLiveData<Boolean> needsPermission = new MutableLiveData<>();
 	private MutableLiveData<String> currentRestaurantId = new MutableLiveData<>();
+	private MutableLiveData<Location> currentLocation = new MutableLiveData<>();
 
 	@SuppressLint("CheckResult")
 	public MainViewModel(@NonNull Application application) {
@@ -31,6 +33,9 @@ public class MainViewModel extends AndroidViewModel {
 
 		placesRepository.getCurrentRestaurantId()
 				.subscribe(currentRestaurantId::setValue);
+
+		placesRepository.getCurrentLocation()
+				.subscribe(currentLocation::setValue);
 	}
 
 	public LiveData<Boolean> getNeedsPermission() {
@@ -47,5 +52,9 @@ public class MainViewModel extends AndroidViewModel {
 
 	public LiveData<User> getCurrentUser() {
 		return usersRepository.getCurrentUser();
+	}
+
+	public LiveData<Location> getCurrentLocation() {
+		return currentLocation;
 	}
 }

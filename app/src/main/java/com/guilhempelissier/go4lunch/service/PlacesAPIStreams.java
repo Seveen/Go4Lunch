@@ -5,6 +5,7 @@ import android.location.Location;
 import com.guilhempelissier.go4lunch.BuildConfig;
 import com.guilhempelissier.go4lunch.model.Restaurant;
 import com.guilhempelissier.go4lunch.model.serialization.DetailsResult;
+import com.guilhempelissier.go4lunch.model.serialization.PlacesAutocompleteResponse;
 import com.guilhempelissier.go4lunch.model.serialization.PlacesDetailsResponse;
 import com.guilhempelissier.go4lunch.model.serialization.PlacesNearbyResponse;
 
@@ -56,5 +57,17 @@ public class PlacesAPIStreams {
 						}
 						)))
 				.toList();
+	}
+
+	public static Observable<PlacesAutocompleteResponse> getPlaceAutocomplete(String input, Location location, String radius) {
+		String locationLatitude = Location.convert(location.getLatitude(),FORMAT_DEGREES);
+		String locationLongitude = Location.convert(location.getLongitude(),FORMAT_DEGREES);
+		String locationCoordinates = locationLatitude + "," + locationLongitude;
+
+		PlacesAPIService placesAPIService = PlacesAPIService.retrofit.create(PlacesAPIService.class);
+
+		return placesAPIService.getAutocompleteResponse(input, BuildConfig.PLACES_KEY, locationCoordinates, radius, "establishment")
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread());
 	}
 }

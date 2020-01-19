@@ -29,6 +29,8 @@ import com.firebase.ui.auth.IdpResponse;
 import com.google.android.gms.common.api.Status;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.model.RectangularBounds;
+import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -38,6 +40,7 @@ import com.guilhempelissier.go4lunch.R;
 import com.guilhempelissier.go4lunch.databinding.ActivityMainBinding;
 import com.guilhempelissier.go4lunch.databinding.MenuHeaderBinding;
 import com.guilhempelissier.go4lunch.model.User;
+import com.guilhempelissier.go4lunch.util.LatLngUtils;
 import com.guilhempelissier.go4lunch.viewmodel.AuthViewModel;
 import com.guilhempelissier.go4lunch.viewmodel.MainViewModel;
 import com.jakewharton.threetenabp.AndroidThreeTen;
@@ -102,9 +105,7 @@ public class MainActivity extends AppCompatActivity {
 
 		NavigationView navView = mainBinding.navView;
 		MenuHeaderBinding menuHeaderBinding = MenuHeaderBinding.bind(navView.getHeaderView(0));
-		authViewModel.getCurrentUser().observe(this, user -> {
-			menuHeaderBinding.setUser(user);
-		});
+		authViewModel.getCurrentUser().observe(this, menuHeaderBinding::setUser);
 		authViewModel.isUserConnected().observe(this, isConnected -> {
 			if (isConnected) {
 				navView.getMenu().setGroupVisible(R.id.menu_group_1, true);
@@ -146,6 +147,7 @@ public class MainActivity extends AppCompatActivity {
 		AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
 				getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
 		autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
+		autocompleteFragment.setTypeFilter(TypeFilter.ESTABLISHMENT);
 
 		autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
 			String TAG = "Autocomplete";
@@ -158,6 +160,11 @@ public class MainActivity extends AppCompatActivity {
 			public void onError(@NonNull Status status) {
 				Log.i(TAG, "An error occurred: " + status);
 			}
+		});
+
+		mainViewModel.getCurrentLocation().observe(this, location -> {
+			RectangularBounds bounds = LatLngUtils.getBoundsAround(location, 750);
+			autocompleteFragment.setLocationRestriction(bounds);
 		});
 	}
 

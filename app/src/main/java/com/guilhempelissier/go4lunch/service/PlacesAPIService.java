@@ -1,5 +1,6 @@
 package com.guilhempelissier.go4lunch.service;
 
+import com.guilhempelissier.go4lunch.model.serialization.PlacesAutocompleteResponse;
 import com.guilhempelissier.go4lunch.model.serialization.PlacesDetailsResponse;
 import com.guilhempelissier.go4lunch.model.serialization.PlacesNearbyResponse;
 
@@ -22,6 +23,13 @@ public interface PlacesAPIService {
 	Observable<PlacesDetailsResponse> getDetailsAboutRestaurant(@Query("place_id") String id,
 																@Query("key") String key,
 																@Query("fields") String fields);
+
+	@GET("maps/api/place/autocomplete/json")
+	Observable<PlacesAutocompleteResponse> getAutocompleteResponse(@Query("input") String input,
+																   @Query("key") String key,
+																   @Query("location") String location,
+																   @Query("radius") String radius,
+																   @Query("types") String types);
 
 	public static final Retrofit retrofit = new Retrofit.Builder()
 			.baseUrl("https://maps.googleapis.com/")
