@@ -19,6 +19,7 @@ import com.guilhempelissier.go4lunch.repository.PlacesRepository;
 import com.guilhempelissier.go4lunch.repository.UsersRepository;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ListViewModel extends AndroidViewModel {
@@ -28,6 +29,7 @@ public class ListViewModel extends AndroidViewModel {
 	private MutableLiveData<List<Restaurant>> results = new MutableLiveData<>();
 	private MediatorLiveData<List<FormattedRestaurant>> restaurants = new MediatorLiveData<>();
 	private MutableLiveData<Location> currentLocation = new MutableLiveData<>();
+	private MutableLiveData<PlacesRepository.Sorting> sortingMethod = new MutableLiveData<>();
 
 	@SuppressLint("CheckResult")
 	public ListViewModel(@NonNull Application application) {
@@ -41,9 +43,13 @@ public class ListViewModel extends AndroidViewModel {
 		placesRepository.getDetailedRestaurantsAround()
 				.subscribe(results::setValue, error -> Log.d(TAG, "Detailed restaurants error: " + error.getMessage()));
 
+		placesRepository.getSortingMethod()
+				.subscribe(sortingMethod::setValue);
+
 		restaurants.addSource(results, o -> updateRestaurants());
 		restaurants.addSource(usersRepository.getWorkmates(), o -> updateRestaurants());
 		restaurants.addSource(currentLocation, o -> updateRestaurants());
+		restaurants.addSource(sortingMethod, o -> updateRestaurants());
 	}
 
 	private void updateRestaurants() {
@@ -65,6 +71,28 @@ public class ListViewModel extends AndroidViewModel {
 					formattedRestaurants.add(FormatUtils.formatRestaurant(location, result, workmatesEatingThere, getApplication().getApplicationContext(), usersRepository.getCurrentUser().getValue()));
 				}
 			}
+
+			switch (sortingMethod.getValue()) {
+				case RatingLeast:
+					Collections.sort(formattedRestaurants, (a, b) -> Integer.compare(a.getStars(), b.getStars()));
+					break;
+				case RatingMost:
+					Collections.sort(formattedRestaurants, (a, b) -> -Integer.compare(a.getStars(), b.getStars()));
+					break;
+				case DistanceLeast:
+					Collections.sort(formattedRestaurants, (a, b) -> Integer.compare(a.getDistance(), b.getDistance()));
+					break;
+				case DistanceMost:
+					Collections.sort(formattedRestaurants, (a, b) -> -Integer.compare(a.getDistance(), b.getDistance()));
+					break;
+				case WorkmatesLeast:
+					Collections.sort(formattedRestaurants, (a, b) -> Integer.compare(a.getWorkmates().size(), b.getWorkmates().size()));
+					break;
+				case WorkmatesMost:
+					Collections.sort(formattedRestaurants, (a, b) -> -Integer.compare(a.getWorkmates().size(), b.getWorkmates().size()));
+					break;
+			}
+
 			restaurants.setValue(formattedRestaurants);
 		}
 	}
@@ -75,5 +103,9 @@ public class ListViewModel extends AndroidViewModel {
 
 	public void setCurrentRestaurantId(String id) {
 		placesRepository.setCurrentRestaurantId(id);
+	}
+
+	public void setSortingMethod(PlacesRepository.Sorting sorting) {
+		placesRepository.setSortingMethod(sorting);
 	}
 }

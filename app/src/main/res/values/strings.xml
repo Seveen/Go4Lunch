@@ -13,6 +13,12 @@
     <string name="menu_logout">Logout</string>
     <string name="main_title">Go4Lunch</string>
     <string name="menu_login">Log in</string>
+    <string name="menu_sort_distance_most">Distance: furthest</string>
+    <string name="menu_sort_distance_least">Distance: closest</string>
+    <string name="menu_sort_workmates_most">Workmates: most</string>
+    <string name="menu_sort_workmates_least">Workmates: least</string>
+    <string name="menu_sort_rating_most">Rating: best</string>
+    <string name="menu_sort_rating_least">Rating: worst</string>
     <string name="openH24">Open 24/7</string>
     <string name="open_until">Open until</string>
     <string name="closed">Closed. Opens at</string>
@@ -21,5 +27,4 @@
     <string name="is_joining">is joining!</string>
     <string name="hasnt_chosen">hasn\'t chosen yet.</string>
     <string name="no_restaurant_selected">Aucun restaurant sélectionné</string>
-
 </resources>

@@ -48,7 +48,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
 		mapViewModel = ViewModelProviders.of(this).get(MapViewModel.class);
 	}
 
@@ -81,16 +80,14 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 		if (initialData != null) {
 			addMarkers(initialData);
 		}
-		mapViewModel.getRestaurants().observe(this, list -> {
-			addMarkers(list);
-		});
+		mapViewModel.getRestaurants().observe(getViewLifecycleOwner(), list -> addMarkers(list));
 
 		Location initialLocation = mapViewModel.getCurrentLocation().getValue();
 		if (initialLocation != null) {
 			currentLocation = initialLocation;
 			centerMapOnCurrentLocation();
 		}
-		mapViewModel.getCurrentLocation().observe(this, location -> {
+		mapViewModel.getCurrentLocation().observe(getViewLifecycleOwner(), location -> {
 			currentLocation = location;
 			centerMapOnCurrentLocation();
 		});

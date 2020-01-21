@@ -120,6 +120,7 @@ public class FormatUtils {
 				result.getVicinity(),
 				openNow,
 				distance,
+				Math.round(distanceResult[0]),
 				FormatUtils.formatRating(result.getRating()),
 				FormatUtils.formatPhotoUrl(result.getPhotos().get(0).getPhotoReference()),
 				new LatLng(restaurantLoc.getLat(), restaurantLoc.getLng()),

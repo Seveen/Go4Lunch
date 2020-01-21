@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.PopupMenu;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -41,8 +42,10 @@ import com.guilhempelissier.go4lunch.R;
 import com.guilhempelissier.go4lunch.databinding.ActivityMainBinding;
 import com.guilhempelissier.go4lunch.databinding.MenuHeaderBinding;
 import com.guilhempelissier.go4lunch.model.User;
+import com.guilhempelissier.go4lunch.repository.PlacesRepository;
 import com.guilhempelissier.go4lunch.util.LatLngUtils;
 import com.guilhempelissier.go4lunch.viewmodel.AuthViewModel;
+import com.guilhempelissier.go4lunch.viewmodel.ListViewModel;
 import com.guilhempelissier.go4lunch.viewmodel.MainViewModel;
 import com.jakewharton.threetenabp.AndroidThreeTen;
 
@@ -61,6 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
 	private MainViewModel mainViewModel;
 	private AuthViewModel authViewModel;
+	private ListViewModel listViewModel;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +83,7 @@ public class MainActivity extends AppCompatActivity {
 			}
 		});
 
+		listViewModel = ViewModelProviders.of(this).get(ListViewModel.class);
 		authViewModel = ViewModelProviders.of(this).get(AuthViewModel.class);
 
 		Toolbar toolbar = mainBinding.toolbar;
@@ -183,6 +188,36 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	public View onCreateView(@NonNull String name, @NonNull Context context, @NonNull AttributeSet attrs) {
 		return super.onCreateView(name, context, attrs);
+	}
+
+	public void showSortingPopup(View v) {
+		PopupMenu popupMenu = new PopupMenu(this, v);
+		popupMenu.getMenuInflater().inflate(R.menu.sort_options_menu, popupMenu.getMenu());
+		popupMenu.setOnMenuItemClickListener(menuItem -> {
+			switch (menuItem.getItemId()) {
+				case R.id.menu_sort_workmates_most:
+					listViewModel.setSortingMethod(PlacesRepository.Sorting.WorkmatesMost);
+					return true;
+				case R.id.menu_sort_workmates_least:
+					listViewModel.setSortingMethod(PlacesRepository.Sorting.WorkmatesLeast);
+					return true;
+				case R.id.menu_sort_distance_most:
+					listViewModel.setSortingMethod(PlacesRepository.Sorting.DistanceMost);
+					return true;
+				case R.id.menu_sort_distance_least:
+					listViewModel.setSortingMethod(PlacesRepository.Sorting.DistanceLeast);
+					return true;
+				case R.id.menu_sort_rating_most:
+					listViewModel.setSortingMethod(PlacesRepository.Sorting.RatingMost);
+					return true;
+				case R.id.menu_sort_rating_least:
+					listViewModel.setSortingMethod(PlacesRepository.Sorting.RatingLeast);
+					return true;
+				default:
+					return false;
+			}
+		});
+		popupMenu.show();
 	}
 
 	private void startSignInActivity() {

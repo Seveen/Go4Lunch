@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menu_sort_distance_least"
+        android:title="@string/menu_sort_distance_least" />
+    <item
+        android:id="@+id/menu_sort_distance_most"
+        android:title="@string/menu_sort_distance_most" />
+    <item
+        android:id="@+id/menu_sort_workmates_most"
+        android:title="@string/menu_sort_workmates_most" />
+    <item
+        android:id="@+id/menu_sort_workmates_least"
+        android:title="@string/menu_sort_workmates_least" />
+    <item
+        android:id="@+id/menu_sort_rating_most"
+        android:title="@string/menu_sort_rating_most" />
+    <item
+        android:id="@+id/menu_sort_rating_least"
+        android:title="@string/menu_sort_rating_least" />
+</menu>

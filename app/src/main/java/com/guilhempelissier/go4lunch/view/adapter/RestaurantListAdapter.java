@@ -12,20 +12,21 @@ import com.guilhempelissier.go4lunch.R;
 import com.guilhempelissier.go4lunch.databinding.ListViewItemBinding;
 import com.guilhempelissier.go4lunch.model.FormattedRestaurant;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAdapter.RestaurantViewHolder> {
 
-	private List<FormattedRestaurant> restaurants;
+	private List<FormattedRestaurant> restaurants = new ArrayList<>();
 	private OnClickRestaurantListener listener;
 
-
 	public RestaurantListAdapter(List<FormattedRestaurant> initialList) {
-		restaurants = initialList;
+		restaurants.addAll(initialList);
 	}
 
 	public void setData(List<FormattedRestaurant> newData) {
-		restaurants = newData;
+		restaurants.clear();
+		restaurants.addAll(newData);
 		notifyDataSetChanged();
 	}
 
@@ -74,7 +75,7 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
 			binding.setName(restaurant.getName());
 			binding.setAddress(restaurant.getAddress());
 			binding.setOpeningTime(restaurant.getOpenNow());
-			binding.setDistance(restaurant.getDistance());
+			binding.setDistanceMeters(restaurant.getDistanceMeters());
 
 			int nbWorkmates = restaurant.getWorkmates().size();
 			if (nbWorkmates == 0) {

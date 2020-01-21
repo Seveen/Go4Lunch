@@ -3,11 +3,9 @@ package com.guilhempelissier.go4lunch.repository;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Location;
-import android.util.Log;
 
 import com.guilhempelissier.go4lunch.di.DI;
 import com.guilhempelissier.go4lunch.model.Restaurant;
-import com.guilhempelissier.go4lunch.model.serialization.AutocompleteResult;
 import com.guilhempelissier.go4lunch.service.LocationService;
 import com.guilhempelissier.go4lunch.service.PlacesAPIStreams;
 
@@ -26,6 +24,7 @@ public class PlacesRepository {
 	private BehaviorSubject<Boolean> permissionStatus;
 	private BehaviorSubject<String> currentRestaurantId;
 	private BehaviorSubject<List<Restaurant>> restaurantsStream;
+	private BehaviorSubject<Sorting> sortingMethod;
 
 	@SuppressLint("CheckResult")
 	public PlacesRepository(Context applicationContext) {
@@ -35,6 +34,9 @@ public class PlacesRepository {
 		permissionStatus = BehaviorSubject.create();
 		restaurantsStream = BehaviorSubject.create();
 		currentRestaurantId = BehaviorSubject.create();
+		sortingMethod = BehaviorSubject.create();
+
+		sortingMethod.onNext(Sorting.DistanceLeast);
 
 		locationService.getObservableLocation()
 				.doOnError( error -> {
@@ -54,14 +56,14 @@ public class PlacesRepository {
 					locationStream.onNext(location);
 					PlacesAPIStreams.getDetailedRestaurantsAround(location, "1500")
 							.subscribe(restaurantsStream::onNext);
-
-					//TODO debug
-					PlacesAPIStreams.getPlaceAutocomplete("répu", location, "1500")
-							.subscribe(placesAutocompleteResponse -> {
-								for (AutocompleteResult result : placesAutocompleteResponse.getPredictions()) {
-									Log.d(TAG, "autocomplete: " + result.getDescription());
-								}
-							});
+//
+//					//TODO debug
+//					PlacesAPIStreams.getPlaceAutocomplete("répu", location, "1500")
+//							.subscribe(placesAutocompleteResponse -> {
+//								for (AutocompleteResult result : placesAutocompleteResponse.getPredictions()) {
+//									Log.d(TAG, "autocomplete: " + result.getDescription());
+//								}
+//							});
 				});
 	}
 
@@ -71,6 +73,10 @@ public class PlacesRepository {
 
 	public void setCurrentRestaurantId(String id) {
 		currentRestaurantId.onNext(id);
+	}
+
+	public void setSortingMethod(Sorting sorting) {
+		sortingMethod.onNext(sorting);
 	}
 
 	public Observable<Location> getCurrentLocation() {
@@ -83,5 +89,18 @@ public class PlacesRepository {
 
 	public Observable<List<Restaurant>> getDetailedRestaurantsAround() {
 		return restaurantsStream;
+	}
+
+	public Observable<Sorting> getSortingMethod() {
+		return sortingMethod;
+	}
+
+	public enum Sorting {
+		WorkmatesMost,
+		WorkmatesLeast,
+		DistanceMost,
+		DistanceLeast,
+		RatingMost,
+		RatingLeast
 	}
 }

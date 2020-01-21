@@ -83,6 +83,7 @@
                         android:background="#00FFFFFF"
                         android:src="@drawable/ic_sort_white_24dp"
                         android:visibility="@{sortVisible ? View.VISIBLE : View.GONE}"
+                        android:onClick="showSortingPopup"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />

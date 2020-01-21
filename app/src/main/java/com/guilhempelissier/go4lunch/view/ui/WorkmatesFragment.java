@@ -49,7 +49,7 @@ public class WorkmatesFragment extends Fragment {
 		adapter = new WorkmatesListAdapter(workmatesViewModel.getWorkmates().getValue(), true, getContext());
 		recyclerView.setAdapter(adapter);
 
-		workmatesViewModel.getWorkmates().observe(this, workmates -> adapter.setData(workmates));
+		workmatesViewModel.getWorkmates().observe(getViewLifecycleOwner(), workmates -> adapter.setData(workmates));
 
 		adapter.setListener(placeId -> {
 			if (placeId != null) {

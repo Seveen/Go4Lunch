@@ -9,7 +9,8 @@ public class FormattedRestaurant {
 	private String name;
 	private String address;
 	private String openNow;
-	private String distance;
+	private String distanceMeters;
+	private int distance;
 	private int stars;
 	private String imageUrl;
 	private LatLng latLng;
@@ -19,12 +20,13 @@ public class FormattedRestaurant {
 	private String phoneNumber;
 	private String website;
 
-	public FormattedRestaurant(String id, String name, String address, String openNow, String distance, int stars, String imageUrl, LatLng latLng, List<String> workmates, boolean isMyLunch, boolean isLikedByCurrentUser, String phoneNumber, String website) {
+	public FormattedRestaurant(String id, String name, String address, String openNow, String distanceMeters, int distance, int stars, String imageUrl, LatLng latLng, List<String> workmates, boolean isMyLunch, boolean isLikedByCurrentUser, String phoneNumber, String website) {
 		this.id = id;
 		this.name = name;
 		this.address = address;
 		this.openNow = openNow;
 		this.distance = distance;
+		this.distanceMeters = distanceMeters;
 		this.stars = stars;
 		this.imageUrl = imageUrl;
 		this.latLng = latLng;
@@ -67,12 +69,12 @@ public class FormattedRestaurant {
 		this.openNow = openNow;
 	}
 
-	public String getDistance() {
-		return distance;
+	public String getDistanceMeters() {
+		return distanceMeters;
 	}
 
-	public void setDistance(String distance) {
-		this.distance = distance;
+	public void setDistanceMeters(String distanceMeters) {
+		this.distanceMeters = distanceMeters;
 	}
 
 	public int getStars() {
@@ -137,5 +139,13 @@ public class FormattedRestaurant {
 
 	public void setLikedByCurrentUser(boolean likedByCurrentUser) {
 		isLikedByCurrentUser = likedByCurrentUser;
+	}
+
+	public int getDistance() {
+		return distance;
+	}
+
+	public void setDistance(int distance) {
+		this.distance = distance;
 	}
 }
