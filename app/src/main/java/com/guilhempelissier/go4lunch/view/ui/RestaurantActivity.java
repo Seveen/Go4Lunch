@@ -49,7 +49,8 @@ public class RestaurantActivity extends AppCompatActivity {
 
 		restaurantViewModel.getCurrentRestaurant()
 				.observe(this, restaurant -> {
-					binding.setRestaurantNameStars(restaurant.getName() + " " + restaurant.getStars());
+					binding.setRestaurantName(restaurant.getName());
+					binding.setRestaurantStars(restaurant.getStars());
 					binding.setRestaurantAddress(restaurant.getAddress());
 					Glide.with(this)
 							.load(restaurant.getImageUrl())

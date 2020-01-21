@@ -56,9 +56,7 @@ public class ListViewFragment extends Fragment {
 		if (initialData != null) {
 			adapter.setData(initialData);
 		}
-		listViewModel.getRestaurantsList().observe(this, restaurants -> {
-			adapter.setData(restaurants);
-		});
+		listViewModel.getRestaurantsList().observe(this, restaurants -> adapter.setData(restaurants));
 
 		adapter.setOnClickRestaurantListener(id -> {
 			listViewModel.setCurrentRestaurantId(id);

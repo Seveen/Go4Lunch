@@ -4,9 +4,18 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View"/>
         <variable
             name="searchVisible"
-            type="Integer" />
+            type="boolean" />
+
+        <variable
+            name="searchDisallowed"
+            type="boolean" />
+
+        <variable
+            name="sortVisible"
+            type="boolean" />
     </data>
 
     <androidx.drawerlayout.widget.DrawerLayout
@@ -28,19 +37,24 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:navigationIcon="@drawable/ic_menu_white_24dp"
                 app:titleTextColor="@android:color/white">
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="horizontal">
 
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/toolbar_autocomplete_cardview"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="end"
-                        android:visibility="visible">
+                        android:layout_marginEnd="8dp"
+                        android:visibility="@{searchVisible ? View.VISIBLE : View.GONE }"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/toolbar_search_toggle_btn"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
 
                         <fragment
                             android:id="@+id/autocomplete_fragment"
@@ -53,10 +67,26 @@
                         android:id="@+id/toolbar_search_toggle_btn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
                         android:background="#00FFFFFF"
-                        android:layout_gravity="end"
-                        android:src="@drawable/ic_search_white_24dp" />
-                </LinearLayout>
+                        android:src="@{searchVisible ? @drawable/ic_close_white_24dp : @drawable/ic_search_white_24dp}"
+                        android:visibility="@{searchDisallowed ? View.GONE : View.VISIBLE}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/toolbar_sort_toggle_btn"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageButton
+                        android:id="@+id/toolbar_sort_toggle_btn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="8dp"
+                        android:background="#00FFFFFF"
+                        android:src="@drawable/ic_sort_white_24dp"
+                        android:visibility="@{sortVisible ? View.VISIBLE : View.GONE}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.appcompat.widget.Toolbar>
 
             <fragment

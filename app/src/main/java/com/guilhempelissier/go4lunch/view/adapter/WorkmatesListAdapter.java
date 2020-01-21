@@ -80,7 +80,7 @@ public class WorkmatesListAdapter extends RecyclerView.Adapter<WorkmatesListAdap
 					.into(picture);
 			if (displayEatingPlace) {
 				if (workmate.getEatingPlace() == "") {
-					text = workmate.getName() + " " + context.getString(R.string.doesnt_have_chosen);
+					text = workmate.getName() + " " + context.getString(R.string.hasnt_chosen);
 				} else {
 					text = workmate.getName() + " " + context.getString(R.string.eats_at) + " " + workmate.getEatingPlace();
 				}

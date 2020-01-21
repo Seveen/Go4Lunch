@@ -19,7 +19,7 @@
     <string name="no_opening_infos">No opening information</string>
     <string name="eats_at"> eats at: </string>
     <string name="is_joining">is joining!</string>
-    <string name="doesnt_have_chosen">doesn\'t have chosen yet.</string>
+    <string name="hasnt_chosen">hasn\'t chosen yet.</string>
     <string name="no_restaurant_selected">Aucun restaurant sélectionné</string>
 
 </resources>

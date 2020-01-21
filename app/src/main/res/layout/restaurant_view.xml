@@ -4,9 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View"/>
         <variable
-            name="restaurantNameStars"
+            name="restaurantName"
             type="String" />
+
+        <variable
+            name="restaurantStars"
+            type="Integer" />
 
         <variable
             name="restaurantAddress"
@@ -54,30 +59,76 @@
             android:id="@+id/restaurant_infos_cardview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardBackgroundColor="#F44336"
+            app:cardBackgroundColor="#FF5722"
             app:cardCornerRadius="0dp"
             app:cardElevation="0dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/restaurant_image_view">
 
-            <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout2"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/restaurant_view_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{restaurantNameStars}" />
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:text="@{restaurantName}"
+                    android:textColor="#FFFFFF"
+                    android:textSize="24sp"
+                    app:layout_constraintStart_toStartOf="@+id/restaurant_view_address"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="Le Zinc" />
 
                 <TextView
                     android:id="@+id/restaurant_view_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@{restaurantAddress}" />
-            </LinearLayout>
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:text="@{restaurantAddress}"
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/restaurant_view_name"
+                    tools:text="12 rue du Faubourg Poissonnière" />
+
+                <ImageView
+                    android:id="@+id/restaurant_star1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:src="@drawable/ic_star_yellow_24dp"
+                    android:visibility="@{restaurantStars >= 1 ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintBottom_toBottomOf="@+id/restaurant_view_name"
+                    app:layout_constraintStart_toEndOf="@+id/restaurant_view_name"
+                    app:layout_constraintTop_toTopOf="@+id/restaurant_view_name" />
+
+                <ImageView
+                    android:id="@+id/restaurant_star2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_star_yellow_24dp"
+                    android:visibility="@{restaurantStars >= 2 ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintBottom_toBottomOf="@+id/restaurant_star1"
+                    app:layout_constraintStart_toEndOf="@+id/restaurant_star1"
+                    app:layout_constraintTop_toTopOf="@+id/restaurant_star1" />
+
+                <ImageView
+                    android:id="@+id/restaurant_star3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_star_yellow_24dp"
+                    android:visibility="@{restaurantStars == 3 ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintBottom_toBottomOf="@+id/restaurant_star2"
+                    app:layout_constraintStart_toEndOf="@+id/restaurant_star2"
+                    app:layout_constraintTop_toTopOf="@+id/restaurant_star2" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </androidx.cardview.widget.CardView>
 
@@ -106,7 +157,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:src="@{isRestaurantLiked ? @drawable/ic_star_orange_24dp : @drawable/ic_star_border_black_24dp}" />
+                    android:src="@{isRestaurantLiked ? @drawable/ic_star_orange_24dp : @drawable/ic_star_border_orange_24dp}" />
 
                 <ImageButton
                     android:id="@+id/restaurant_website_button"

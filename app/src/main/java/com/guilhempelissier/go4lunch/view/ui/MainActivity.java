@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
@@ -48,9 +49,11 @@ import com.jakewharton.threetenabp.AndroidThreeTen;
 import java.util.Arrays;
 
 public class MainActivity extends AppCompatActivity {
+	private static final String TAG = "Main Activity";
 
 	private static final int PERMISSIONS_ACCESS_CODE = 126;
-	private static final int RC_SIGN_IN = 123;
+	private static final int SIGN_IN_REQUEST_CODE = 123;
+
 	private ActionBarDrawerToggle actionBarDrawerToggle;
 	private BottomNavigationView bottomNavigationView;
 	private NavController navController;
@@ -66,6 +69,9 @@ public class MainActivity extends AppCompatActivity {
 
 		ActivityMainBinding mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
+		mainBinding.setSearchVisible(false);
+		mainBinding.toolbarSearchToggleBtn.setOnClickListener(view -> mainBinding.setSearchVisible(!mainBinding.getSearchVisible()));
+
 		mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
 		mainViewModel.getNeedsPermission().observe(this, isPermissionNeeded -> {
 			if(isPermissionNeeded) {
@@ -79,25 +85,30 @@ public class MainActivity extends AppCompatActivity {
 		setSupportActionBar(toolbar);
 
 		drawerLayout = mainBinding.drawerLayout;
-		actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open_drawer, R.string.close_drawer);
+		actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer);
+		actionBarDrawerToggle.setDrawerIndicatorEnabled(false);
+		toolbar.setNavigationOnClickListener(view -> drawerLayout.openDrawer(Gravity.LEFT));
 		drawerLayout.addDrawerListener(actionBarDrawerToggle);
 		actionBarDrawerToggle.syncState();
 
-		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
 		navController = Navigation.findNavController(this, R.id.navigation_container);
-
 		bottomNavigationView = mainBinding.navigationMenu;
 		bottomNavigationView.setOnNavigationItemSelectedListener(menuItem -> {
 			switch (menuItem.getItemId()) {
 				case R.id.menu_map_view:
 					navController.navigate(R.id.action_global_mapViewFragment);
+					mainBinding.setSortVisible(false);
+					mainBinding.setSearchDisallowed(false);
 					break;
 				case R.id.menu_list_view:
 					navController.navigate(R.id.action_global_listViewFragment);
+					mainBinding.setSortVisible(true);
+					mainBinding.setSearchDisallowed(false);
 					break;
 				case R.id.menu_workmates:
 					navController.navigate(R.id.action_global_workmatesFragment);
+					mainBinding.setSortVisible(false);
+					mainBinding.setSearchDisallowed(true);
 					break;
 			}
 			return true;
@@ -184,14 +195,14 @@ public class MainActivity extends AppCompatActivity {
 				)
 				.setIsSmartLockEnabled(false, true)
 				.build(),
-			RC_SIGN_IN
+				SIGN_IN_REQUEST_CODE
 		);
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if (requestCode == RC_SIGN_IN) {
+		if (requestCode == SIGN_IN_REQUEST_CODE) {
 			handleLoginResult(resultCode, data);
 		}
 	}
@@ -201,18 +212,20 @@ public class MainActivity extends AppCompatActivity {
 
 		if (resultCode == RESULT_OK) {
 			Toast.makeText(this, "Connecté", Toast.LENGTH_SHORT).show();
+			authViewModel.updateCurrentUser();
 		} else {
 			if (response == null) {
 				Toast.makeText(this, "La connexion a été annulée", Toast.LENGTH_SHORT).show();
+				finish();
 			} else {
 				switch (response.getError().getErrorCode()) {
 					case ErrorCodes.NO_NETWORK: Toast.makeText(this, "Pas de connexion internet", Toast.LENGTH_SHORT).show();
 					case ErrorCodes.UNKNOWN_ERROR: Toast.makeText(this, "Erreur inconnue", Toast.LENGTH_SHORT).show();
 					default:
 				}
+				authViewModel.updateCurrentUser();
 			}
 		}
-		authViewModel.updateCurrentUser();
 	}
 
 	@Override

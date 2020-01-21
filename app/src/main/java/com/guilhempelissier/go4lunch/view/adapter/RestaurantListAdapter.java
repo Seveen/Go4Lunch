@@ -66,17 +66,26 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
 			});
 		}
 
-		//TODO redo en passant le binding dans le xml
 		public void bind(FormattedRestaurant restaurant) {
 			Glide.with(binding.getRoot())
 					.load(restaurant.getImageUrl())
+					.centerCrop()
 					.into(picture);
 			binding.setName(restaurant.getName());
 			binding.setAddress(restaurant.getAddress());
 			binding.setOpeningTime(restaurant.getOpenNow());
 			binding.setDistance(restaurant.getDistance());
-			binding.setNbWorkmates(Integer.toString(restaurant.getWorkmates().size()));
-			binding.setStars(String.valueOf(restaurant.getStars()));
+
+			int nbWorkmates = restaurant.getWorkmates().size();
+			if (nbWorkmates == 0) {
+				binding.setNbWorkmates("");
+				binding.setIsWorkmateNotZero(false);
+			} else {
+				binding.setNbWorkmates(Integer.toString(nbWorkmates));
+				binding.setIsWorkmateNotZero(true);
+			}
+
+			binding.setStars(restaurant.getStars());
 		}
 	}
 
