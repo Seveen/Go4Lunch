@@ -18,7 +18,6 @@ public class MainViewModel extends AndroidViewModel {
 	private PlacesRepository placesRepository;
 	private UsersRepository usersRepository;
 	private MutableLiveData<Boolean> needsPermission = new MutableLiveData<>();
-	private MutableLiveData<String> currentRestaurantId = new MutableLiveData<>();
 
 	@SuppressLint("CheckResult")
 	public MainViewModel(@NonNull Application application) {
@@ -28,9 +27,6 @@ public class MainViewModel extends AndroidViewModel {
 
 		placesRepository.getPermissionStatus()
 				.subscribe(needsPermission::setValue);
-
-		placesRepository.getCurrentRestaurantId()
-				.subscribe(currentRestaurantId::setValue);
 	}
 
 	public LiveData<Boolean> getNeedsPermission() {

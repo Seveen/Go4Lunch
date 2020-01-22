@@ -17,8 +17,6 @@ import com.guilhempelissier.go4lunch.databinding.RestaurantViewBinding;
 import com.guilhempelissier.go4lunch.view.adapter.WorkmatesListAdapter;
 import com.guilhempelissier.go4lunch.viewmodel.RestaurantViewModel;
 
-import java.util.Collections;
-
 public class RestaurantActivity extends AppCompatActivity {
 	private RestaurantViewBinding binding;
 
@@ -44,7 +42,7 @@ public class RestaurantActivity extends AppCompatActivity {
 
 		recyclerView = findViewById(R.id.restaurant_view_recyclerview);
 		recyclerView.setLayoutManager(new LinearLayoutManager(this));
-		adapter = new WorkmatesListAdapter(Collections.emptyList(), false, getApplicationContext());
+		adapter = new WorkmatesListAdapter(false, getApplicationContext());
 		recyclerView.setAdapter(adapter);
 
 		restaurantViewModel.getCurrentRestaurant()

@@ -34,7 +34,7 @@ public class PlacesAPIStreams {
 			.observeOn(AndroidSchedulers.mainThread());
 	}
 
-	public static Observable<PlacesDetailsResponse> getDetailsAboutRestaurant(String id) {
+	private static Observable<PlacesDetailsResponse> getDetailsAboutRestaurant(String id) {
 		PlacesAPIService placesAPIService = PlacesAPIService.retrofit.create(PlacesAPIService.class);
 
 		return placesAPIService.getDetailsAboutRestaurant(id, BuildConfig.PLACES_KEY, detailedFields)
@@ -42,19 +42,17 @@ public class PlacesAPIStreams {
 			.observeOn(AndroidSchedulers.mainThread());
 	}
 
+	public static Observable<Restaurant> getRestaurant(String id) {
+		return getDetailsAboutRestaurant(id)
+			.map(placesDetailsResponse -> createRestaurantFromResult(id, placesDetailsResponse.getResult()));
+	}
+
 	public static Single<List<Restaurant>> getDetailedRestaurantsAround(Location location,
 																		 String radius) {
 		return getRestaurantsAround(location, radius)
 				.flatMapIterable(PlacesNearbyResponse::getResults)
 				.flatMap(result -> Observable.zip(Observable.just(result), getDetailsAboutRestaurant(result.getPlaceId()),
-						((res, details) -> {
-							DetailsResult detailsResult = details.getResult();
-							return new Restaurant(res.getGeometry(), res.getName(), res.getPhotos(),
-									res.getPlaceId(), res.getVicinity(), res.getRating(),
-									detailsResult.getFormattedPhoneNumber(),
-									detailsResult.getWebsite(),
-									detailsResult.getOpeningHours());
-						}
+						((res, details) -> createRestaurantFromResult(res.getPlaceId(), details.getResult())
 						)))
 				.toList();
 	}
@@ -72,15 +70,22 @@ public class PlacesAPIStreams {
 				.flatMapIterable(PlacesAutocompleteResponse::getPredictions)
 				.filter(autocompleteResult -> autocompleteResult.getTypes().contains("restaurant"))
 				.flatMap(autocompleteResult -> Observable.zip(Observable.just(autocompleteResult), getDetailsAboutRestaurant(autocompleteResult.getPlaceId()),
-						((res, details) -> {
-							DetailsResult detailsResult = details.getResult();
-							return new Restaurant(detailsResult.getGeometry(), detailsResult.getName(), detailsResult.getPhotos(),
-									res.getPlaceId(), detailsResult.getVicinity(), detailsResult.getRating(),
-									detailsResult.getFormattedPhoneNumber(),
-									detailsResult.getWebsite(),
-									detailsResult.getOpeningHours());
-						}
-						)))
+						((res, details) -> createRestaurantFromResult(res.getPlaceId(), details.getResult()))))
 				.toList();
+	}
+
+	public static Single<List<Restaurant>> getRestaurants(List<String> ids) {
+		return Observable.just(ids)
+				.flatMapIterable(id -> id)
+				.flatMap(PlacesAPIStreams::getRestaurant)
+				.toList();
+	}
+
+	private static Restaurant createRestaurantFromResult(String id, DetailsResult detailsResult) {
+		return new Restaurant(detailsResult.getGeometry(), detailsResult.getName(), detailsResult.getPhotos(),
+				id, detailsResult.getVicinity(), detailsResult.getRating(),
+				detailsResult.getFormattedPhoneNumber(),
+				detailsResult.getWebsite(),
+				detailsResult.getOpeningHours());
 	}
 }

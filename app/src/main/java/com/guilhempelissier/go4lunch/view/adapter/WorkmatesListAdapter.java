@@ -14,6 +14,7 @@ import com.guilhempelissier.go4lunch.R;
 import com.guilhempelissier.go4lunch.databinding.WorkmatesViewItemBinding;
 import com.guilhempelissier.go4lunch.model.FormattedWorkmate;
 
+import java.util.Collections;
 import java.util.List;
 
 public class WorkmatesListAdapter extends RecyclerView.Adapter<WorkmatesListAdapter.WorkmateViewHolder> {
@@ -24,8 +25,8 @@ public class WorkmatesListAdapter extends RecyclerView.Adapter<WorkmatesListAdap
 
 	private Context context;
 
-	public WorkmatesListAdapter(List<FormattedWorkmate> initialList, boolean displayEatingPlace, Context context) {
-		workmates = initialList;
+	public WorkmatesListAdapter(boolean displayEatingPlace, Context context) {
+		workmates = Collections.emptyList();
 		this.displayEatingPlace = displayEatingPlace;
 		this.context = context;
 	}

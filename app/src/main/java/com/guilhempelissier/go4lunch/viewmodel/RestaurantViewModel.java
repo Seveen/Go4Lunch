@@ -25,8 +25,7 @@ public class RestaurantViewModel extends AndroidViewModel {
 	private PlacesRepository placesRepository;
 	private UsersRepository usersRepository;
 
-	private MutableLiveData<List<Restaurant>> results = new MutableLiveData<>();
-	private MutableLiveData<String> currentRestaurantId = new MutableLiveData<>();
+	private MutableLiveData<Restaurant> result = new MutableLiveData<>();
 	private MediatorLiveData<FormattedRestaurant> currentRestaurant = new MediatorLiveData<>();
 	private MutableLiveData<Location> currentLocation = new MutableLiveData<>();
 
@@ -37,49 +36,45 @@ public class RestaurantViewModel extends AndroidViewModel {
 		placesRepository = DI.getPlacesRepository(application.getApplicationContext());
 		usersRepository = DI.getUsersRepository();
 
-		placesRepository.getDetailedRestaurantsAround()
-				.subscribe(results::setValue);
-
-		placesRepository.getCurrentRestaurantId()
-				.subscribe(currentRestaurantId::setValue);
+		placesRepository.getCurrentRestaurant()
+				.subscribe(result::setValue);
 
 		placesRepository.getCurrentLocation()
 				.subscribe(currentLocation::setValue);
 
-		currentRestaurant.addSource(results, o -> updateCurrentRestaurant());
-		currentRestaurant.addSource(currentRestaurantId, o -> updateCurrentRestaurant());
+		currentRestaurant.addSource(result, o -> updateCurrentRestaurant());
 		currentRestaurant.addSource(usersRepository.getCurrentUser(), o -> updateCurrentRestaurant());
 	}
 
 	private void updateCurrentRestaurant() {
 		List<User> workmates = usersRepository.getWorkmates().getValue();
 
-		for (Restaurant result : results.getValue()) {
-			if (result.getPlaceId().equals(currentRestaurantId.getValue())) {
-				List<String> workmateNames = new ArrayList<>();
-				List<FormattedWorkmate> formattedWorkmates = new ArrayList<>();
-				if (workmates != null) {
-					for (User user : workmates) {
-						if (result.getPlaceId().equals(user.getLunch())) {
-							FormattedWorkmate formattedWorkmate = new FormattedWorkmate(
-									user.getUsername(),
-									result.getPlaceId(),
-									result.getName(),
-									user.getImageUrl());
-							formattedWorkmates.add(formattedWorkmate);
-							workmateNames.add(user.getUsername());
-						}
+		if(result.getValue() != null && currentLocation.getValue() != null) {
+			List<String> workmateNames = new ArrayList<>();
+			List<FormattedWorkmate> formattedWorkmates = new ArrayList<>();
+			if (workmates != null) {
+				for (User user : workmates) {
+					if (result.getValue().getPlaceId().equals(user.getLunch())) {
+						FormattedWorkmate formattedWorkmate = new FormattedWorkmate(
+								user.getUsername(),
+								result.getValue().getPlaceId(),
+								result.getValue().getName(),
+								user.getImageUrl());
+						formattedWorkmates.add(formattedWorkmate);
+						workmateNames.add(user.getUsername());
 					}
 				}
-				currentRestaurant.setValue(FormatUtils.formatRestaurant(
-						currentLocation.getValue(),
-						result,
-						workmateNames,
-						getApplication().getApplicationContext(),
-						usersRepository.getCurrentUser().getValue()));
-				workmatesEatingThere.setValue(formattedWorkmates);
 			}
+			currentRestaurant.setValue(FormatUtils.formatRestaurant(
+					currentLocation.getValue(),
+					result.getValue(),
+					workmateNames,
+					getApplication().getApplicationContext(),
+					usersRepository.getCurrentUser().getValue()));
+			workmatesEatingThere.setValue(formattedWorkmates);
 		}
+
+
 	}
 
 	public void toggleEatingLunchHere() {

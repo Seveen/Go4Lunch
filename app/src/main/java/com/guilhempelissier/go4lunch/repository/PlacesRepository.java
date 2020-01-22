@@ -23,9 +23,10 @@ public class PlacesRepository {
 	private Location cachedLocation;
 	private BehaviorSubject<Location> locationStream;
 	private BehaviorSubject<Boolean> permissionStatus;
-	private BehaviorSubject<String> currentRestaurantId;
 	private BehaviorSubject<List<Restaurant>> restaurantsStream;
 	private BehaviorSubject<Sorting> sortingMethod;
+	private BehaviorSubject<Restaurant> currentSelectedRestaurant;
+	private BehaviorSubject<List<Restaurant>> workmatesRestaurants;
 
 	@SuppressLint("CheckResult")
 	public PlacesRepository(Context applicationContext) {
@@ -34,8 +35,9 @@ public class PlacesRepository {
 		locationStream = BehaviorSubject.create();
 		permissionStatus = BehaviorSubject.create();
 		restaurantsStream = BehaviorSubject.create();
-		currentRestaurantId = BehaviorSubject.create();
 		sortingMethod = BehaviorSubject.create();
+		currentSelectedRestaurant = BehaviorSubject.create();
+		workmatesRestaurants = BehaviorSubject.create();
 
 		sortingMethod.onNext(Sorting.DistanceLeast);
 
@@ -63,12 +65,8 @@ public class PlacesRepository {
 			});
 	}
 
-	public Observable<String> getCurrentRestaurantId() {
-		return currentRestaurantId;
-	}
-
 	public void setCurrentRestaurantId(String id) {
-		currentRestaurantId.onNext(id);
+		PlacesAPIStreams.getRestaurant(id).subscribe(currentSelectedRestaurant::onNext);
 	}
 
 	public void setSortingMethod(Sorting sorting) {
@@ -85,6 +83,19 @@ public class PlacesRepository {
 
 	public Observable<List<Restaurant>> getDetailedRestaurantsAround() {
 		return restaurantsStream;
+	}
+
+	public Observable<Restaurant> getCurrentRestaurant() {
+		return currentSelectedRestaurant;
+	}
+
+	public Observable<List<Restaurant>> getWorkmatesRestaurants() {
+		return workmatesRestaurants;
+	}
+
+	public void updateWorkmatesRestaurants(List<String> restaurants) {
+		PlacesAPIStreams.getRestaurants(restaurants)
+				.subscribe(workmatesRestaurants::onNext);
 	}
 
 	public void getAutocompletePredictions(String input) {

@@ -31,14 +31,28 @@ public class WorkmatesViewModel extends AndroidViewModel {
 		usersRepository = DI.getUsersRepository();
 		placesRepository = DI.getPlacesRepository(application.getApplicationContext());
 
-		placesRepository.getDetailedRestaurantsAround().subscribe(restaurants::setValue);
+		placesRepository.getWorkmatesRestaurants().subscribe(restaurants::setValue);
 
-		formattedWorkmates.addSource(usersRepository.getCurrentAuthUser(), o -> updateWorkmatesList());
-		formattedWorkmates.addSource(usersRepository.getWorkmates(), o -> updateWorkmatesList());
+		formattedWorkmates.addSource(usersRepository.getCurrentAuthUser(), o -> updateWorkmatesRestaurants());
+		formattedWorkmates.addSource(usersRepository.getWorkmates(), o -> updateWorkmatesRestaurants());
+
+		formattedWorkmates.addSource(restaurants, o -> updateWorkmatesList());
 	}
 
 	public LiveData<List<FormattedWorkmate>> getWorkmates() {
 		return formattedWorkmates;
+	}
+
+	private void updateWorkmatesRestaurants() {
+		List<User> workmates = usersRepository.getWorkmates().getValue();
+		List<String> restaurants = new ArrayList<>();
+		for (User workmate : workmates) {
+			FirebaseUser currentUser = usersRepository.getCurrentAuthUser().getValue();
+			if (currentUser!=null && !workmate.getUid().equals(currentUser.getUid()) && !workmate.getLunch().equals("")) {
+				restaurants.add(workmate.getLunch());
+			}
+		}
+		placesRepository.updateWorkmatesRestaurants(restaurants);
 	}
 
 	private void updateWorkmatesList() {
