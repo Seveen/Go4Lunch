@@ -3,6 +3,7 @@ package com.guilhempelissier.go4lunch.repository;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.location.Location;
+import android.util.Log;
 
 import com.guilhempelissier.go4lunch.di.DI;
 import com.guilhempelissier.go4lunch.model.Restaurant;
@@ -39,32 +40,27 @@ public class PlacesRepository {
 		sortingMethod.onNext(Sorting.DistanceLeast);
 
 		locationService.getObservableLocation()
-				.doOnError( error -> {
-					if (error instanceof SecurityException) {
-						permissionStatus.onNext(true);
-					}
-				})
-				.retryWhen(attempts -> attempts.flatMap(i -> Observable.timer(1, TimeUnit.SECONDS)))
-				.filter(location -> {
-					if (cachedLocation == null) {
-						return true;
-					}
-					return cachedLocation.distanceTo(location) > 100.0;
-				})
-				.subscribe(location -> {
-					cachedLocation = location;
-					locationStream.onNext(location);
-					PlacesAPIStreams.getDetailedRestaurantsAround(location, "1500")
-							.subscribe(restaurantsStream::onNext);
-//
-//					//TODO debug
-//					PlacesAPIStreams.getPlaceAutocomplete("répu", location, "1500")
-//							.subscribe(placesAutocompleteResponse -> {
-//								for (AutocompleteResult result : placesAutocompleteResponse.getPredictions()) {
-//									Log.d(TAG, "autocomplete: " + result.getDescription());
-//								}
-//							});
-				});
+			.doOnError( error -> {
+				if (error instanceof SecurityException) {
+					permissionStatus.onNext(true);
+				}
+			})
+			.retryWhen(attempts -> attempts.flatMap(i -> Observable.timer(1, TimeUnit.SECONDS)))
+			.filter(location -> {
+				if (cachedLocation == null) {
+					return true;
+				}
+				return cachedLocation.distanceTo(location) > 100.0;
+			})
+			.subscribe(location -> {
+				if (location == null) {
+					Log.d(TAG, "PlacesRepository: location null");
+				}
+				cachedLocation = location;
+				locationStream.onNext(location);
+				PlacesAPIStreams.getDetailedRestaurantsAround(location, "1500")
+						.subscribe(restaurantsStream::onNext);
+			});
 	}
 
 	public Observable<String> getCurrentRestaurantId() {
@@ -89,6 +85,20 @@ public class PlacesRepository {
 
 	public Observable<List<Restaurant>> getDetailedRestaurantsAround() {
 		return restaurantsStream;
+	}
+
+	public void getAutocompletePredictions(String input) {
+		if (cachedLocation != null) {
+			PlacesAPIStreams.getPlaceAutocomplete(input, cachedLocation, "1500")
+					.subscribe(restaurantsStream::onNext);
+		}
+	}
+
+	public void clearAutocompleteResults() {
+		if (cachedLocation != null) {
+			PlacesAPIStreams.getDetailedRestaurantsAround(cachedLocation, "1500")
+					.subscribe(restaurantsStream::onNext);
+		}
 	}
 
 	public Observable<Sorting> getSortingMethod() {

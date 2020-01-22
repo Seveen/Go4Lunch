@@ -20,7 +20,7 @@ import static android.location.Location.FORMAT_DEGREES;
 
 public class PlacesAPIStreams {
 	public static String detailedFields =
-			"formatted_phone_number,opening_hours,website";
+			"geometry,name,photos,vicinity,rating,formatted_phone_number,opening_hours,website";
 
 	public static Observable<PlacesNearbyResponse> getRestaurantsAround(Location location, String radius) {
 		String locationLatitude = Location.convert(location.getLatitude(),FORMAT_DEGREES);
@@ -59,7 +59,7 @@ public class PlacesAPIStreams {
 				.toList();
 	}
 
-	public static Observable<PlacesAutocompleteResponse> getPlaceAutocomplete(String input, Location location, String radius) {
+	public static Single<List<Restaurant>> getPlaceAutocomplete(String input, Location location, String radius) {
 		String locationLatitude = Location.convert(location.getLatitude(),FORMAT_DEGREES);
 		String locationLongitude = Location.convert(location.getLongitude(),FORMAT_DEGREES);
 		String locationCoordinates = locationLatitude + "," + locationLongitude;
@@ -68,6 +68,19 @@ public class PlacesAPIStreams {
 
 		return placesAPIService.getAutocompleteResponse(input, BuildConfig.PLACES_KEY, locationCoordinates, radius, "establishment")
 				.subscribeOn(Schedulers.io())
-				.observeOn(AndroidSchedulers.mainThread());
+				.observeOn(AndroidSchedulers.mainThread())
+				.flatMapIterable(PlacesAutocompleteResponse::getPredictions)
+				.filter(autocompleteResult -> autocompleteResult.getTypes().contains("restaurant"))
+				.flatMap(autocompleteResult -> Observable.zip(Observable.just(autocompleteResult), getDetailsAboutRestaurant(autocompleteResult.getPlaceId()),
+						((res, details) -> {
+							DetailsResult detailsResult = details.getResult();
+							return new Restaurant(detailsResult.getGeometry(), detailsResult.getName(), detailsResult.getPhotos(),
+									res.getPlaceId(), detailsResult.getVicinity(), detailsResult.getRating(),
+									detailsResult.getFormattedPhoneNumber(),
+									detailsResult.getWebsite(),
+									detailsResult.getOpeningHours());
+						}
+						)))
+				.toList();
 	}
 }

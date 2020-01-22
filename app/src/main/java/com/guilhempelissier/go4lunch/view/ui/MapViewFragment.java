@@ -27,6 +27,7 @@ import com.guilhempelissier.go4lunch.R;
 import com.guilhempelissier.go4lunch.model.FormattedRestaurant;
 import com.guilhempelissier.go4lunch.viewmodel.MapViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MapViewFragment extends Fragment implements OnMapReadyCallback {
@@ -35,6 +36,8 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
 	private MapViewModel mapViewModel;
 	private Location currentLocation;
+
+	private List<Marker> currentMarkers = new ArrayList<>();
 
 	public MapViewFragment() {
 		// Required empty public constructor
@@ -78,9 +81,9 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
 		List<FormattedRestaurant> initialData = mapViewModel.getRestaurants().getValue();
 		if (initialData != null) {
-			addMarkers(initialData);
+			updateMarkers(initialData);
 		}
-		mapViewModel.getRestaurants().observe(getViewLifecycleOwner(), list -> addMarkers(list));
+		mapViewModel.getRestaurants().observe(getViewLifecycleOwner(), this::updateMarkers);
 
 		Location initialLocation = mapViewModel.getCurrentLocation().getValue();
 		if (initialLocation != null) {
@@ -105,7 +108,8 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 		});
 	}
 
-	private void addMarkers(List<FormattedRestaurant> list) {
+	private void updateMarkers(List<FormattedRestaurant> list) {
+		clearMarkers();
 		for (FormattedRestaurant restaurant : list) {
 			LatLng latLng = restaurant.getLatLng();
 			Bitmap icon;
@@ -119,7 +123,15 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 					.position(latLng)
 					.icon(BitmapDescriptorFactory.fromBitmap(icon)));
 			marker.setTag(restaurant.getId());
+			currentMarkers.add(marker);
 		}
+	}
+
+	private void clearMarkers() {
+		for (Marker marker : currentMarkers) {
+			marker.remove();
+		}
+		currentMarkers.clear();
 	}
 
 	private void centerMapOnLocation(Location location) {

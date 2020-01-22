@@ -5,11 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.PopupMenu;
 import android.widget.Toast;
 
@@ -28,22 +30,13 @@ import androidx.navigation.Navigation;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
-import com.google.android.gms.common.api.Status;
-import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.model.RectangularBounds;
-import com.google.android.libraries.places.api.model.TypeFilter;
-import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
-import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
-import com.guilhempelissier.go4lunch.BuildConfig;
 import com.guilhempelissier.go4lunch.R;
 import com.guilhempelissier.go4lunch.databinding.ActivityMainBinding;
 import com.guilhempelissier.go4lunch.databinding.MenuHeaderBinding;
 import com.guilhempelissier.go4lunch.model.User;
 import com.guilhempelissier.go4lunch.repository.PlacesRepository;
-import com.guilhempelissier.go4lunch.util.LatLngUtils;
 import com.guilhempelissier.go4lunch.viewmodel.AuthViewModel;
 import com.guilhempelissier.go4lunch.viewmodel.ListViewModel;
 import com.guilhempelissier.go4lunch.viewmodel.MainViewModel;
@@ -73,8 +66,13 @@ public class MainActivity extends AppCompatActivity {
 
 		ActivityMainBinding mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-		mainBinding.setSearchVisible(false);
-		mainBinding.toolbarSearchToggleBtn.setOnClickListener(view -> mainBinding.setSearchVisible(!mainBinding.getSearchVisible()));
+		mainBinding.setSearchNotVisible(true);
+		mainBinding.toolbarSearchToggleBtn.setOnClickListener(view -> {
+			if (!mainBinding.getSearchNotVisible()) {
+				mainViewModel.clearAutocompleteResults();
+			}
+			mainBinding.setSearchNotVisible(!mainBinding.getSearchNotVisible());
+		});
 
 		mainViewModel = ViewModelProviders.of(this).get(MainViewModel.class);
 		mainViewModel.getNeedsPermission().observe(this, isPermissionNeeded -> {
@@ -159,28 +157,18 @@ public class MainActivity extends AppCompatActivity {
 			return true;
 		});
 
-		Places.initialize(this, BuildConfig.PLACES_KEY);
-		AutocompleteSupportFragment autocompleteFragment = (AutocompleteSupportFragment)
-				getSupportFragmentManager().findFragmentById(R.id.autocomplete_fragment);
-		autocompleteFragment.setPlaceFields(Arrays.asList(Place.Field.ID, Place.Field.NAME));
-		autocompleteFragment.setTypeFilter(TypeFilter.ESTABLISHMENT);
-
-		autocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-			String TAG = "Autocomplete";
+		EditText searchView = mainBinding.toolbarSearchEdittext;
+		searchView.addTextChangedListener(new TextWatcher() {
 			@Override
-			public void onPlaceSelected(@NonNull Place place) {
-				Log.i(TAG, "Place: " + place.getName() + ", " + place.getId());
+			public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
+
+			@Override
+			public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+				mainViewModel.queryAutocompletePrediction(charSequence.toString());
 			}
 
 			@Override
-			public void onError(@NonNull Status status) {
-				Log.i(TAG, "An error occurred: " + status);
-			}
-		});
-
-		mainViewModel.getCurrentLocation().observe(this, location -> {
-			RectangularBounds bounds = LatLngUtils.getBoundsAround(location, 750);
-			autocompleteFragment.setLocationRestriction(bounds);
+			public void afterTextChanged(Editable editable) {}
 		});
 	}
 

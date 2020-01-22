@@ -6,7 +6,7 @@
     <data>
         <import type="android.view.View"/>
         <variable
-            name="searchVisible"
+            name="searchNotVisible"
             type="boolean" />
 
         <variable
@@ -50,17 +50,16 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
-                        android:visibility="@{searchVisible ? View.VISIBLE : View.GONE }"
+                        android:visibility="@{searchNotVisible || searchDisallowed ? View.GONE : View.VISIBLE}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/toolbar_search_toggle_btn"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent">
 
-                        <fragment
-                            android:id="@+id/autocomplete_fragment"
-                            android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"
+                        <EditText
+                            android:id="@+id/toolbar_search_edittext"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content" />
+                            android:layout_height="match_parent"/>
                     </com.google.android.material.card.MaterialCardView>
 
                     <ImageButton
@@ -69,7 +68,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="16dp"
                         android:background="#00FFFFFF"
-                        android:src="@{searchVisible ? @drawable/ic_close_white_24dp : @drawable/ic_search_white_24dp}"
+                        android:src="@{searchNotVisible ? @drawable/ic_search_white_24dp : @drawable/ic_close_white_24dp }"
                         android:visibility="@{searchDisallowed ? View.GONE : View.VISIBLE}"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toStartOf="@+id/toolbar_sort_toggle_btn"

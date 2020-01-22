@@ -40,6 +40,7 @@ public class MapViewModel extends AndroidViewModel {
 
 		placesRepository.getDetailedRestaurantsAround()
 			.subscribe(allResults -> {
+				Log.d(TAG, "All results: " + allResults.size());
 				results.setValue(allResults);
 			}, error -> Log.d(TAG, "Detailed restaurants error: " + error.getMessage()));
 

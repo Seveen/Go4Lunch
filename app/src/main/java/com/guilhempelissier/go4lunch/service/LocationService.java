@@ -38,7 +38,7 @@ public class LocationService {
 					}
 				};
 				LocationRequest locationRequest = LocationRequest.create();
-				locationRequest.setInterval(10000);
+				locationRequest.setInterval(1000);
 				locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
 				locationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
 			}
