@@ -24,7 +24,7 @@ public interface PlacesAPIService {
 																@Query("key") String key,
 																@Query("fields") String fields);
 
-	@GET("maps/api/place/autocomplete/json")
+	@GET("maps/api/place/autocomplete/json?strictbounds")
 	Observable<PlacesAutocompleteResponse> getAutocompleteResponse(@Query("input") String input,
 																   @Query("key") String key,
 																   @Query("location") String location,
