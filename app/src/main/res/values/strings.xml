@@ -26,5 +26,11 @@
     <string name="eats_at"> eats at: </string>
     <string name="is_joining">is joining!</string>
     <string name="hasnt_chosen">hasn\'t chosen yet.</string>
-    <string name="no_restaurant_selected">Aucun restaurant sélectionné</string>
+    <string name="no_restaurant_selected">No restaurant selected</string>
+    <string name="notification_title">Your lunch</string>
+    <string name="default_notification_channel_id">4fe794ea-4e71-41d0-8ab9-58bfe12722b1</string>
+    <string name="with">With</string>
+    <string name="workmate_maybe_plural">workmate(s)</string>
+    <string name="channel_name">Message coming from Go4lunch</string>
+    <string name="youre_eating_at">You\'re eating at:</string>
 </resources>
