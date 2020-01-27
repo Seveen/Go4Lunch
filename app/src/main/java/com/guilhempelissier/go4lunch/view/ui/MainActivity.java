@@ -23,6 +23,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -138,10 +139,11 @@ public class MainActivity extends AppCompatActivity {
 					authViewModel.disconnectCurrentUser();
 					break;
 				case R.id.menu_settings:
+					DialogFragment settingsDialog = new SettingsDialogFragment();
+					settingsDialog.show(getSupportFragmentManager(), "settings");
 					break;
 				case R.id.menu_lunch:
 					User user = mainViewModel.getCurrentUser().getValue();
-
 					if (user != null && !user.getLunch().equals("")) {
 						mainViewModel.setCurrentRestaurantId(user.getLunch());
 						Intent intent = new Intent(this, RestaurantActivity.class);

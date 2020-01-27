@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Go4Lunch</string>
+    <string name="channel_name">Message provenant de Go4lunch</string>
+    <string name="close_drawer">Fermer</string>
+    <string name="closed">"Fermé. Ouvre à "</string>
+    <string name="eats_at">mange à :</string>
+    <string name="hasnt_chosen">n\'a pas encore choisi.</string>
+    <string name="is_joining">se joint à vous !</string>
+    <string name="menu_list_view_title">Liste</string>
+    <string name="menu_login">Connexion</string>
+    <string name="menu_logout">Déconnexion</string>
+    <string name="menu_map_view_title">Carte</string>
+    <string name="menu_settings">Paramètres</string>
+    <string name="menu_sort_distance_least">Distance : proche</string>
+    <string name="menu_sort_distance_most">Distance : loin</string>
+    <string name="menu_sort_rating_least">Classement : moins bon</string>
+    <string name="menu_sort_rating_most">Classement : meilleur</string>
+    <string name="menu_sort_workmates_least">Collègues : moins</string>
+    <string name="menu_sort_workmates_most">Collègues : plus</string>
+    <string name="menu_workmates_title">Collègues</string>
+    <string name="menu_your_lunch">Votre déjeuner</string>
+    <string name="no_opening_infos">Pas d\'informations sur l\'ouverture</string>
+    <string name="no_restaurant_selected">Aucun restaurant sélectionné</string>
+    <string name="notification_title">Votre déjeuner</string>
+    <string name="openH24">Ouvert 24/7</string>
+    <string name="open_drawer">Ouvrir</string>
+    <string name="open_until">Ouvers jusqu\'à</string>
+    <string name="title_activity_maps">Carte</string>
+    <string name="with">Avec</string>
+    <string name="workmate_maybe_plural">collègue(s)</string>
+    <string name="youre_eating_at">Vous mangez à :</string>
+    <string name="notify_me_at_lunch_time">Notifiez moi à l\'heure du repas</string>
+    <string name="back">Retour</string>
+</resources>

@@ -61,7 +61,11 @@ public class PlacesRepository {
 				cachedLocation = location;
 				locationStream.onNext(location);
 				PlacesAPIStreams.getDetailedRestaurantsAround(location, "1500")
-						.subscribe(restaurantsStream::onNext);
+						.subscribe(restaurants -> {
+							Log.d(TAG, "PlacesRepository: restaurants" + restaurants.toString());
+							restaurantsStream.onNext(restaurants);
+						});
+//						.subscribe(restaurantsStream::onNext);
 			});
 	}
 

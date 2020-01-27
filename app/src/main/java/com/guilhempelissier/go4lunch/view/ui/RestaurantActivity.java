@@ -3,7 +3,6 @@ package com.guilhempelissier.go4lunch.view.ui;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -23,8 +22,6 @@ public class RestaurantActivity extends AppCompatActivity {
 	private RecyclerView recyclerView;
 	private WorkmatesListAdapter adapter;
 
-	private ImageView restaurantImageView;
-
 	private RestaurantViewModel restaurantViewModel;
 
 	private String phoneNumber;
@@ -37,10 +34,8 @@ public class RestaurantActivity extends AppCompatActivity {
 		restaurantViewModel = ViewModelProviders.of(this).get(RestaurantViewModel.class);
 
 		binding = DataBindingUtil.setContentView(this, R.layout.restaurant_view);
-		//TODO move binding in xml
-		restaurantImageView = findViewById(R.id.restaurant_image_view);
 
-		recyclerView = findViewById(R.id.restaurant_view_recyclerview);
+		recyclerView = binding.restaurantViewRecyclerview;
 		recyclerView.setLayoutManager(new LinearLayoutManager(this));
 		adapter = new WorkmatesListAdapter(false, getApplicationContext());
 		recyclerView.setAdapter(adapter);
@@ -53,7 +48,7 @@ public class RestaurantActivity extends AppCompatActivity {
 					Glide.with(this)
 							.load(restaurant.getImageUrl())
 							.centerCrop()
-							.into(restaurantImageView);
+							.into(binding.restaurantImageView);
 					binding.setIsUserEatingHere(restaurant.isMyLunch());
 					binding.setIsRestaurantLiked(restaurant.isLikedByCurrentUser());
 					phoneNumber = restaurant.getPhoneNumber();

@@ -52,4 +52,11 @@ public class MainViewModel extends AndroidViewModel {
 	public void clearAutocompleteResults() {
 		placesRepository.clearAutocompleteResults();
 	}
+
+	public void toggleNotifyMe() {
+		User user = usersRepository.getCurrentUser().getValue();
+		if (user != null) {
+			usersRepository.updateCurrentUserNotificationStatus(!user.isNotifyMe());
+		}
+	}
 }

@@ -9,6 +9,7 @@ public class User {
 	private String imageUrl;
 	private String lunch;
 	private List<String> likedRestaurants;
+	private boolean notifyMe;
 
 	public User() {}
 
@@ -18,6 +19,7 @@ public class User {
 		this.imageUrl = imageUrl;
 		this.lunch = "";
 		this.likedRestaurants = Collections.emptyList();
+		this.notifyMe = true;
 	}
 
 	public User(String uid, String username,String imageUrl, String lunch, List<String> likedRestaurants) {
@@ -26,6 +28,7 @@ public class User {
 		this.imageUrl = imageUrl;
 		this.lunch = lunch;
 		this.likedRestaurants = likedRestaurants;
+		this.notifyMe = true;
 	}
 
 	public String getUid() {
@@ -66,5 +69,13 @@ public class User {
 
 	public void setImageUrl(String imageUrl) {
 		this.imageUrl = imageUrl;
+	}
+
+	public boolean isNotifyMe() {
+		return notifyMe;
+	}
+
+	public void setNotifyMe(boolean notifyMe) {
+		this.notifyMe = notifyMe;
 	}
 }

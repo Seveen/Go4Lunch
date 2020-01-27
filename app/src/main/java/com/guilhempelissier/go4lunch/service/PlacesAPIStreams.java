@@ -1,6 +1,7 @@
 package com.guilhempelissier.go4lunch.service;
 
 import android.location.Location;
+import android.util.Log;
 
 import com.guilhempelissier.go4lunch.BuildConfig;
 import com.guilhempelissier.go4lunch.model.Restaurant;
@@ -52,7 +53,10 @@ public class PlacesAPIStreams {
 		return getRestaurantsAround(location, radius)
 				.flatMapIterable(PlacesNearbyResponse::getResults)
 				.flatMap(result -> Observable.zip(Observable.just(result), getDetailsAboutRestaurant(result.getPlaceId()),
-						((res, details) -> createRestaurantFromResult(res.getPlaceId(), details.getResult())
+						((res, details) -> {
+							Log.d("stream", "getDetailedRestaurantsAround: " + res.getName());
+							return createRestaurantFromResult(res.getPlaceId(), details.getResult());
+						}
 						)))
 				.toList();
 	}

@@ -71,8 +71,12 @@ public class UsersRepository {
 		isUserConnected.setValue(connected);
 
 		if (connected) {
-			FirebaseService.createUser(user.getUid(), user.getDisplayName(),
-					user.getPhotoUrl().toString());
+			FirebaseService.getUser(user.getUid()).addOnSuccessListener(documentSnapshot -> {
+				if (!documentSnapshot.exists()) {
+					FirebaseService.createUser(user.getUid(), user.getDisplayName(),
+							user.getPhotoUrl().toString());
+				}
+			});
 		}
 	}
 
@@ -85,6 +89,12 @@ public class UsersRepository {
 	public void updateCurrentUserLikes(List<String> likes) {
 		if (currentUser.getValue() != null) {
 			FirebaseService.updateLikes(currentUser.getValue().getUid(), likes);
+		}
+	}
+
+	public void updateCurrentUserNotificationStatus(Boolean isNotified) {
+		if (currentUser.getValue() != null) {
+			FirebaseService.updateNotification(currentUser.getValue().getUid(), isNotified);
 		}
 	}
 }

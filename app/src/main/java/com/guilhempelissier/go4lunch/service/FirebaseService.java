@@ -41,6 +41,10 @@ public class FirebaseService {
 		return getUsersCollection().document(uid).update("likedRestaurants", likes);
 	}
 
+	public static Task<Void> updateNotification(String uid, Boolean isNotified) {
+		return getUsersCollection().document(uid).update("notifyMe", isNotified);
+	}
+
 	public static Task<Void> deleteUser(String uid) {
 		return getUsersCollection().document(uid).delete();
 	}
