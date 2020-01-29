@@ -72,21 +72,14 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
 					.load(restaurant.getImageUrl())
 					.centerCrop()
 					.into(picture);
-			binding.setName(restaurant.getName());
-			binding.setAddress(restaurant.getAddress());
-			binding.setOpeningTime(restaurant.getOpenNow());
-			binding.setDistanceMeters(restaurant.getDistanceMeters());
+			binding.setRestaurant(restaurant);
 
 			int nbWorkmates = restaurant.getWorkmates().size();
 			if (nbWorkmates == 0) {
 				binding.setNbWorkmates("");
-				binding.setIsWorkmateNotZero(false);
 			} else {
 				binding.setNbWorkmates(Integer.toString(nbWorkmates));
-				binding.setIsWorkmateNotZero(true);
 			}
-
-			binding.setStars(restaurant.getStars());
 		}
 	}
 

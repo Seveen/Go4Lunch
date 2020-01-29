@@ -6,26 +6,11 @@
     <data>
         <import type="android.view.View"/>
         <variable
-            name="name"
-            type="String" />
-        <variable
-            name="address"
-            type="String" />
-        <variable
-            name="openingTime"
-            type="String" />
-        <variable
-            name="distanceMeters"
-            type="String" />
-        <variable
-            name="isWorkmateNotZero"
-            type="Boolean" />
-        <variable
             name="nbWorkmates"
             type="String" />
         <variable
-            name="stars"
-            type="Integer" />
+            name="restaurant"
+            type="com.guilhempelissier.go4lunch.model.FormattedRestaurant" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -46,8 +31,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="@{name}"
-                android:textStyle="bold"
+                android:text="@{restaurant.name}"
+                android:textColor="#000000"
+                android:textSize="16sp"
                 app:layout_constraintEnd_toStartOf="@+id/list_item_distance"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -59,7 +45,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="@{address}"
+                android:text="@{restaurant.address}"
+                android:textSize="14sp"
                 app:layout_constraintEnd_toStartOf="@+id/imageView"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/list_item_name"
@@ -72,7 +59,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="@{openingTime}"
+                android:text="@{restaurant.openNow}"
                 android:textStyle="italic"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/list_item_star1"
@@ -87,7 +74,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
-                android:text="@{distanceMeters}"
+                android:text="@{restaurant.distanceMeters}"
                 android:textColor="#7F7F7F"
                 app:layout_constraintEnd_toStartOf="@+id/list_item_image"
                 app:layout_constraintTop_toTopOf="parent"
@@ -98,7 +85,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_person_outline_black_24dp"
-                android:visibility="@{isWorkmateNotZero ? View.VISIBLE : View.GONE}"
+                android:visibility="@{restaurant.workmates.size != 0 ? View.VISIBLE : View.GONE}"
                 app:layout_constraintBottom_toBottomOf="@+id/list_item_nb_workmates"
                 app:layout_constraintEnd_toStartOf="@+id/list_item_nb_workmates"
                 app:layout_constraintTop_toTopOf="@+id/list_item_nb_workmates" />
@@ -122,7 +109,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
-                android:src="@{stars == 3 ? @drawable/ic_star_yellow_24dp : @drawable/ic_star_border_yellow_24dp}"
+                android:src="@{restaurant.stars == 3 ? @drawable/ic_star_yellow_24dp : @drawable/ic_star_border_yellow_24dp}"
                 android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/list_item_image"
@@ -130,9 +117,11 @@
 
             <ImageView
                 android:id="@+id/list_item_image"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -142,7 +131,7 @@
                 android:id="@+id/list_item_star2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@{stars >= 2 ? @drawable/ic_star_yellow_24dp : @drawable/ic_star_border_yellow_24dp}"
+                android:src="@{restaurant.stars >= 2 ? @drawable/ic_star_yellow_24dp : @drawable/ic_star_border_yellow_24dp}"
                 android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="@+id/list_item_star3"
                 app:layout_constraintEnd_toStartOf="@+id/list_item_star3"
@@ -152,7 +141,7 @@
                 android:id="@+id/list_item_star1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@{stars  >= 1 ? @drawable/ic_star_yellow_24dp : @drawable/ic_star_border_yellow_24dp}"
+                android:src="@{restaurant.stars  >= 1 ? @drawable/ic_star_yellow_24dp : @drawable/ic_star_border_yellow_24dp}"
                 android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="@+id/list_item_star2"
                 app:layout_constraintEnd_toStartOf="@+id/list_item_star2"

@@ -5,7 +5,7 @@
     <string name="close_drawer">Fermer</string>
     <string name="closed">"Fermé. Ouvre à "</string>
     <string name="eats_at">mange à :</string>
-    <string name="hasnt_chosen">n\'a pas encore choisi.</string>
+    <string name="hasnt_chosen">n\'a pas encore décidé.</string>
     <string name="is_joining">se joint à vous !</string>
     <string name="menu_list_view_title">Liste</string>
     <string name="menu_login">Connexion</string>
@@ -32,4 +32,6 @@
     <string name="youre_eating_at">Vous mangez à :</string>
     <string name="notify_me_at_lunch_time">Notifiez moi à l\'heure du repas</string>
     <string name="back">Retour</string>
+    <string name="i_m_hungry">J\'ai faim !</string>
+    <string name="available_workmates">Collègues disponibles</string>
 </resources>

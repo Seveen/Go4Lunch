@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -45,7 +46,10 @@ public class WorkmatesFragment extends Fragment {
 		ViewGroup root = (ViewGroup) inflater.inflate(R.layout.fragment_workmates, null);
 
 		recyclerView = root.findViewById(R.id.workmatesRecyclerView);
-		recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+		LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+		recyclerView.setLayoutManager(layoutManager);
+		DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(getContext(), layoutManager.getOrientation());
+		recyclerView.addItemDecoration(dividerItemDecoration);
 		adapter = new WorkmatesListAdapter(true, getContext());
 		recyclerView.setAdapter(adapter);
 

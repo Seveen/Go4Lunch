@@ -55,6 +55,7 @@ public class PlacesAPIStreams {
 				.flatMap(result -> Observable.zip(Observable.just(result), getDetailsAboutRestaurant(result.getPlaceId()),
 						((res, details) -> {
 							Log.d("stream", "getDetailedRestaurantsAround: " + res.getName());
+							Log.d("stream", "getDetailedRestaurantsAround: " + res.getPlaceId());
 							return createRestaurantFromResult(res.getPlaceId(), details.getResult());
 						}
 						)))
