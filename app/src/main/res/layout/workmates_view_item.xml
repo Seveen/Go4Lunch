@@ -39,9 +39,11 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:text="@{text}"
+                android:textSize="14sp"
                 app:layout_constraintBottom_toBottomOf="@+id/workmates_item_image"
                 app:layout_constraintStart_toEndOf="@+id/workmates_item_image"
-                app:layout_constraintTop_toTopOf="@+id/workmates_item_image" />
+                app:layout_constraintTop_toTopOf="@+id/workmates_item_image"
+                tools:text="test" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.cardview.widget.CardView>

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,21 +37,20 @@ public class RestaurantActivity extends AppCompatActivity {
 		binding = DataBindingUtil.setContentView(this, R.layout.restaurant_view);
 
 		recyclerView = binding.restaurantViewRecyclerview;
-		recyclerView.setLayoutManager(new LinearLayoutManager(this));
+		LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+		recyclerView.setLayoutManager(layoutManager);
+		DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(this, layoutManager.getOrientation());
+		recyclerView.addItemDecoration(dividerItemDecoration);
 		adapter = new WorkmatesListAdapter(false, getApplicationContext());
 		recyclerView.setAdapter(adapter);
 
 		restaurantViewModel.getCurrentRestaurant()
 				.observe(this, restaurant -> {
-					binding.setRestaurantName(restaurant.getName());
-					binding.setRestaurantStars(restaurant.getStars());
-					binding.setRestaurantAddress(restaurant.getAddress());
+					binding.setRestaurant(restaurant);
 					Glide.with(this)
 							.load(restaurant.getImageUrl())
 							.centerCrop()
 							.into(binding.restaurantImageView);
-					binding.setIsUserEatingHere(restaurant.isMyLunch());
-					binding.setIsRestaurantLiked(restaurant.isLikedByCurrentUser());
 					phoneNumber = restaurant.getPhoneNumber();
 					website = restaurant.getWebsite();
 				});

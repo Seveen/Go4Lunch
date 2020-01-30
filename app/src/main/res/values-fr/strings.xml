@@ -34,4 +34,7 @@
     <string name="back">Retour</string>
     <string name="i_m_hungry">J\'ai faim !</string>
     <string name="available_workmates">Collègues disponibles</string>
+    <string name="call">Appel</string>
+    <string name="website">Site web</string>
+    <string name="like">Like</string>
 </resources>

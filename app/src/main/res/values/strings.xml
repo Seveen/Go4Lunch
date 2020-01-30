@@ -37,4 +37,7 @@
     <string name="back">Back</string>
     <string name="i_m_hungry">I\'m Hungry!</string>
     <string name="available_workmates">Available workmates</string>
+    <string name="call">Call</string>
+    <string name="like">Like</string>
+    <string name="website">Website</string>
 </resources>

@@ -6,24 +6,8 @@
     <data>
         <import type="android.view.View"/>
         <variable
-            name="restaurantName"
-            type="String" />
-
-        <variable
-            name="restaurantStars"
-            type="Integer" />
-
-        <variable
-            name="restaurantAddress"
-            type="String" />
-
-        <variable
-            name="isUserEatingHere"
-            type="boolean" />
-
-        <variable
-            name="isRestaurantLiked"
-            type="boolean" />
+            name="restaurant"
+            type="com.guilhempelissier.go4lunch.model.FormattedRestaurant" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -35,9 +19,11 @@
         <ImageView
             android:id="@+id/restaurant_image_view"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:maxHeight="200dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="400dp"
             android:adjustViewBounds="true"
+            android:maxHeight="250dp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -53,7 +39,7 @@
             app:layout_constraintBottom_toTopOf="@+id/restaurant_infos_cardview"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/restaurant_image_view"
-            android:src="@{isUserEatingHere ? @drawable/ic_check_circle_green_24dp : @drawable/ic_add_black_24dp}" />
+            android:src="@{restaurant.isMyLunch ? @drawable/ic_check_circle_green_24dp : @drawable/ic_add_black_24dp}" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/restaurant_infos_cardview"
@@ -76,10 +62,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:text="@{restaurantName}"
+                    android:layout_marginTop="16dp"
+                    android:text="@{restaurant.name}"
                     android:textColor="#FFFFFF"
-                    android:textSize="24sp"
+                    android:textSize="18sp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="Le Zinc" />
@@ -90,8 +76,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
-                    android:text="@{restaurantAddress}"
+                    android:layout_marginBottom="16dp"
+                    android:text="@{restaurant.address}"
                     android:textColor="#FFFFFF"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -104,7 +90,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:src="@drawable/ic_star_yellow_24dp"
-                    android:visibility="@{restaurantStars >= 1 ? View.VISIBLE : View.GONE}"
+                    android:visibility="@{restaurant.stars >= 1 ? View.VISIBLE : View.GONE}"
                     app:layout_constraintBottom_toBottomOf="@+id/restaurant_view_name"
                     app:layout_constraintStart_toEndOf="@+id/restaurant_view_name"
                     app:layout_constraintTop_toTopOf="@+id/restaurant_view_name" />
@@ -114,7 +100,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_star_yellow_24dp"
-                    android:visibility="@{restaurantStars >= 2 ? View.VISIBLE : View.GONE}"
+                    android:visibility="@{restaurant.stars >= 2 ? View.VISIBLE : View.GONE}"
                     app:layout_constraintBottom_toBottomOf="@+id/restaurant_star1"
                     app:layout_constraintStart_toEndOf="@+id/restaurant_star1"
                     app:layout_constraintTop_toTopOf="@+id/restaurant_star1" />
@@ -124,7 +110,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/ic_star_yellow_24dp"
-                    android:visibility="@{restaurantStars == 3 ? View.VISIBLE : View.GONE}"
+                    android:visibility="@{restaurant.stars == 3 ? View.VISIBLE : View.GONE}"
                     app:layout_constraintBottom_toBottomOf="@+id/restaurant_star2"
                     app:layout_constraintStart_toEndOf="@+id/restaurant_star2"
                     app:layout_constraintTop_toTopOf="@+id/restaurant_star2" />
@@ -145,26 +131,41 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <ImageButton
+                <Button
                     android:id="@+id/restaurant_call_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_call_orange_24dp" />
+                    android:background="#00FFFFFF"
+                    android:drawableTop="@drawable/ic_call_orange_24dp"
+                    android:drawablePadding="8dp"
+                    android:padding="16dp"
+                    android:text="@string/call"
+                    android:textColor="@color/colorPrimary" />
 
-                <ImageButton
+                <Button
                     android:id="@+id/restaurant_like_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:src="@{isRestaurantLiked ? @drawable/ic_star_orange_24dp : @drawable/ic_star_border_orange_24dp}" />
+                    android:background="#00FFFFFF"
+                    android:drawableTop="@{restaurant.isLikedByCurrentUser ? @drawable/ic_star_orange_24dp : @drawable/ic_star_border_orange_24dp}"
+                    android:drawablePadding="8dp"
+                    android:padding="16dp"
+                    android:text="@string/like"
+                    android:textColor="@color/colorPrimary" />
 
-                <ImageButton
+                <Button
                     android:id="@+id/restaurant_website_button"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:src="@drawable/ic_website_orange_24dp" />
+                    android:background="#00FFFFFF"
+                    android:drawableTop="@drawable/ic_website_orange_24dp"
+                    android:drawablePadding="8dp"
+                    android:padding="16dp"
+                    android:text="@string/website"
+                    android:textColor="@color/colorPrimary" />
             </LinearLayout>
         </androidx.cardview.widget.CardView>
 
