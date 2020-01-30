@@ -38,7 +38,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:navigationIcon="@drawable/ic_menu_white_24dp"
-                app:titleTextColor="@android:color/white">
+                app:titleTextColor="@color/colorTextOnPrimary">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
@@ -67,7 +67,7 @@
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:text="@{searchDisallowed ? @string/available_workmates : @string/i_m_hungry}"
-                        android:textColor="#FFFFFF"
+                        android:textColor="@color/colorTextOnPrimary"
                         android:textSize="18sp"
                         android:textStyle="bold"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -132,8 +132,19 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"
+            android:background="@color/colorMenuBackground"
             app:headerLayout="@layout/menu_header"
-            app:menu="@menu/drawer_menu" />
+            app:itemIconTint="@color/colorTextOnPrimary"
+            app:itemTextColor="@color/colorTextOnPrimary"
+            app:menu="@menu/drawer_menu">
+
+            <ImageView
+                android:id="@+id/logo"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
+                android:src="@drawable/ic_go4lunch_logo" />
+        </com.google.android.material.navigation.NavigationView>
 
     </androidx.drawerlayout.widget.DrawerLayout>
 </layout>

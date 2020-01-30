@@ -9,9 +9,9 @@
     <string name="is_joining">se joint à vous !</string>
     <string name="menu_list_view_title">Liste</string>
     <string name="menu_login">Connexion</string>
-    <string name="menu_logout">Déconnexion</string>
+    <string name="menu_logout">DÉCONNEXION</string>
     <string name="menu_map_view_title">Carte</string>
-    <string name="menu_settings">Paramètres</string>
+    <string name="menu_settings">PARAMÈTRES</string>
     <string name="menu_sort_distance_least">Distance : proche</string>
     <string name="menu_sort_distance_most">Distance : loin</string>
     <string name="menu_sort_rating_least">Classement : moins bon</string>
@@ -19,7 +19,7 @@
     <string name="menu_sort_workmates_least">Collègues : moins</string>
     <string name="menu_sort_workmates_most">Collègues : plus</string>
     <string name="menu_workmates_title">Collègues</string>
-    <string name="menu_your_lunch">Votre déjeuner</string>
+    <string name="menu_your_lunch">VOTRE DÉJEUNER</string>
     <string name="no_opening_infos">Pas d\'informations sur l\'ouverture</string>
     <string name="no_restaurant_selected">Aucun restaurant sélectionné</string>
     <string name="notification_title">Votre déjeuner</string>

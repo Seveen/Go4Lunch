@@ -19,24 +19,26 @@
             android:id="@+id/background_image"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:cropToPadding="true"
+            android:padding="0dp"
+            android:scaleType="centerCrop"
             android:tint="#9E000000"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0"
-            app:srcCompat="@drawable/lunch" />
+            app:srcCompat="@drawable/lunch_640" />
 
         <TextView
             android:id="@+id/menu_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="32dp"
             android:text="@string/main_title"
             android:textAlignment="center"
             android:textColor="#FFFFFF"
-            android:textSize="24sp"
+            android:textSize="36sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/menu_name"
             app:layout_constraintEnd_toEndOf="parent"
@@ -45,13 +47,13 @@
 
         <ImageView
             android:id="@+id/menu_avatar"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             android:layout_marginStart="16dp"
+            android:layout_marginBottom="24dp"
+            app:circledImageURL="@{user.avatarUrl}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:circledImageURL="@{user.avatarUrl}"
             tools:srcCompat="@tools:sample/avatars" />
 
         <TextView
@@ -59,11 +61,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
             android:text="@{user.displayName}"
             android:textColor="#FFFFFF"
-            app:layout_constraintBottom_toTopOf="@+id/menu_email"
             app:layout_constraintStart_toEndOf="@+id/menu_avatar"
-            app:layout_constraintTop_toTopOf="@+id/menu_avatar" />
+            app:layout_constraintTop_toTopOf="@+id/menu_avatar"
+            tools:text="John Doe" />
 
         <TextView
             android:id="@+id/menu_email"
@@ -72,9 +75,9 @@
             android:layout_marginStart="16dp"
             android:text="@{user.email}"
             android:textColor="#FFFFFF"
-            app:layout_constraintBottom_toBottomOf="@+id/menu_avatar"
             app:layout_constraintStart_toEndOf="@+id/menu_avatar"
-            app:layout_constraintTop_toBottomOf="@+id/menu_name" />
+            app:layout_constraintTop_toBottomOf="@+id/menu_name"
+            tools:text="j.doe@example.com" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
