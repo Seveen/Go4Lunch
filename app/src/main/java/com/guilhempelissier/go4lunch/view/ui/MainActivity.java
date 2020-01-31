@@ -28,6 +28,7 @@ import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.firebase.ui.auth.AuthMethodPickerLayout;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
@@ -211,10 +212,16 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	private void startSignInActivity() {
+		AuthMethodPickerLayout customLayout = new AuthMethodPickerLayout
+				.Builder(R.layout.login_view)
+				.setGoogleButtonId(R.id.google_login_button)
+				.setFacebookButtonId(R.id.fb_login_button)
+				.build();
 		startActivityForResult(
 				AuthUI.getInstance()
 				.createSignInIntentBuilder()
 				.setTheme(R.style.AppTheme)
+				.setAuthMethodPickerLayout(customLayout)
 				.setAvailableProviders(
 						Arrays.asList(new AuthUI.IdpConfig.GoogleBuilder().build(), new AuthUI.IdpConfig.FacebookBuilder().build())
 				)

@@ -40,4 +40,5 @@
     <string name="website">Website</string>
     <string name="menu_settings">SETTINGS</string>
     <string name="menu_your_lunch">YOUR LUNCH</string>
+    <string name="login_subtitle">Find a nice restaurant and invite your co-workers for lunch!</string>
 </resources>
