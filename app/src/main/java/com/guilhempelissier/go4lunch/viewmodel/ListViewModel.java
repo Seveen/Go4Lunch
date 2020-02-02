@@ -17,11 +17,11 @@ import com.guilhempelissier.go4lunch.model.Restaurant;
 import com.guilhempelissier.go4lunch.model.User;
 import com.guilhempelissier.go4lunch.repository.PlacesRepository;
 import com.guilhempelissier.go4lunch.repository.UsersRepository;
+import com.guilhempelissier.go4lunch.utils.SortingUtils;
 
 import org.threeten.bp.LocalDateTime;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class ListViewModel extends AndroidViewModel {
@@ -80,26 +80,7 @@ public class ListViewModel extends AndroidViewModel {
 				}
 			}
 
-			switch (sortingMethod.getValue()) {
-				case RatingLeast:
-					Collections.sort(formattedRestaurants, (a, b) -> Integer.compare(a.getStars(), b.getStars()));
-					break;
-				case RatingMost:
-					Collections.sort(formattedRestaurants, (a, b) -> -Integer.compare(a.getStars(), b.getStars()));
-					break;
-				case DistanceLeast:
-					Collections.sort(formattedRestaurants, (a, b) -> Long.compare(a.getDistance(), b.getDistance()));
-					break;
-				case DistanceMost:
-					Collections.sort(formattedRestaurants, (a, b) -> -Long.compare(a.getDistance(), b.getDistance()));
-					break;
-				case WorkmatesLeast:
-					Collections.sort(formattedRestaurants, (a, b) -> Integer.compare(a.getWorkmates().size(), b.getWorkmates().size()));
-					break;
-				case WorkmatesMost:
-					Collections.sort(formattedRestaurants, (a, b) -> -Integer.compare(a.getWorkmates().size(), b.getWorkmates().size()));
-					break;
-			}
+			SortingUtils.sortRestaurantsBy(formattedRestaurants, sortingMethod.getValue());
 
 			restaurants.setValue(formattedRestaurants);
 		}
