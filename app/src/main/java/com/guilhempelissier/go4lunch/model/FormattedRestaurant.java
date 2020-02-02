@@ -3,6 +3,7 @@ package com.guilhempelissier.go4lunch.model;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
+import java.util.Objects;
 
 public class FormattedRestaurant {
 	private String id;
@@ -10,7 +11,7 @@ public class FormattedRestaurant {
 	private String address;
 	private String openNow;
 	private String distanceMeters;
-	private int distance;
+	private long distance;
 	private int stars;
 	private String imageUrl;
 	private LatLng latLng;
@@ -20,7 +21,7 @@ public class FormattedRestaurant {
 	private String phoneNumber;
 	private String website;
 
-	public FormattedRestaurant(String id, String name, String address, String openNow, String distanceMeters, int distance, int stars, String imageUrl, LatLng latLng, List<String> workmates, boolean isMyLunch, boolean isLikedByCurrentUser, String phoneNumber, String website) {
+	public FormattedRestaurant(String id, String name, String address, String openNow, String distanceMeters, long distance, int stars, String imageUrl, LatLng latLng, List<String> workmates, boolean isMyLunch, boolean isLikedByCurrentUser, String phoneNumber, String website) {
 		this.id = id;
 		this.name = name;
 		this.address = address;
@@ -141,11 +142,37 @@ public class FormattedRestaurant {
 		isLikedByCurrentUser = likedByCurrentUser;
 	}
 
-	public int getDistance() {
+	public long getDistance() {
 		return distance;
 	}
 
-	public void setDistance(int distance) {
+	public void setDistance(long distance) {
 		this.distance = distance;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		FormattedRestaurant that = (FormattedRestaurant) o;
+		return distance == that.distance &&
+				stars == that.stars &&
+				isMyLunch == that.isMyLunch &&
+				isLikedByCurrentUser == that.isLikedByCurrentUser &&
+				Objects.equals(id, that.id) &&
+				Objects.equals(name, that.name) &&
+				Objects.equals(address, that.address) &&
+				Objects.equals(openNow, that.openNow) &&
+				Objects.equals(distanceMeters, that.distanceMeters) &&
+				Objects.equals(imageUrl, that.imageUrl) &&
+				Objects.equals(latLng, that.latLng) &&
+				Objects.equals(workmates, that.workmates) &&
+				Objects.equals(phoneNumber, that.phoneNumber) &&
+				Objects.equals(website, that.website);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, name, address, openNow, distanceMeters, distance, stars, imageUrl, latLng, workmates, isMyLunch, isLikedByCurrentUser, phoneNumber, website);
 	}
 }

@@ -18,6 +18,8 @@ import com.guilhempelissier.go4lunch.model.User;
 import com.guilhempelissier.go4lunch.repository.PlacesRepository;
 import com.guilhempelissier.go4lunch.repository.UsersRepository;
 
+import org.threeten.bp.LocalDateTime;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -68,7 +70,13 @@ public class ListViewModel extends AndroidViewModel {
 				}
 				Location location = currentLocation.getValue();
 				if (location != null) {
-					formattedRestaurants.add(FormatUtils.formatRestaurant(location, result, workmatesEatingThere, getApplication().getApplicationContext(), usersRepository.getCurrentUser().getValue()));
+					formattedRestaurants.add(FormatUtils.formatRestaurant(
+							location,
+							result,
+							workmatesEatingThere,
+							getApplication().getApplicationContext(),
+							usersRepository.getCurrentUser().getValue(),
+							LocalDateTime.now()));
 				}
 			}
 
@@ -80,10 +88,10 @@ public class ListViewModel extends AndroidViewModel {
 					Collections.sort(formattedRestaurants, (a, b) -> -Integer.compare(a.getStars(), b.getStars()));
 					break;
 				case DistanceLeast:
-					Collections.sort(formattedRestaurants, (a, b) -> Integer.compare(a.getDistance(), b.getDistance()));
+					Collections.sort(formattedRestaurants, (a, b) -> Long.compare(a.getDistance(), b.getDistance()));
 					break;
 				case DistanceMost:
-					Collections.sort(formattedRestaurants, (a, b) -> -Integer.compare(a.getDistance(), b.getDistance()));
+					Collections.sort(formattedRestaurants, (a, b) -> -Long.compare(a.getDistance(), b.getDistance()));
 					break;
 				case WorkmatesLeast:
 					Collections.sort(formattedRestaurants, (a, b) -> Integer.compare(a.getWorkmates().size(), b.getWorkmates().size()));

@@ -8,6 +8,11 @@ public class DateTime {
 	@Expose
 	int time;
 
+	public DateTime(int day, int time) {
+		this.day = day;
+		this.time = time;
+	}
+
 	public int getDay() {
 		return day;
 	}

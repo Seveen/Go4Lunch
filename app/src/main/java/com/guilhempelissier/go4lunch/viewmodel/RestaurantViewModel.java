@@ -17,6 +17,8 @@ import com.guilhempelissier.go4lunch.model.User;
 import com.guilhempelissier.go4lunch.repository.PlacesRepository;
 import com.guilhempelissier.go4lunch.repository.UsersRepository;
 
+import org.threeten.bp.LocalDateTime;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,7 +72,8 @@ public class RestaurantViewModel extends AndroidViewModel {
 					result.getValue(),
 					workmateNames,
 					getApplication().getApplicationContext(),
-					usersRepository.getCurrentUser().getValue()));
+					usersRepository.getCurrentUser().getValue(),
+					LocalDateTime.now()));
 			workmatesEatingThere.setValue(formattedWorkmates);
 		}
 

@@ -15,4 +15,9 @@ public class Period {
 	public DateTime getClose() {
 		return close;
 	}
+
+	public Period(DateTime open, DateTime close) {
+		this.open = open;
+		this.close = close;
+	}
 }

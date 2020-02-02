@@ -26,4 +26,8 @@ public class Location_ {
         this.lng = lng;
     }
 
+    public Location_(Double lat, Double lng) {
+        this.lat = lat;
+        this.lng = lng;
+    }
 }

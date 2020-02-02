@@ -12,6 +12,7 @@ import com.guilhempelissier.go4lunch.model.User;
 import com.guilhempelissier.go4lunch.model.serialization.Location_;
 import com.guilhempelissier.go4lunch.model.serialization.OpeningHours;
 import com.guilhempelissier.go4lunch.model.serialization.Period;
+import com.guilhempelissier.go4lunch.utils.LatLngUtils;
 
 import org.threeten.bp.LocalDateTime;
 
@@ -21,7 +22,15 @@ import java.util.List;
 
 public class FormatUtils {
 	public static int formatRating(Double rating) {
-		return (int) Math.round(rating/2.0);
+		int result = 0;
+		if (rating >= 4.5) {
+			result = 3;
+		} else if (rating >= 2.5) {
+			result = 2;
+		} else if (rating >= 0.5) {
+			result = 1;
+		}
+		return result;
 	}
 
 	public static String formatPhotoUrl(String ref) {
@@ -34,10 +43,9 @@ public class FormatUtils {
 		return result.toString();
 	}
 
-	public static String formatOpenNow(OpeningHours openingHours, Context ctx) {
+	public static String formatOpenNow(OpeningHours openingHours, LocalDateTime now, Context ctx) {
 		List<Period> periods = openingHours.getPeriods();
 
-		LocalDateTime now = LocalDateTime.now();
 		int currentDay = now.getDayOfWeek().getValue();
 		if (currentDay == 7) {
 			currentDay = 0;
@@ -75,7 +83,7 @@ public class FormatUtils {
 		return hourFormat.format(hours) + ":" + minutesFormat.format(minutes);
 	}
 
-	public static String formatDistance(float distance) {
+	public static String formatDistance(double distance) {
 		StringBuilder result = new StringBuilder();
 		DecimalFormat format = new DecimalFormat("####");
 		format.setRoundingMode(RoundingMode.DOWN);
@@ -98,19 +106,22 @@ public class FormatUtils {
 		return false;
 	}
 
-	public static FormattedRestaurant formatRestaurant(Location currentLocation, Restaurant result, List<String> workmates, Context ctx, User currentUser) {
+	public static FormattedRestaurant formatRestaurant(Location currentLocation, Restaurant result, List<String> workmates, Context ctx, User currentUser,
+													   LocalDateTime currentDateTime) {
 
 		Location_ restaurantLoc = result.getGeometry().getLocation();
-		float[] distanceResult = new float[1];
-		Location.distanceBetween(currentLocation.getLatitude(), currentLocation.getLongitude(),
-				restaurantLoc.getLat(), restaurantLoc.getLng(), distanceResult);
-		String distance = FormatUtils.formatDistance(distanceResult[0]);
+
+		double distanceMeters = LatLngUtils.getDistanceInMetersBetweenTwoLatLng(
+				currentLocation.getLatitude(), currentLocation.getLongitude(),
+				restaurantLoc.getLat(), restaurantLoc.getLng());
+
+		String distance = FormatUtils.formatDistance(distanceMeters);
 
 		OpeningHours openingHours = result.getOpeningHours();
 
 		String openNow;
 		if (openingHours != null) {
-			openNow = FormatUtils.formatOpenNow(openingHours, ctx);
+			openNow = FormatUtils.formatOpenNow(openingHours, currentDateTime, ctx);
 		} else {
 			openNow = ctx.getString(R.string.no_opening_infos);
 		}
@@ -120,7 +131,7 @@ public class FormatUtils {
 				result.getVicinity(),
 				openNow,
 				distance,
-				Math.round(distanceResult[0]),
+				Math.round(distanceMeters),
 				FormatUtils.formatRating(result.getRating()),
 				FormatUtils.formatPhotoUrl(result.getPhotos().get(0).getPhotoReference()),
 				new LatLng(restaurantLoc.getLat(), restaurantLoc.getLng()),

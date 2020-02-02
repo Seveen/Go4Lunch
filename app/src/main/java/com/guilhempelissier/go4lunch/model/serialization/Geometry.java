@@ -25,4 +25,9 @@ public class Geometry {
     public void setViewport(Viewport viewport) {
         this.viewport = viewport;
     }
+
+    public Geometry(Location_ location, Viewport viewport) {
+        this.location = location;
+        this.viewport = viewport;
+    }
 }

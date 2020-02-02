@@ -18,6 +18,8 @@ import com.guilhempelissier.go4lunch.model.User;
 import com.guilhempelissier.go4lunch.repository.PlacesRepository;
 import com.guilhempelissier.go4lunch.repository.UsersRepository;
 
+import org.threeten.bp.LocalDateTime;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,8 +65,13 @@ public class MapViewModel extends AndroidViewModel {
 						}
 					}
 				}
-				formattedRestaurants.add(FormatUtils.formatRestaurant(currentLocation.getValue(), result, workmatesEatingThere, getApplication().getApplicationContext(),
-						usersRepository.getCurrentUser().getValue()));
+				formattedRestaurants.add(FormatUtils.formatRestaurant(
+						currentLocation.getValue(),
+						result,
+						workmatesEatingThere,
+						getApplication().getApplicationContext(),
+						usersRepository.getCurrentUser().getValue(),
+						LocalDateTime.now()));
 			}
 			restaurants.setValue(formattedRestaurants);
 		}
