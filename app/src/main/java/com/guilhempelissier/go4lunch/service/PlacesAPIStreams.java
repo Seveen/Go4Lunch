@@ -45,6 +45,7 @@ public class PlacesAPIStreams {
 
 	public static Observable<Restaurant> getRestaurant(String id) {
 		return getDetailsAboutRestaurant(id)
+			.filter(placesDetailsResponse -> placesDetailsResponse.getResult() != null)
 			.map(placesDetailsResponse -> createRestaurantFromResult(id, placesDetailsResponse.getResult()));
 	}
 
@@ -52,13 +53,14 @@ public class PlacesAPIStreams {
 																		 String radius) {
 		return getRestaurantsAround(location, radius)
 				.flatMapIterable(PlacesNearbyResponse::getResults)
-				.flatMap(result -> Observable.zip(Observable.just(result), getDetailsAboutRestaurant(result.getPlaceId()),
+				.flatMap(result -> Observable.zip(
+							Observable.just(result),
+							getDetailsAboutRestaurant(result.getPlaceId()).filter(placesDetailsResponse -> placesDetailsResponse.getResult() != null),
 						((res, details) -> {
 							Log.d("stream", "getDetailedRestaurantsAround: " + res.getName());
 							Log.d("stream", "getDetailedRestaurantsAround: " + res.getPlaceId());
 							return createRestaurantFromResult(res.getPlaceId(), details.getResult());
-						}
-						)))
+						})))
 				.toList();
 	}
 
@@ -74,7 +76,10 @@ public class PlacesAPIStreams {
 				.observeOn(AndroidSchedulers.mainThread())
 				.flatMapIterable(PlacesAutocompleteResponse::getPredictions)
 				.filter(autocompleteResult -> autocompleteResult.getTypes().contains("restaurant"))
-				.flatMap(autocompleteResult -> Observable.zip(Observable.just(autocompleteResult), getDetailsAboutRestaurant(autocompleteResult.getPlaceId()),
+				.flatMap(autocompleteResult -> Observable.zip(
+							Observable.just(autocompleteResult),
+							getDetailsAboutRestaurant(autocompleteResult.getPlaceId())
+									.filter(placesDetailsResponse -> placesDetailsResponse.getResult() != null),
 						((res, details) -> createRestaurantFromResult(res.getPlaceId(), details.getResult()))))
 				.toList();
 	}

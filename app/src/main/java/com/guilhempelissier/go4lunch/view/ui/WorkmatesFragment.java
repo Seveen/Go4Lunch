@@ -56,7 +56,7 @@ public class WorkmatesFragment extends Fragment {
 		workmatesViewModel.getWorkmates().observe(getViewLifecycleOwner(), workmates -> adapter.setData(workmates));
 
 		adapter.setListener(placeId -> {
-			if (placeId != null) {
+			if (placeId != null && !placeId.equals("")) {
 				workmatesViewModel.setCurrentRestaurantId(placeId);
 				Intent intent = new Intent(getActivity(), RestaurantActivity.class);
 				startActivity(intent);

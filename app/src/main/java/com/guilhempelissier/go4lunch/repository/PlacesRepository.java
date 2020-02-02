@@ -58,14 +58,14 @@ public class PlacesRepository {
 				if (location == null) {
 					Log.d(TAG, "PlacesRepository: location null");
 				}
+				Log.d(TAG, "PlacesRepository: location "+location.toString());
 				cachedLocation = location;
 				locationStream.onNext(location);
 				PlacesAPIStreams.getDetailedRestaurantsAround(location, "1500")
 						.subscribe(restaurants -> {
 							Log.d(TAG, "PlacesRepository: restaurants" + restaurants.toString());
 							restaurantsStream.onNext(restaurants);
-						});
-//						.subscribe(restaurantsStream::onNext);
+						}, error -> Log.d(TAG, "PlacesRepository: error: "+ error.getMessage()));
 			});
 	}
 
@@ -99,20 +99,20 @@ public class PlacesRepository {
 
 	public void updateWorkmatesRestaurants(List<String> restaurants) {
 		PlacesAPIStreams.getRestaurants(restaurants)
-				.subscribe(workmatesRestaurants::onNext);
+				.subscribe(workmatesRestaurants::onNext, error -> Log.d(TAG, "PlacesRepository: error: "+ error.getMessage()));
 	}
 
 	public void getAutocompletePredictions(String input) {
 		if (cachedLocation != null) {
 			PlacesAPIStreams.getPlaceAutocomplete(input, cachedLocation, "10000")
-					.subscribe(restaurantsStream::onNext);
+					.subscribe(restaurantsStream::onNext, error -> Log.d(TAG, "PlacesRepository: error: "+ error.getMessage()));
 		}
 	}
 
 	public void clearAutocompleteResults() {
 		if (cachedLocation != null) {
 			PlacesAPIStreams.getDetailedRestaurantsAround(cachedLocation, "1500")
-					.subscribe(restaurantsStream::onNext);
+					.subscribe(restaurantsStream::onNext, error -> Log.d(TAG, "PlacesRepository: error: "+ error.getMessage()));
 		}
 	}
 

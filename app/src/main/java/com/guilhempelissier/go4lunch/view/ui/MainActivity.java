@@ -243,16 +243,16 @@ public class MainActivity extends AppCompatActivity {
 		IdpResponse response = IdpResponse.fromResultIntent(data);
 
 		if (resultCode == RESULT_OK) {
-			Toast.makeText(this, "Connecté", Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, getString(R.string.connected), Toast.LENGTH_SHORT).show();
 			authViewModel.updateCurrentUser();
 		} else {
 			if (response == null) {
-				Toast.makeText(this, "La connexion a été annulée", Toast.LENGTH_SHORT).show();
+				Toast.makeText(this, getString(R.string.connection_canceled), Toast.LENGTH_SHORT).show();
 				finish();
 			} else {
 				switch (response.getError().getErrorCode()) {
-					case ErrorCodes.NO_NETWORK: Toast.makeText(this, "Pas de connexion internet", Toast.LENGTH_SHORT).show();
-					case ErrorCodes.UNKNOWN_ERROR: Toast.makeText(this, "Erreur inconnue", Toast.LENGTH_SHORT).show();
+					case ErrorCodes.NO_NETWORK: Toast.makeText(this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+					case ErrorCodes.UNKNOWN_ERROR: Toast.makeText(this, getString(R.string.unknown_error), Toast.LENGTH_SHORT).show();
 					default:
 				}
 				authViewModel.updateCurrentUser();

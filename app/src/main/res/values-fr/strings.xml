@@ -25,7 +25,7 @@
     <string name="notification_title">Votre déjeuner</string>
     <string name="openH24">Ouvert 24/7</string>
     <string name="open_drawer">Ouvrir</string>
-    <string name="open_until">Ouvers jusqu\'à</string>
+    <string name="open_until">Ouvert jusqu\'à</string>
     <string name="title_activity_maps">Carte</string>
     <string name="with">Avec</string>
     <string name="workmate_maybe_plural">collègue(s)</string>
@@ -38,4 +38,8 @@
     <string name="website">Site web</string>
     <string name="like">Like</string>
     <string name="login_subtitle">Trouvez un bon restaurant et invitez vos collègues à déjeuner !</string>
+    <string name="connected">Connecté</string>
+    <string name="connection_canceled">La connexion a été annulée</string>
+    <string name="no_internet">Pas de connexion internet</string>
+    <string name="unknown_error">Erreur inconnue</string>
 </resources>

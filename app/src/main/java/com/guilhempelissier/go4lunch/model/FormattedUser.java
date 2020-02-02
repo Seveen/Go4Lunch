@@ -7,7 +7,7 @@ public class FormattedUser {
 
 	//TODO changer url
 	public static FormattedUser defaultUser() {
-		return new FormattedUser(" ", "User disconnected", "https://www.uclg-planning.org/sites/default/files/styles/featured_home_left/public/no-user-image-square.jpg?itok=PANMBJF-");
+		return new FormattedUser(" ", " ", "https://www.uclg-planning.org/sites/default/files/styles/featured_home_left/public/no-user-image-square.jpg?itok=PANMBJF-");
 	}
 
 	public FormattedUser(String email, String displayName, String avatarUrl) {

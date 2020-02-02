@@ -59,8 +59,8 @@
         android:layout_width="0dp"
         android:layout_height="64dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="96dp"
         android:layout_marginEnd="32dp"
+        android:layout_marginBottom="24dp"
         android:background="@drawable/fb_login_button_shape"
         android:drawableStart="@drawable/fui_ic_facebook_white_22dp"
         android:gravity="center"
@@ -68,25 +68,25 @@
         android:paddingEnd="32dp"
         android:text="@string/fui_sign_in_with_facebook"
         android:textColor="@color/colorTextOnPrimary"
+        app:layout_constraintBottom_toTopOf="@+id/google_login_button"
         app:layout_constraintEnd_toEndOf="@+id/background_image"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_subtitle" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/google_login_button"
         android:layout_width="0dp"
         android:layout_height="64dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
+        android:layout_marginBottom="64dp"
         android:background="@drawable/google_login_button_shape"
         android:drawableStart="@drawable/common_google_signin_btn_icon_light_normal"
         android:paddingStart="20dp"
         android:paddingEnd="44dp"
         android:text="@string/fui_sign_in_with_google"
         android:textColor="@color/colorTextOnPrimary"
+        app:layout_constraintBottom_toBottomOf="@+id/background_image"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fb_login_button" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

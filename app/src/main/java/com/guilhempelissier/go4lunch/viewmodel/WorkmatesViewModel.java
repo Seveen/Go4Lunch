@@ -46,13 +46,15 @@ public class WorkmatesViewModel extends AndroidViewModel {
 	private void updateWorkmatesRestaurants() {
 		List<User> workmates = usersRepository.getWorkmates().getValue();
 		List<String> restaurants = new ArrayList<>();
-		for (User workmate : workmates) {
-			FirebaseUser currentUser = usersRepository.getCurrentAuthUser().getValue();
-			if (currentUser!=null && !workmate.getUid().equals(currentUser.getUid()) && !workmate.getLunch().equals("")) {
-				restaurants.add(workmate.getLunch());
+		if (workmates != null) {
+			for (User workmate : workmates) {
+				FirebaseUser currentUser = usersRepository.getCurrentAuthUser().getValue();
+				if (currentUser!=null && !workmate.getUid().equals(currentUser.getUid()) && !workmate.getLunch().equals("")) {
+					restaurants.add(workmate.getLunch());
+				}
 			}
+			placesRepository.updateWorkmatesRestaurants(restaurants);
 		}
-		placesRepository.updateWorkmatesRestaurants(restaurants);
 	}
 
 	private void updateWorkmatesList() {

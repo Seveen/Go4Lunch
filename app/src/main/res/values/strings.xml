@@ -41,4 +41,8 @@
     <string name="menu_settings">SETTINGS</string>
     <string name="menu_your_lunch">YOUR LUNCH</string>
     <string name="login_subtitle">Find a nice restaurant and invite your co-workers for lunch!</string>
+    <string name="connected">Connected</string>
+    <string name="connection_canceled">The connection was canceled</string>
+    <string name="no_internet">No internet connection</string>
+    <string name="unknown_error">Unknown error</string>
 </resources>
