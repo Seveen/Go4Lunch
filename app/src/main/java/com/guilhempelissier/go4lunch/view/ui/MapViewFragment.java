@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -76,6 +77,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
 	@Override
 	public void onMapReady(GoogleMap googleMap) {
+		Log.d("MAP", "onMapReady: ");
 		map = googleMap;
 		map.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.style_json));
 

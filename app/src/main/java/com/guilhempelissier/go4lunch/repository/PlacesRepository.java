@@ -103,7 +103,7 @@ public class PlacesRepository {
 	}
 
 	public void getAutocompletePredictions(String input) {
-		if (cachedLocation != null) {
+		if (cachedLocation != null && !input.equals("")) {
 			PlacesAPIStreams.getPlaceAutocomplete(input, cachedLocation, "10000")
 					.subscribe(restaurantsStream::onNext, error -> Log.d(TAG, "PlacesRepository: error: "+ error.getMessage()));
 		}

@@ -167,7 +167,9 @@ public class MainActivity extends AppCompatActivity {
 
 			@Override
 			public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-				mainViewModel.queryAutocompletePrediction(charSequence.toString());
+				if (charSequence.length() > 0) {
+					mainViewModel.queryAutocompletePrediction(charSequence.toString());
+				}
 			}
 
 			@Override
