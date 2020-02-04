@@ -56,7 +56,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login_title" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/fb_login_button"
         android:layout_width="0dp"
         android:layout_height="64dp"
@@ -64,7 +64,7 @@
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="24dp"
         android:background="@drawable/fb_login_button_shape"
-        android:drawableStart="@drawable/fui_ic_facebook_white_22dp"
+        app:drawableStartCompat="@drawable/fui_ic_facebook_white_22dp"
         android:gravity="center"
         android:paddingStart="32dp"
         android:paddingEnd="32dp"
@@ -74,7 +74,7 @@
         app:layout_constraintEnd_toEndOf="@+id/background_image"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/google_login_button"
         android:layout_width="0dp"
         android:layout_height="64dp"
@@ -82,7 +82,7 @@
         android:layout_marginEnd="32dp"
         android:layout_marginBottom="64dp"
         android:background="@drawable/google_login_button_shape"
-        android:drawableStart="@drawable/common_google_signin_btn_icon_light_normal"
+        app:drawableStartCompat="@drawable/common_google_signin_btn_icon_light_normal"
         android:paddingStart="20dp"
         android:paddingEnd="44dp"
         android:text="@string/fui_sign_in_with_google"
