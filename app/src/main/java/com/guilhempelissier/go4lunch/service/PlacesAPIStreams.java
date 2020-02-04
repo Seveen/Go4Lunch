@@ -31,7 +31,7 @@ public class PlacesAPIStreams {
 		String locationLatitude = Location.convert(location.getLatitude(),FORMAT_DEGREES);
 		String locationLongitude = Location.convert(location.getLongitude(),FORMAT_DEGREES);
 		String locationCoordinates = locationLatitude + "," + locationLongitude;
-		
+
 		Locale.setDefault(locale);
 
 		PlacesAPIService placesAPIService = PlacesAPIService.retrofit.create(PlacesAPIService.class);
@@ -58,9 +58,7 @@ public class PlacesAPIStreams {
 	public static Single<List<Restaurant>> getDetailedRestaurantsAround(Location location,
 																		 String radius) {
 		return getRestaurantsAround(location, radius)
-				.flatMapIterable(result -> {
-					return result.getResults();
-				})
+				.flatMapIterable(result -> result.getResults())
 				.flatMap(result -> Observable.zip(
 							Observable.just(result),
 							getDetailsAboutRestaurant(result.getPlaceId()).filter(placesDetailsResponse -> placesDetailsResponse.getResult() != null),

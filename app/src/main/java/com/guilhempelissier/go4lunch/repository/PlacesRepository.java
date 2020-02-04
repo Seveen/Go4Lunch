@@ -55,13 +55,9 @@ public class PlacesRepository {
 				return cachedLocation.distanceTo(location) > 100.0;
 			})
 			.subscribe(location -> {
-				if (location == null) {
-					Log.d(TAG, "PlacesRepository: location null");
-				}
-				Log.d(TAG, "PlacesRepository: location "+location.toString());
 				cachedLocation = location;
 				locationStream.onNext(location);
-				PlacesAPIStreams.getDetailedRestaurantsAround(location, "15000")
+				PlacesAPIStreams.getDetailedRestaurantsAround(location, "1500")
 						.subscribe(restaurants -> restaurantsStream.onNext(restaurants), error -> Log.d(TAG, "PlacesRepository: error: "+ error.getMessage()));
 			});
 	}
