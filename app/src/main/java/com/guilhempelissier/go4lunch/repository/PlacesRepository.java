@@ -61,11 +61,8 @@ public class PlacesRepository {
 				Log.d(TAG, "PlacesRepository: location "+location.toString());
 				cachedLocation = location;
 				locationStream.onNext(location);
-				PlacesAPIStreams.getDetailedRestaurantsAround(location, "1500")
-						.subscribe(restaurants -> {
-							Log.d(TAG, "PlacesRepository: restaurants" + restaurants.toString());
-							restaurantsStream.onNext(restaurants);
-						}, error -> Log.d(TAG, "PlacesRepository: error: "+ error.getMessage()));
+				PlacesAPIStreams.getDetailedRestaurantsAround(location, "15000")
+						.subscribe(restaurants -> restaurantsStream.onNext(restaurants), error -> Log.d(TAG, "PlacesRepository: error: "+ error.getMessage()));
 			});
 	}
 

@@ -11,6 +11,7 @@ import com.guilhempelissier.go4lunch.model.serialization.PlacesDetailsResponse;
 import com.guilhempelissier.go4lunch.model.serialization.PlacesNearbyResponse;
 
 import java.util.List;
+import java.util.Locale;
 
 import io.reactivex.Observable;
 import io.reactivex.Single;
@@ -24,9 +25,14 @@ public class PlacesAPIStreams {
 			"geometry,name,photos,vicinity,rating,formatted_phone_number,opening_hours,website";
 
 	public static Observable<PlacesNearbyResponse> getRestaurantsAround(Location location, String radius) {
+		Locale locale = Locale.getDefault();
+		Locale.setDefault(Locale.ENGLISH);
+
 		String locationLatitude = Location.convert(location.getLatitude(),FORMAT_DEGREES);
 		String locationLongitude = Location.convert(location.getLongitude(),FORMAT_DEGREES);
 		String locationCoordinates = locationLatitude + "," + locationLongitude;
+		
+		Locale.setDefault(locale);
 
 		PlacesAPIService placesAPIService = PlacesAPIService.retrofit.create(PlacesAPIService.class);
 		return placesAPIService.getRestaurantsAround(
@@ -52,13 +58,15 @@ public class PlacesAPIStreams {
 	public static Single<List<Restaurant>> getDetailedRestaurantsAround(Location location,
 																		 String radius) {
 		return getRestaurantsAround(location, radius)
-				.flatMapIterable(PlacesNearbyResponse::getResults)
+				.flatMapIterable(result -> {
+					return result.getResults();
+				})
 				.flatMap(result -> Observable.zip(
 							Observable.just(result),
 							getDetailsAboutRestaurant(result.getPlaceId()).filter(placesDetailsResponse -> placesDetailsResponse.getResult() != null),
 						((res, details) -> {
-							Log.d("stream", "getDetailedRestaurantsAround: " + res.getName());
-							Log.d("stream", "getDetailedRestaurantsAround: " + res.getPlaceId());
+							Log.d("streamPlaces", "getDetailedRestaurantsAround: " + res.getName());
+							Log.d("streamPlaces", "getDetailedRestaurantsAround: " + res.getPlaceId());
 							return createRestaurantFromResult(res.getPlaceId(), details.getResult());
 						})))
 				.toList();
