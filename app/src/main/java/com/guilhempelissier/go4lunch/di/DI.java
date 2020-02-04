@@ -6,31 +6,20 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.guilhempelissier.go4lunch.repository.PlacesRepository;
 import com.guilhempelissier.go4lunch.repository.UsersRepository;
 import com.guilhempelissier.go4lunch.service.AuthService;
-import com.guilhempelissier.go4lunch.service.FirebaseService;
 import com.guilhempelissier.go4lunch.service.LocationService;
-import com.guilhempelissier.go4lunch.service.PlacesAPIStreams;
 
 public class DI {
 	private static PlacesRepository placesRepository;
 	private static UsersRepository usersRepository;
 
-	private static PlacesAPIStreams placesService;
 	private static LocationService locationService;
 	private static AuthService authService;
-	private static FirebaseService firebaseService;
 
 	public static PlacesRepository getPlacesRepository(Context applicationContext) {
 		if (placesRepository == null) {
 			placesRepository = new PlacesRepository(applicationContext);
 		}
 		return placesRepository;
-	}
-
-	public static PlacesAPIStreams getPlacesService() {
-		if (placesService == null) {
-			placesService = new PlacesAPIStreams();
-		}
-		return placesService;
 	}
 
 	public static LocationService getLocationService(Context applicationContext) {

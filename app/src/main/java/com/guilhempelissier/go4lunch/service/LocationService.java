@@ -21,7 +21,7 @@ import io.reactivex.schedulers.Schedulers;
 import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 public class LocationService {
-	Observable<Location> lastLocation;
+	private Observable<Location> lastLocation;
 
 	public LocationService(Context applicationContext) {
 		FusedLocationProviderClient locationClient = LocationServices.getFusedLocationProviderClient(applicationContext);
