@@ -33,8 +33,7 @@ public class ListViewFragment extends Fragment {
 	}
 
 	public static ListViewFragment newInstance() {
-		ListViewFragment fragment = new ListViewFragment();
-		return fragment;
+		return new ListViewFragment();
 	}
 
 	@Override

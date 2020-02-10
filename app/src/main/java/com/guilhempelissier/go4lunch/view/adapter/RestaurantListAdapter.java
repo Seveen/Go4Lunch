@@ -49,11 +49,11 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
 		return restaurants.size();
 	}
 
-	public class RestaurantViewHolder extends RecyclerView.ViewHolder {
+	class RestaurantViewHolder extends RecyclerView.ViewHolder {
 		private final ListViewItemBinding binding;
 		private ImageView picture;
 
-		public RestaurantViewHolder(ListViewItemBinding binding) {
+		RestaurantViewHolder(ListViewItemBinding binding) {
 			super(binding.getRoot());
 			picture = binding.getRoot().findViewById(R.id.list_item_image);
 			this.binding = binding;
@@ -67,7 +67,7 @@ public class RestaurantListAdapter extends RecyclerView.Adapter<RestaurantListAd
 			});
 		}
 
-		public void bind(FormattedRestaurant restaurant) {
+		void bind(FormattedRestaurant restaurant) {
 			Glide.with(binding.getRoot())
 					.load(restaurant.getImageUrl())
 					.centerCrop()

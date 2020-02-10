@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Context;
 import android.location.Location;
 import android.os.Looper;
-import android.util.Log;
 
 import androidx.core.content.ContextCompat;
 
@@ -33,7 +32,6 @@ public class LocationService {
 				LocationCallback locationCallback = new LocationCallback() {
 					@Override
 					public void onLocationResult(LocationResult locationResult) {
-						Log.d("Location Service", "onLocationResult: new location result");
 						emitter.onNext(locationResult.getLastLocation());
 					}
 				};

@@ -18,7 +18,6 @@ import io.reactivex.subjects.BehaviorSubject;
 
 public class PlacesRepository {
 	private String TAG = "PlacesRepository";
-	private LocationService locationService;
 
 	private Location cachedLocation;
 	private BehaviorSubject<Location> locationStream;
@@ -30,7 +29,7 @@ public class PlacesRepository {
 
 	@SuppressLint("CheckResult")
 	public PlacesRepository(Context applicationContext) {
-		locationService = DI.getLocationService(applicationContext);
+		LocationService locationService = DI.getLocationService(applicationContext);
 
 		locationStream = BehaviorSubject.create();
 		permissionStatus = BehaviorSubject.create();

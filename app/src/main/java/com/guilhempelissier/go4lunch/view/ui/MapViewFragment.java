@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +32,6 @@ import java.util.List;
 
 public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 	private GoogleMap map;
-	private FloatingActionButton centerButton;
 
 	private MapViewModel mapViewModel;
 	private Location currentLocation;
@@ -45,8 +43,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 	}
 
 	public static MapViewFragment newInstance() {
-		MapViewFragment fragment = new MapViewFragment();
-		return fragment;
+		return new MapViewFragment();
 	}
 
 	@Override
@@ -64,7 +61,7 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 			if (mapFragment != null) {
 				mapFragment.getMapAsync(this);
 			}
-			centerButton = getView().findViewById(R.id.map_center_fab);
+			FloatingActionButton centerButton = getView().findViewById(R.id.map_center_fab);
 			centerButton.setOnClickListener(view -> centerMapOnCurrentLocation());
 		}
 	}
@@ -77,7 +74,6 @@ public class MapViewFragment extends Fragment implements OnMapReadyCallback {
 
 	@Override
 	public void onMapReady(GoogleMap googleMap) {
-		Log.d("MAP", "onMapReady: ");
 		map = googleMap;
 		map.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.style_json));
 

@@ -1,11 +1,10 @@
 package com.guilhempelissier.go4lunch.model;
 
 public class FormattedUser {
-	String email;
-	String displayName;
-	String avatarUrl;
+	private String email;
+	private String displayName;
+	private String avatarUrl;
 
-	//TODO changer url
 	public static FormattedUser defaultUser() {
 		return new FormattedUser(" ", " ", "https://www.uclg-planning.org/sites/default/files/styles/featured_home_left/public/no-user-image-square.jpg?itok=PANMBJF-");
 	}

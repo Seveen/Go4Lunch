@@ -55,11 +55,11 @@ public class WorkmatesListAdapter extends RecyclerView.Adapter<WorkmatesListAdap
 		return workmates.size();
 	}
 
-	public class WorkmateViewHolder extends RecyclerView.ViewHolder {
+	class WorkmateViewHolder extends RecyclerView.ViewHolder {
 		private final WorkmatesViewItemBinding binding;
 		private ImageView picture;
 
-		public WorkmateViewHolder(WorkmatesViewItemBinding binding) {
+		WorkmateViewHolder(WorkmatesViewItemBinding binding) {
 			super(binding.getRoot());
 			picture = binding.workmatesItemImage;
 			this.binding = binding;
@@ -73,7 +73,7 @@ public class WorkmatesListAdapter extends RecyclerView.Adapter<WorkmatesListAdap
 			});
 		}
 
-		public void bind(FormattedWorkmate workmate) {
+		void bind(FormattedWorkmate workmate) {
 			String text;
 			Glide.with(binding.getRoot())
 					.load(workmate.getImageUrl())

@@ -8,8 +8,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -22,6 +20,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
+import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.DialogFragment;
@@ -65,7 +64,6 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		Log.d(TAG, "onCreate: HELLO");
 		AndroidThreeTen.init(getApplicationContext());
 
 		ActivityMainBinding mainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
@@ -94,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
 		drawerLayout = mainBinding.drawerLayout;
 		actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.open_drawer, R.string.close_drawer);
 		actionBarDrawerToggle.setDrawerIndicatorEnabled(false);
-		toolbar.setNavigationOnClickListener(view -> drawerLayout.openDrawer(Gravity.LEFT));
+		toolbar.setNavigationOnClickListener(view -> drawerLayout.openDrawer(GravityCompat.START));
 		drawerLayout.addDrawerListener(actionBarDrawerToggle);
 		actionBarDrawerToggle.syncState();
 
@@ -124,16 +122,6 @@ public class MainActivity extends AppCompatActivity {
 		NavigationView navView = mainBinding.navView;
 		MenuHeaderBinding menuHeaderBinding = MenuHeaderBinding.bind(navView.getHeaderView(0));
 		authViewModel.getCurrentUser().observe(this, menuHeaderBinding::setUser);
-		authViewModel.isUserConnected().observe(this, isConnected -> {
-			if (isConnected) {
-				navView.getMenu().setGroupVisible(R.id.menu_group_1, true);
-				navView.getMenu().setGroupVisible(R.id.menu_group_2, false);
-			} else {
-				navView.getMenu().setGroupVisible(R.id.menu_group_1, false);
-				navView.getMenu().setGroupVisible(R.id.menu_group_2, true);
-				startSignInActivity();
-			}
-		});
 		authViewModel.updateCurrentUser();
 
 		navView.setNavigationItemSelectedListener(menuItem -> {
@@ -154,9 +142,6 @@ public class MainActivity extends AppCompatActivity {
 					} else {
 						Toast.makeText(this, getString(R.string.no_restaurant_selected), Toast.LENGTH_SHORT).show();
 					}
-					break;
-				case R.id.menu_login:
-					startSignInActivity();
 					break;
 			}
 			return true;
