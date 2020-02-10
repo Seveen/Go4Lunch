@@ -16,3 +16,4 @@ todo.md
 
 /app/google-services.json
 /gradle.properties
+/app/src/debug/res/values/google_maps_api.xml
