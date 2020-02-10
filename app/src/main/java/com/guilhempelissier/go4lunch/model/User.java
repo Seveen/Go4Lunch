@@ -1,6 +1,6 @@
 package com.guilhempelissier.go4lunch.model;
 
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
 
 public class User {
@@ -18,7 +18,7 @@ public class User {
 		this.username = username;
 		this.imageUrl = imageUrl;
 		this.lunch = "";
-		this.likedRestaurants = Collections.emptyList();
+		this.likedRestaurants = new ArrayList<>();
 		this.notifyMe = true;
 	}
 

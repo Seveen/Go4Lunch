@@ -126,6 +126,13 @@ public class FormatUtils {
 			openNow = ctx.getString(R.string.no_opening_infos);
 		}
 
+		String photoReference = "";
+		if (result.getPhotos() != null) {
+			if (result.getPhotos().get(0) != null) {
+				photoReference = result.getPhotos().get(0).getPhotoReference();
+			}
+		}
+
 		return new FormattedRestaurant(result.getPlaceId(),
 				result.getName(),
 				result.getVicinity(),
@@ -133,7 +140,7 @@ public class FormatUtils {
 				distance,
 				Math.round(distanceMeters),
 				FormatUtils.formatRating(result.getRating()),
-				FormatUtils.formatPhotoUrl(result.getPhotos().get(0).getPhotoReference()),
+				FormatUtils.formatPhotoUrl(photoReference),
 				new LatLng(restaurantLoc.getLat(), restaurantLoc.getLng()),
 				workmates,
 				FormatUtils.formatIsLunch(currentUser, result),

@@ -24,23 +24,6 @@ public class UsersRepository {
 	public UsersRepository() {
 		authService = DI.getAuthService();
 		updateConnectedUser();
-
-		FirebaseService.getUsersCollection().addSnapshotListener((snapshot, e) -> {
-			if (snapshot != null && !snapshot.isEmpty()) {
-				List<User> users = snapshot.toObjects(User.class);
-				List<User> workmateUsers = new ArrayList<>();
-
-				for (User user : users) {
-					if (currentAuthUser.getValue() != null && user.getUid().equals(currentAuthUser.getValue().getUid())) {
-						currentUser.setValue(user);
-					} else {
-						workmateUsers.add(user);
-					}
-				}
-				Collections.sort(workmateUsers, new LunchComparator());
-				workmates.setValue(workmateUsers);
-			}
-		});
 	}
 
 	public LiveData<FirebaseUser> getCurrentAuthUser() {
@@ -77,24 +60,41 @@ public class UsersRepository {
 							user.getPhotoUrl().toString());
 				}
 			});
+
+			FirebaseService.getUsersCollection().addSnapshotListener((snapshot, e) -> {
+				if (snapshot != null && !snapshot.isEmpty()) {
+					List<User> users = snapshot.toObjects(User.class);
+					List<User> workmateUsers = new ArrayList<>();
+
+					for (User usr : users) {
+						if (currentAuthUser.getValue() != null && usr.getUid().equals(currentAuthUser.getValue().getUid())) {
+							currentUser.setValue(usr);
+						} else {
+							workmateUsers.add(usr);
+						}
+					}
+					Collections.sort(workmateUsers, new LunchComparator());
+					workmates.setValue(workmateUsers);
+				}
+			});
 		}
 	}
 
 	public void updateCurrentUserLunch(String lunch) {
-		if (currentUser.getValue() != null) {
-			FirebaseService.updateLunch(currentUser.getValue().getUid(), lunch);
+		if (currentAuthUser.getValue() != null) {
+			FirebaseService.updateLunch(currentAuthUser.getValue().getUid(), lunch);
 		}
 	}
 
 	public void updateCurrentUserLikes(List<String> likes) {
-		if (currentUser.getValue() != null) {
-			FirebaseService.updateLikes(currentUser.getValue().getUid(), likes);
+		if (currentAuthUser.getValue() != null) {
+			FirebaseService.updateLikes(currentAuthUser.getValue().getUid(), likes);
 		}
 	}
 
 	public void updateCurrentUserNotificationStatus(Boolean isNotified) {
-		if (currentUser.getValue() != null) {
-			FirebaseService.updateNotification(currentUser.getValue().getUid(), isNotified);
+		if (currentAuthUser.getValue() != null) {
+			FirebaseService.updateNotification(currentAuthUser.getValue().getUid(), isNotified);
 		}
 	}
 }

@@ -122,6 +122,11 @@ public class MainActivity extends AppCompatActivity {
 		NavigationView navView = mainBinding.navView;
 		MenuHeaderBinding menuHeaderBinding = MenuHeaderBinding.bind(navView.getHeaderView(0));
 		authViewModel.getCurrentUser().observe(this, menuHeaderBinding::setUser);
+		authViewModel.isUserConnected().observe(this, isConnected -> {
+			if (!isConnected) {
+				startSignInActivity();
+			}
+		});
 		authViewModel.updateCurrentUser();
 
 		navView.setNavigationItemSelectedListener(menuItem -> {

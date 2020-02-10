@@ -94,17 +94,20 @@ public class RestaurantViewModel extends AndroidViewModel {
 	public void toggleLikeRestaurant() {
 		FormattedRestaurant restaurant = currentRestaurant.getValue();
 		User user = usersRepository.getCurrentUser().getValue();
-		List<String> likedRestaurants = user.getLikedRestaurants();
 
-		if (restaurant != null) {
-			if (likedRestaurants.contains(restaurant.getId())) {
-				likedRestaurants.remove(restaurant.getId());
-			} else {
-				likedRestaurants.add(restaurant.getId());
+		if (user != null) {
+			List<String> likedRestaurants = user.getLikedRestaurants();
+
+			if (restaurant != null) {
+				if (likedRestaurants.contains(restaurant.getId())) {
+					likedRestaurants.remove(restaurant.getId());
+				} else {
+					likedRestaurants.add(restaurant.getId());
+				}
 			}
-		}
 
-		usersRepository.updateCurrentUserLikes(likedRestaurants);
+			usersRepository.updateCurrentUserLikes(likedRestaurants);
+		}
 	}
 
 	public LiveData<FormattedRestaurant> getCurrentRestaurant() {
