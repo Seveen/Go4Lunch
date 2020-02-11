@@ -1,4 +1,4 @@
-package com.guilhempelissier.go4lunch.viewmodel;
+package com.guilhempelissier.go4lunch.utils;
 
 import android.content.Context;
 import android.location.Location;
@@ -12,7 +12,6 @@ import com.guilhempelissier.go4lunch.model.User;
 import com.guilhempelissier.go4lunch.model.serialization.Location_;
 import com.guilhempelissier.go4lunch.model.serialization.OpeningHours;
 import com.guilhempelissier.go4lunch.model.serialization.Period;
-import com.guilhempelissier.go4lunch.utils.LatLngUtils;
 
 import org.threeten.bp.LocalDateTime;
 

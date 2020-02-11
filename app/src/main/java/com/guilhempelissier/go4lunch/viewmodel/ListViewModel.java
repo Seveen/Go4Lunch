@@ -17,6 +17,7 @@ import com.guilhempelissier.go4lunch.model.Restaurant;
 import com.guilhempelissier.go4lunch.model.User;
 import com.guilhempelissier.go4lunch.repository.PlacesRepository;
 import com.guilhempelissier.go4lunch.repository.UsersRepository;
+import com.guilhempelissier.go4lunch.utils.FormatUtils;
 import com.guilhempelissier.go4lunch.utils.SortingUtils;
 
 import org.threeten.bp.LocalDateTime;

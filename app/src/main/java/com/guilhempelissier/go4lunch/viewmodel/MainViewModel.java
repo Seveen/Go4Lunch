@@ -14,7 +14,6 @@ import com.guilhempelissier.go4lunch.repository.PlacesRepository;
 import com.guilhempelissier.go4lunch.repository.UsersRepository;
 
 public class MainViewModel extends AndroidViewModel {
-	private String TAG = "PlaceVM";
 	private PlacesRepository placesRepository;
 	private UsersRepository usersRepository;
 	private MutableLiveData<Boolean> needsPermission = new MutableLiveData<>();

@@ -13,7 +13,7 @@ import com.guilhempelissier.go4lunch.model.serialization.Location_;
 import com.guilhempelissier.go4lunch.model.serialization.OpeningHours;
 import com.guilhempelissier.go4lunch.model.serialization.Period;
 import com.guilhempelissier.go4lunch.model.serialization.Photo;
-import com.guilhempelissier.go4lunch.viewmodel.FormatUtils;
+import com.guilhempelissier.go4lunch.utils.FormatUtils;
 
 import org.junit.Before;
 import org.junit.Test;

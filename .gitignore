@@ -12,7 +12,7 @@
 /captures
 .externalNativeBuild
 .cxx
-todo.md
+.apk
 
 /app/google-services.json
 /gradle.properties
