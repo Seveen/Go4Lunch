@@ -23,6 +23,7 @@ public class WorkmatesViewModel extends AndroidViewModel {
 	private String TAG = "WorkmatesVM";
 	private UsersRepository usersRepository;
 	private PlacesRepository placesRepository;
+
 	private MediatorLiveData<List<FormattedWorkmate>> formattedWorkmates = new MediatorLiveData<>();
 	private MutableLiveData<List<Restaurant>> restaurants = new MutableLiveData<>();
 

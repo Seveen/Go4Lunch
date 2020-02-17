@@ -29,9 +29,9 @@ public class RestaurantViewModel extends AndroidViewModel {
 	private UsersRepository usersRepository;
 
 	private MutableLiveData<Restaurant> result = new MutableLiveData<>();
-	private MediatorLiveData<FormattedRestaurant> currentRestaurant = new MediatorLiveData<>();
 	private MutableLiveData<Location> currentLocation = new MutableLiveData<>();
-
+	
+	private MediatorLiveData<FormattedRestaurant> currentRestaurant = new MediatorLiveData<>();
 	private MutableLiveData<List<FormattedWorkmate>> workmatesEatingThere = new MutableLiveData<>();
 
 	public RestaurantViewModel(@NonNull Application application) {

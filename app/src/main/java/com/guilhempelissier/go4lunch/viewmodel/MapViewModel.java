@@ -28,9 +28,11 @@ public class MapViewModel extends AndroidViewModel {
 	private String TAG = "MapVM";
 	private PlacesRepository placesRepository;
 	private UsersRepository usersRepository;
-	private MutableLiveData<List<Restaurant>> results = new MutableLiveData<>();
-	private MediatorLiveData<List<FormattedRestaurant>> restaurants;
+
 	private MutableLiveData<Location> currentLocation = new MutableLiveData<>();
+	private MutableLiveData<List<Restaurant>> results = new MutableLiveData<>();
+
+	private MediatorLiveData<List<FormattedRestaurant>> restaurants;
 
 	@SuppressLint("CheckResult")
 	public MapViewModel(@NonNull Application application) {
