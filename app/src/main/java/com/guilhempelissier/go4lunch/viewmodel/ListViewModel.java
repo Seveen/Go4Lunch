@@ -29,10 +29,12 @@ public class ListViewModel extends AndroidViewModel {
 	private String TAG = "ListVM";
 	private PlacesRepository placesRepository;
 	private UsersRepository usersRepository;
+
 	private MutableLiveData<List<Restaurant>> results = new MutableLiveData<>();
-	private MediatorLiveData<List<FormattedRestaurant>> restaurants = new MediatorLiveData<>();
 	private MutableLiveData<Location> currentLocation = new MutableLiveData<>();
 	private MutableLiveData<PlacesRepository.Sorting> sortingMethod = new MutableLiveData<>();
+
+	private MediatorLiveData<List<FormattedRestaurant>> restaurants = new MediatorLiveData<>();
 
 	@SuppressLint("CheckResult")
 	public ListViewModel(@NonNull Application application) {
@@ -41,7 +43,7 @@ public class ListViewModel extends AndroidViewModel {
 		usersRepository = DI.getUsersRepository();
 
 		placesRepository.getCurrentLocation()
-				.subscribe(location -> currentLocation.setValue(location), error -> Log.d(TAG, error.getMessage()));
+				.subscribe(currentLocation::setValue, error -> Log.d(TAG, error.getMessage()));
 
 		placesRepository.getDetailedRestaurantsAround()
 				.subscribe(results::setValue, error -> Log.d(TAG, "Detailed restaurants error: " + error.getMessage()));
