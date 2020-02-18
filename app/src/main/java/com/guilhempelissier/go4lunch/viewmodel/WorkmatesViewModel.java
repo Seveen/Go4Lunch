@@ -26,7 +26,7 @@ public class WorkmatesViewModel extends AndroidViewModel {
 
 	private MediatorLiveData<List<FormattedWorkmate>> formattedWorkmates = new MediatorLiveData<>();
 	private MutableLiveData<List<Restaurant>> restaurants = new MutableLiveData<>();
-
+	
 	public WorkmatesViewModel(@NonNull Application application) {
 		super(application);
 		usersRepository = DI.getUsersRepository();
@@ -38,10 +38,6 @@ public class WorkmatesViewModel extends AndroidViewModel {
 		formattedWorkmates.addSource(usersRepository.getWorkmates(), o -> updateWorkmatesRestaurants());
 
 		formattedWorkmates.addSource(restaurants, o -> updateWorkmatesList());
-	}
-
-	public LiveData<List<FormattedWorkmate>> getWorkmates() {
-		return formattedWorkmates;
 	}
 
 	private void updateWorkmatesRestaurants() {
@@ -82,6 +78,10 @@ public class WorkmatesViewModel extends AndroidViewModel {
 		}
 
 		formattedWorkmates.setValue(list);
+	}
+
+	public LiveData<List<FormattedWorkmate>> getWorkmates() {
+		return formattedWorkmates;
 	}
 
 	public void setCurrentRestaurantId(String id) {
