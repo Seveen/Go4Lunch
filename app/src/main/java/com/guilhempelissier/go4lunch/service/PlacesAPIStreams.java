@@ -38,10 +38,21 @@ public class PlacesAPIStreams {
 			.observeOn(AndroidSchedulers.mainThread());
 	}
 
-	public static Observable<Restaurant> getRestaurant(String id) {
-		return getDetailsAboutRestaurant(id)
-			.filter(placesDetailsResponse -> placesDetailsResponse.getResult() != null)
-			.map(placesDetailsResponse -> createRestaurantFromResult(id, placesDetailsResponse.getResult()));
+	public static Single<List<Restaurant>> getPlaceAutocomplete(String input, Location location, String radius) {
+		String locationCoordinates = LatLngUtils.convertLocationToStringCoordinates(location);
+
+		PlacesAPIService placesAPIService = PlacesAPIService.retrofit.create(PlacesAPIService.class);
+		return placesAPIService.getAutocompleteResponse(input, BuildConfig.PLACES_KEY, locationCoordinates, radius, "establishment")
+				.subscribeOn(Schedulers.io())
+				.observeOn(AndroidSchedulers.mainThread())
+				.flatMapIterable(PlacesAutocompleteResponse::getPredictions)
+				.filter(autocompleteResult -> autocompleteResult.getTypes().contains("restaurant"))
+				.flatMap(autocompleteResult -> Observable.zip(
+						Observable.just(autocompleteResult),
+						getDetailsAboutRestaurant(autocompleteResult.getPlaceId())
+								.filter(placesDetailsResponse -> placesDetailsResponse.getResult() != null),
+						((res, details) -> createRestaurantFromResult(res.getPlaceId(), details.getResult()))))
+				.toList();
 	}
 
 	public static Single<List<Restaurant>> getDetailedRestaurantsAround(Location location,
@@ -55,21 +66,10 @@ public class PlacesAPIStreams {
 				.toList();
 	}
 
-	public static Single<List<Restaurant>> getPlaceAutocomplete(String input, Location location, String radius) {
-		String locationCoordinates = LatLngUtils.convertLocationToStringCoordinates(location);
-
-		PlacesAPIService placesAPIService = PlacesAPIService.retrofit.create(PlacesAPIService.class);
-		return placesAPIService.getAutocompleteResponse(input, BuildConfig.PLACES_KEY, locationCoordinates, radius, "establishment")
-				.subscribeOn(Schedulers.io())
-				.observeOn(AndroidSchedulers.mainThread())
-				.flatMapIterable(PlacesAutocompleteResponse::getPredictions)
-				.filter(autocompleteResult -> autocompleteResult.getTypes().contains("restaurant"))
-				.flatMap(autocompleteResult -> Observable.zip(
-							Observable.just(autocompleteResult),
-							getDetailsAboutRestaurant(autocompleteResult.getPlaceId())
-									.filter(placesDetailsResponse -> placesDetailsResponse.getResult() != null),
-						((res, details) -> createRestaurantFromResult(res.getPlaceId(), details.getResult()))))
-				.toList();
+	public static Observable<Restaurant> getRestaurant(String id) {
+		return getDetailsAboutRestaurant(id)
+				.filter(placesDetailsResponse -> placesDetailsResponse.getResult() != null)
+				.map(placesDetailsResponse -> createRestaurantFromResult(id, placesDetailsResponse.getResult()));
 	}
 
 	public static Single<List<Restaurant>> getRestaurants(List<String> ids) {

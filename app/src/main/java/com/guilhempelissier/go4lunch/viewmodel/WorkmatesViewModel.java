@@ -26,7 +26,7 @@ public class WorkmatesViewModel extends AndroidViewModel {
 
 	private MediatorLiveData<List<FormattedWorkmate>> formattedWorkmates = new MediatorLiveData<>();
 	private MutableLiveData<List<Restaurant>> restaurants = new MutableLiveData<>();
-	
+
 	public WorkmatesViewModel(@NonNull Application application) {
 		super(application);
 		usersRepository = DI.getUsersRepository();

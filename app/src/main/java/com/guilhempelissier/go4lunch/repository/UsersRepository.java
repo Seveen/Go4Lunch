@@ -16,9 +16,11 @@ import java.util.List;
 
 public class UsersRepository {
 	private AuthService authService;
+
 	private MutableLiveData<FirebaseUser> currentAuthUser = new MutableLiveData<>();
 	private MutableLiveData<Boolean> isUserConnected = new MutableLiveData<>();
 	private MutableLiveData<User> currentUser = new MutableLiveData<>();
+
 	private MutableLiveData<List<User>> workmates = new MutableLiveData<>();
 
 	public UsersRepository() {
