@@ -36,3 +36,11 @@ Vous pouvez :
 * MVVM
 * databinding
 * Java
+
+## Compétences évaluées
+* Afficher une liste de données avec une RecyclerView et un Adapter
+* Créer et afficher un menu
+* Créer, gérer et afficher des fragments d'interface
+* Afficher du contenu multi-langue
+* Définir et appliquer un thème global
+* Modifier les paramètres d'un projet Android
