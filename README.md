@@ -4,7 +4,8 @@ Ce dépôt contient le projet 7 pour le parcours OpenClassrooms Développeur d'a
 
 ## Aperçu
 
-Go4Lunch est une application pour trouver un restaurant où déjeuner avec vos collègues. 
+Go4Lunch est une application pour trouver un restaurant où déjeuner avec vos collègues.
+
 Vous pouvez : 
  * Visualiser les restaurants autour de vous sur une carte ou sur une liste
  * Afficher les coordonnées de chaque restaurant et les appeler directement pour réserver une table
@@ -20,7 +21,6 @@ Vous pouvez :
 ## Libraries
 * [Glide](https://github.com/bumptech/glide/)
 * [Gson](https://github.com/google/gson/)
-* [ButterKnife](https://jakewharton.github.io/butterknife/)
 * [Retrofit](https://square.github.io/retrofit/)
 * [RxJava](https://github.com/ReactiveX/RxJava)
 * [Firebase Authentification](https://firebase.google.com/docs/auth)
