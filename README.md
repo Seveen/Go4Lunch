@@ -35,6 +35,7 @@ Vous pouvez :
 ## App Architecture
 * MVVM
 * databinding
+* RxJava
 * Java
 
 ## Compétences évaluées
